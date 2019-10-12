@@ -9,7 +9,7 @@ const IndexPage = () => {
 
   return (
     <>
-      <SEO title="filtersnstuff" description="Upload your art to a 3D canvas" />
+      <SEO title="virtualcanvas" description="Upload your art to a 3D canvas" />
       <Wrapper uploaded={uploaded ? 1 : 0}>
         <Home uploaded={uploaded} setUploaded={setUploaded} />
       </Wrapper>

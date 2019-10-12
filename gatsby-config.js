@@ -1,6 +1,6 @@
 module.exports = {
   siteMetadata: {
-    title: `filtersnstuff`,
+    title: `virtualcanvas`,
     description: `Upload your art to a 3D canvas`,
     author: `@nicopellerin_io`,
   },
@@ -20,8 +20,8 @@ module.exports = {
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
-        name: `filtersnstuff`,
-        short_name: `filtersnstuff`,
+        name: `virtualcanvas`,
+        short_name: `virtualcanvas`,
         start_url: `/`,
         background_color: `#ff1654`,
         theme_color: `#ff1654`,
