@@ -118,6 +118,7 @@ export const MainScene = ({
           gl.shadowMap.enabled = true
           gl.shadowMap.type = THREE.PCFSoftShadowMap
           document.body.appendChild(WEBVR.createButton(gl))
+          gl.preserveDrawingBuffer = true
         }}
       >
         <ambientLight intensity={0.8} />
