@@ -12,7 +12,7 @@ export const HomeCard = ({ handlePhotoUpload, setUploaded }) => {
     <Wrapper>
       <Top>
         <img src={Logo} alt="logo" width={375} />
-        <Tag>Turn your art into virtual 3D</Tag>
+        <Tag>Turn your art into a virtual 3D canvas</Tag>
       </Top>
       <Bottom>
         <form onSubmit={e => e.preventDefault()}>
