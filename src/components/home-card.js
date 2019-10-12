@@ -11,7 +11,7 @@ export const HomeCard = ({ handlePhotoUpload, setUploaded }) => {
   return (
     <Wrapper>
       <Top>
-        <img src={Logo} alt="logo" width={325} />
+        <img src={Logo} alt="logo" width={375} />
         <Tag>Upload your art to a 3D canvas</Tag>
       </Top>
       <Bottom>
@@ -90,10 +90,10 @@ const UploadButton = styled(motion.button)`
 `
 
 const Tag = styled.span`
-  font-size: 1.5rem;
-  font-weight: 600;
+  font-size: 1.4rem;
+  font-weight: 400;
   text-align: center;
-  font-family: "Courier New", Courier, monospace;
   margin-top: 1.8rem;
-  margin-bottom: 1.5rem;
+  color: #555;
+  letter-spacing: 2.3px;
 `

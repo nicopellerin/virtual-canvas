@@ -77,8 +77,8 @@ const Tag = styled.h6`
   display: ${props => (props.photoUploaded ? "none" : "block")};
   margin-top: 40px;
   text-align: center;
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   font-weight: 400;
-  color: #666;
+  color: #555;
   letter-spacing: 2.3px;
 `
