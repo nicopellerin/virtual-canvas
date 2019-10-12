@@ -1,17 +1,24 @@
 import React, { useState, useEffect } from "react"
 import styled from "styled-components"
 import { motion } from "framer-motion"
+import cookie from "js-cookie"
 
 const tips = [
   "Use your trackpad to zoom in/zoom out",
   "Click, hold & then move mouse to rotate canvas",
 ]
 
+const cookieExists = cookie.get("show_tips")
+
 const Tips = () => {
   const [tip, setTip] = useState("")
 
   useEffect(() => {
+    if (cookieExists) {
+      return null
+    }
     timer()
+    cookie.set("show_tips", "nope")
   }, [])
 
   const timer = () => {
