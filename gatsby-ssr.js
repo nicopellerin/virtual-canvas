@@ -1,7 +1,14 @@
-/**
- * Implement Gatsby's SSR (Server Side Rendering) APIs in this file.
- *
- * See: https://www.gatsbyjs.org/docs/ssr-apis/
- */
+import React from "react"
 
-// You can delete this file if you're not using it
+import { GlobalStyles } from "./src/styles/global-styles"
+
+import "typeface-inter"
+
+export const wrapRootElement = ({ element }) => {
+  return (
+    <>
+      {element}
+      <GlobalStyles />
+    </>
+  )
+}

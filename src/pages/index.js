@@ -1,21 +1,30 @@
-import React from "react"
-import { Link } from "gatsby"
+import React, { useState } from "react"
+import styled from "styled-components"
 
-import Layout from "../components/layout"
-import Image from "../components/image"
+import { Home } from "../components/home"
 import SEO from "../components/seo"
 
-const IndexPage = () => (
-  <Layout>
-    <SEO title="Home" />
-    <h1>Hi people</h1>
-    <p>Welcome to your new Gatsby site.</p>
-    <p>Now go build something great.</p>
-    <div style={{ maxWidth: `300px`, marginBottom: `1.45rem` }}>
-      <Image />
-    </div>
-    <Link to="/page-2/">Go to page 2</Link>
-  </Layout>
-)
+const IndexPage = () => {
+  const [uploaded, setUploaded] = useState(false)
+
+  return (
+    <>
+      <SEO title="filtersnstuff" description="Upload your art to a 3D canvas" />
+      <Wrapper uploaded={uploaded ? 1 : 0}>
+        <Home uploaded={uploaded} setUploaded={setUploaded} />
+      </Wrapper>
+    </>
+  )
+}
 
 export default IndexPage
+
+// Styles
+const Wrapper = styled.div`
+  background: ${props => (props.uploaded ? "#000" : "#fff")};
+  background-size: cover;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
