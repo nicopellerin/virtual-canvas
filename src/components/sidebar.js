@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react"
 import { motion } from "framer-motion"
-import { MdShoppingCart, MdAddAPhoto, MdAdd, MdRemove } from "react-icons/md"
+import { MdAddAPhoto, MdAdd, MdRemove, MdPhotoCamera } from "react-icons/md"
 import styled from "styled-components"
 import { useSpring, animated } from "react-spring"
 
@@ -74,7 +74,7 @@ export const Sidebar = ({
                 checked={checkedBackground}
                 onChange={() => setCheckedBackground(prevState => !prevState)}
               />
-              <BackdropCheckboxLabel>Add room backdrop</BackdropCheckboxLabel>
+              <BackdropCheckboxLabel>VR backdrop</BackdropCheckboxLabel>
             </label>
           </BackdropCheckbox>
         </Elements>
@@ -90,8 +90,8 @@ export const Sidebar = ({
           />
         </ZoomRange>
         <DownloadButton whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-          <MdShoppingCart style={{ marginRight: 10 }} />
-          Buy now
+          <MdPhotoCamera style={{ marginRight: 10 }} />
+          Take screenshot
         </DownloadButton>
         <input
           type="file"
@@ -107,7 +107,7 @@ export const Sidebar = ({
           onClick={() => fileInputRef.current.click()}
         >
           <MdAddAPhoto style={{ marginRight: 10 }} />
-          Add image
+          Add image to gallery
         </ResetButton>
       </Container>
     </Wrapper>
@@ -303,7 +303,7 @@ const ResetButton = styled(motion.button)`
   border-radius: 5px;
   box-shadow: 0 5px #333;
   cursor: pointer;
-  width: 17rem;
+  width: 21rem;
   margin: 0 auto;
 `
 

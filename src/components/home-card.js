@@ -94,6 +94,6 @@ const Tag = styled.span`
   font-weight: 600;
   text-align: center;
   font-family: "Courier New", Courier, monospace;
-  margin-top: 1.5rem;
+  margin-top: 1.8rem;
   margin-bottom: 1.5rem;
 `
