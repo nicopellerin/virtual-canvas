@@ -7,8 +7,7 @@ const Room = ({ show }) => {
   const [model, setModel] = useState()
 
   useEffect(() => {
-      new GLTFLoader().load("/new/scene.gltf", setModel)
-    }
+    new GLTFLoader().load("/new/scene.gltf", setModel)
   }, [])
 
   return model ? (
