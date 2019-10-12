@@ -1,10 +1,4 @@
-import React, {
-  useRef,
-  useState,
-  useEffect,
-  Suspense,
-  useCallback,
-} from "react"
+import React, { useRef, useState, useEffect, Suspense } from "react"
 import * as THREE from "three"
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
 import { Canvas, extend, useThree, useRender } from "react-three-fiber"
@@ -47,7 +41,9 @@ export const MainScene = ({
   const [rotateCanvas, setRotateCanvas] = useState(true)
   const [lightIntensity, setLightIntensity] = useState(7)
   const [showTexture, setShowTexture] = useState(true)
-  const [showBorder, setShowBorder] = useState(false)
+  const [showBorder, setShowBorder] = useState(true)
+
+  // const { gl, scene, camera } = useThree()
 
   // const mouse = useRef([0, 0])
   // const onMouseMove = useCallback(
@@ -55,6 +51,23 @@ export const MainScene = ({
   //     (mouse.current = [x - window.innerWidth / 2, y - window.innerHeight / 2]),
   //   []
   // )
+
+  function saveAsImage(gl, scene, camera) {
+    var w = window.open("", "")
+    w.document.title = "Screenshot"
+    //w.document.body.style.backgroundColor = "red";
+    var img = new Image()
+    let canvas
+    img.onload = function() {
+      canvas = document.querySelector("#main-image")
+      console.log(canvas)
+    }
+    // Without 'preserveDrawingBuffer' set to true, we must render now
+    // gl.render(scene, camera)
+    // img.src = canvas.toDataURL()
+    console.log("IMG", img)
+    w.document.body.appendChild(img)
+  }
 
   // Control canvas
   const Controls = ({ rotate }) => {
@@ -114,7 +127,7 @@ export const MainScene = ({
         id="main-image"
         // vr
         camera={{ position: [0, -4, -1] }}
-        onCreated={({ gl }) => {
+        onCreated={({ gl, scene, camera }) => {
           gl.shadowMap.enabled = true
           gl.shadowMap.type = THREE.PCFSoftShadowMap
           document.body.appendChild(WEBVR.createButton(gl))
@@ -123,9 +136,9 @@ export const MainScene = ({
       >
         <ambientLight intensity={0.8} />
         <hemisphereLight intensity={0.1} />
-        <Suspense fallback={null}>
+        {/* <Suspense fallback={null}>
           <Room show={checkedBackground} />
-        </Suspense>
+        </Suspense> */}
         <Suspense fallback={null}>
           <Box
             url={photoPreview}
@@ -165,6 +178,7 @@ export const MainScene = ({
         setShowTexture={setShowTexture}
         showBorder={showBorder}
         setShowBorder={setShowBorder}
+        saveAsImage={saveAsImage}
       />
       <Gallery
         setPhotoRatio={setPhotoRatio}

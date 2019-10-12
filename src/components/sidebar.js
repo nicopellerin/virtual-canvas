@@ -20,6 +20,7 @@ export const Sidebar = ({
   setShowTexture,
   showBorder,
   setShowBorder,
+  saveAsImage,
 }) => {
   const [toggle, setToggle] = useState(false)
 
@@ -68,7 +69,7 @@ export const Sidebar = ({
                 <TextureCheckboxLabel>Texture</TextureCheckboxLabel>
               </label>
             </TextureCheckbox>
-            <BackdropCheckbox>
+            {/* <BackdropCheckbox>
               <label>
                 <Checkbox
                   checked={checkedBackground}
@@ -76,7 +77,7 @@ export const Sidebar = ({
                 />
                 <BackdropCheckboxLabel>VR backdrop</BackdropCheckboxLabel>
               </label>
-            </BackdropCheckbox>
+            </BackdropCheckbox> */}
           </Elements>
           <ZoomRange>
             <ZoomTitle>Spotlight intensity</ZoomTitle>
@@ -92,6 +93,7 @@ export const Sidebar = ({
           <DownloadButton
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
+            onClick={() => saveAsImage()}
           >
             <MdPhotoCamera style={{ marginRight: 10 }} />
             Take screenshot
