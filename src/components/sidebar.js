@@ -6,7 +6,7 @@ import { useSpring, animated } from "react-spring"
 
 import Checkbox from "./checkbox"
 
-import Logo from "../images/logo.svg"
+import Logo from "../images/logo-text.svg"
 
 export const Sidebar = ({
   checkedBackground,
@@ -38,7 +38,7 @@ export const Sidebar = ({
       </ToggleButton>
       <Container>
         <TempLogo>
-          <LogoStyled src={Logo} alt="logo" /> filtersnstuff
+          <img src={Logo} alt="logo" width={270} />
         </TempLogo>
         <Elements>
           <RotateCheckbox>

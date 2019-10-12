@@ -3,7 +3,7 @@ import styled from "styled-components"
 import { MdCloudUpload } from "react-icons/md"
 import { motion } from "framer-motion"
 
-import Logo from "../images/logo.svg"
+import Logo from "../images/logo-home.svg"
 
 export const HomeCard = ({ handlePhotoUpload, setUploaded }) => {
   const fileInputRef = useRef()
@@ -11,10 +11,7 @@ export const HomeCard = ({ handlePhotoUpload, setUploaded }) => {
   return (
     <Wrapper>
       <Top>
-        <LogoCameraWrapper>
-          <ApertureStyled src={Logo} />
-        </LogoCameraWrapper>
-        <TempLogo>filtersnstuff</TempLogo>
+        <img src={Logo} alt="logo" width={325} />
         <Tag>Upload your art to a 3D canvas</Tag>
       </Top>
       <Bottom>
@@ -57,26 +54,6 @@ const Wrapper = styled.div`
   border-radius: 25px;
 `
 
-const TempLogo = styled.h1`
-  font-size: 5.5rem;
-  color: #333;
-  font-weight: 800;
-  margin-top: 12rem;
-  margin-bottom: 1.5rem;
-`
-
-const LogoCameraWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  /* background: white; */
-  width: 18rem;
-  height: 18rem;
-  position: absolute;
-  top: 1rem;
-  border-radius: 25px;
-`
-
 const Top = styled.div`
   flex: 1;
   display: flex;
@@ -112,13 +89,11 @@ const UploadButton = styled(motion.button)`
   cursor: pointer;
 `
 
-const ApertureStyled = styled.img`
-  width: 14rem;
-`
-
 const Tag = styled.span`
   font-size: 1.5rem;
   font-weight: 600;
   text-align: center;
   font-family: "Courier New", Courier, monospace;
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
 `
