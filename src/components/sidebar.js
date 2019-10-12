@@ -212,6 +212,7 @@ const Wrapper = styled(animated.div)`
 const Container = styled.div`
   display: flex;
   flex-direction: column;
+  position: relative;
 `
 
 const Elements = styled.div`
