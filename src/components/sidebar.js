@@ -34,7 +34,7 @@ export const Sidebar = ({
   return (
     <Wrapper toggle={toggle ? 1 : 0} style={slideInOut}>
       <ToggleButton onClick={() => setToggle(prev => !prev)}>
-        {toggle ? <MdRemove /> : <MdAdd />}
+        {toggle ? <MdRemove size={26} /> : <MdAdd size={26} />}
       </ToggleButton>
       <Container>
         <TempLogo>
