@@ -12,7 +12,6 @@ export const Sidebar = ({
   checkedBackground,
   setCheckedBackground,
   handlePhotoUpload,
-  setUploaded,
   rotateCanvas,
   setRotateCanvas,
   lightIntensity,
@@ -27,90 +26,96 @@ export const Sidebar = ({
   const fileInputRef = useRef()
 
   const slideInOut = useSpring({
-    transform: toggle ? "translate3d(0, -50%, 0)" : "translate3d(87%, -50%, 0)",
+    transform: toggle ? "translate3d(0, -50%, 0)" : "translate3d(88%, -50%, 0)",
     config: { mass: 1, tension: 120, friction: 18 },
   })
 
   return (
-    <Wrapper toggle={toggle ? 1 : 0} style={slideInOut}>
-      <ToggleButton onClick={() => setToggle(prev => !prev)}>
-        {toggle ? <MdRemove size={26} /> : <MdAdd size={26} />}
-      </ToggleButton>
-      <Container>
-        <TempLogo>
-          <img src={Logo} alt="logo" width={270} />
-        </TempLogo>
-        <Elements>
-          <RotateCheckbox>
-            <label>
-              <Checkbox
-                checked={rotateCanvas}
-                onChange={() => setRotateCanvas(prev => !prev)}
-              />
-              <RotateCheckboxLabel>Auto-rotate</RotateCheckboxLabel>
-            </label>
-          </RotateCheckbox>
-          <BorderCheckbox>
-            <label>
-              <Checkbox
-                checked={showBorder}
-                onChange={() => setShowBorder(prevState => !prevState)}
-              />
-              <BorderCheckboxLabel>Border</BorderCheckboxLabel>
-            </label>
-          </BorderCheckbox>
-          <TextureCheckbox>
-            <label>
-              <Checkbox
-                checked={showTexture}
-                onChange={() => setShowTexture(prevState => !prevState)}
-              />
-              <TextureCheckboxLabel>Texture</TextureCheckboxLabel>
-            </label>
-          </TextureCheckbox>
-          <BackdropCheckbox>
-            <label>
-              <Checkbox
-                checked={checkedBackground}
-                onChange={() => setCheckedBackground(prevState => !prevState)}
-              />
-              <BackdropCheckboxLabel>VR backdrop</BackdropCheckboxLabel>
-            </label>
-          </BackdropCheckbox>
-        </Elements>
-        <ZoomRange>
-          <ZoomTitle>Spotlight intensity</ZoomTitle>
-          <ZoomText>{lightIntensity}%</ZoomText>
+    <div>
+      <Wrapper toggle={toggle ? 1 : 0} style={slideInOut}>
+        <ToggleButton onClick={() => setToggle(prev => !prev)}>
+          {toggle ? <MdRemove size={26} /> : <MdAdd size={26} />}
+        </ToggleButton>
+        <Container>
+          <TempLogo>
+            <img src={Logo} alt="logo" width={270} />
+          </TempLogo>
+          <Elements>
+            <RotateCheckbox>
+              <label>
+                <Checkbox
+                  checked={rotateCanvas}
+                  onChange={() => setRotateCanvas(prev => !prev)}
+                />
+                <RotateCheckboxLabel>Auto-rotate</RotateCheckboxLabel>
+              </label>
+            </RotateCheckbox>
+            <BorderCheckbox>
+              <label>
+                <Checkbox
+                  checked={showBorder}
+                  onChange={() => setShowBorder(prevState => !prevState)}
+                />
+                <BorderCheckboxLabel>Border</BorderCheckboxLabel>
+              </label>
+            </BorderCheckbox>
+            <TextureCheckbox>
+              <label>
+                <Checkbox
+                  checked={showTexture}
+                  onChange={() => setShowTexture(prevState => !prevState)}
+                />
+                <TextureCheckboxLabel>Texture</TextureCheckboxLabel>
+              </label>
+            </TextureCheckbox>
+            <BackdropCheckbox>
+              <label>
+                <Checkbox
+                  checked={checkedBackground}
+                  onChange={() => setCheckedBackground(prevState => !prevState)}
+                />
+                <BackdropCheckboxLabel>VR backdrop</BackdropCheckboxLabel>
+              </label>
+            </BackdropCheckbox>
+          </Elements>
+          <ZoomRange>
+            <ZoomTitle>Spotlight intensity</ZoomTitle>
+            <ZoomText>{lightIntensity}%</ZoomText>
+            <input
+              type="range"
+              min="0"
+              max="20"
+              onChange={e => setLightIntensity(e.target.value)}
+              value={lightIntensity}
+            />
+          </ZoomRange>
+          <DownloadButton
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+          >
+            <MdPhotoCamera style={{ marginRight: 10 }} />
+            Take screenshot
+          </DownloadButton>
           <input
-            type="range"
-            min="0"
-            max="20"
-            onChange={e => setLightIntensity(e.target.value)}
-            value={lightIntensity}
+            type="file"
+            style={{ display: "none" }}
+            ref={fileInputRef}
+            onChange={e => {
+              handlePhotoUpload(e)
+            }}
           />
-        </ZoomRange>
-        <DownloadButton whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-          <MdPhotoCamera style={{ marginRight: 10 }} />
-          Take screenshot
-        </DownloadButton>
-        <input
-          type="file"
-          style={{ display: "none" }}
-          ref={fileInputRef}
-          onChange={e => {
-            handlePhotoUpload(e)
-          }}
-        />
-        <ResetButton
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
-          onClick={() => fileInputRef.current.click()}
-        >
-          <MdAddAPhoto style={{ marginRight: 10 }} />
-          Add image to gallery
-        </ResetButton>
-      </Container>
-    </Wrapper>
+          <ResetButton
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            onClick={() => fileInputRef.current.click()}
+          >
+            <MdAddAPhoto style={{ marginRight: 10 }} />
+            Add image to gallery
+          </ResetButton>
+        </Container>
+        <Bar />
+      </Wrapper>
+    </div>
   )
 }
 
@@ -125,6 +130,7 @@ const Wrapper = styled(animated.div)`
   top: 50%;
   right: 0rem;
   box-shadow: -4px 0 15px rgba(0, 0, 0, 0.15);
+  z-index: 2;
 
   input[type="range"] {
     -webkit-appearance: none;
@@ -213,6 +219,22 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   position: relative;
+  z-index: 2;
+`
+
+const Bar = styled.div`
+  content: "";
+  height: 90%;
+  width: 17px;
+  background: #dddddd;
+  position: absolute;
+  border-top-left-radius: 23px;
+  border-bottom-left-radius: 23px;
+  top: 50%;
+  left: -17px;
+  z-index: 2000;
+  transform: translateY(-50%);
+  box-shadow: -4px 0 15px rgba(0, 0, 0, 0.15);
 `
 
 const Elements = styled.div`
