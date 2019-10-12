@@ -227,16 +227,16 @@ const Container = styled.div`
 const Bar = styled.div`
   content: "";
   height: 90%;
-  width: 17px;
+  width: 15px;
   background: #dddddd;
   position: absolute;
   border-top-left-radius: 23px;
   border-bottom-left-radius: 23px;
   top: 50%;
-  left: -17px;
+  left: -15px;
   z-index: 2000;
   transform: translateY(-50%);
-  box-shadow: -4px 0 15px rgba(0, 0, 0, 0.15);
+  box-shadow: -4px 0 15px rgba(0, 0, 0, 0.1);
 `
 
 const Elements = styled.div`

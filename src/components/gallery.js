@@ -12,57 +12,53 @@ export const Gallery = ({ photoGallery, setPhotoPreview, setPhotoRatio }) => {
   })
 
   return (
-    <>
-      {photoGallery.length > 1 && (
-        <animated.div
-          style={
-            (slideInOut,
-            { position: "absolute", zIndex: 1000, top: "50%", left: 0 })
-          }
-        >
-          <div
-            onClick={() => setToggle(prev => !prev)}
+    <animated.div
+      style={
+        (slideInOut,
+        { position: "absolute", zIndex: 1000, top: "50%", left: 0 })
+      }
+    >
+      <div
+        onClick={() => setToggle(prev => !prev)}
+        style={{
+          transform: "translateY(-50%)",
+          background: photoGallery
+            ? "rgba(255,255,255, 0.02)"
+            : "rgba(255, 255, 255, 0.05)",
+          width: 80,
+          height: 400,
+          overflowY: "auto",
+          display: "grid",
+          gridTemplateColumns: "1fr",
+          gridTemplateRows: `repeat(${photoGallery.length}, 75px)`,
+          justifyItems: "center",
+          paddingTop: 20,
+          marginBottom: 20,
+          gridGap: 5,
+          borderTopRightRadius: 23,
+          borderBottomRightRadius: 23,
+          boxShadow: "4px 0 15px rgba(0, 0, 0, 0.1)",
+        }}
+      >
+        {photoGallery.map(photo => (
+          <img
+            src={photo.src}
+            key={photo.src}
+            alt=""
+            width={60}
+            height={60}
             style={{
-              transform: "translateY(-50%)",
-              background: photoGallery
-                ? "rgba(0, 0, 0, 0.3)"
-                : "rgba(255, 255, 255, 0.05)",
-              width: 90,
-              height: 400,
-              overflowY: "auto",
-              display: "grid",
-              gridTemplateColumns: "1fr",
-              gridTemplateRows: `repeat(${photoGallery.length}, 75px)`,
-              justifyItems: "center",
-              paddingTop: 20,
-              marginBottom: 20,
-              gridGap: 5,
-              borderTopRightRadius: 23,
-              borderBottomRightRadius: 23,
-              boxShadow: "4px 0 15px rgba(0, 0, 0, 0.15)",
+              borderRadius: "50%",
+              cursor: "pointer",
             }}
-          >
-            {photoGallery.map(photo => (
-              <img
-                src={photo.src}
-                key={photo.src}
-                alt=""
-                width={60}
-                height={60}
-                style={{
-                  borderRadius: "50%",
-                  cursor: "pointer",
-                }}
-                onClick={() => {
-                  setPhotoPreview(photo.src)
-                  setPhotoRatio(photo.ratio)
-                }}
-              />
-            ))}
-          </div>
-        </animated.div>
-      )}
-    </>
+            onClick={() => {
+              setPhotoPreview(photo.src)
+              setPhotoRatio(photo.ratio)
+            }}
+          />
+        ))}
+      </div>
+    </animated.div>
   )
 }
 

@@ -7,6 +7,7 @@ import uniforms from "../three/uniforms"
 
 import { Sidebar } from "./sidebar"
 import { Box } from "./box"
+import { Logo } from "./logo"
 import Room from "./room"
 import Gallery from "./gallery"
 import Tips from "./tips"
@@ -39,7 +40,7 @@ export const MainScene = ({
   const [checkedBackground, setCheckedBackground] = useState(false)
   const [setUploaded] = useState(true)
   const [rotateCanvas, setRotateCanvas] = useState(true)
-  const [lightIntensity, setLightIntensity] = useState(7)
+  const [lightIntensity, setLightIntensity] = useState(4)
   const [showTexture, setShowTexture] = useState(true)
   const [showBorder, setShowBorder] = useState(true)
 
@@ -164,6 +165,7 @@ export const MainScene = ({
         />
       </Canvas>
       <Tips />
+      <Logo />
       <Sidebar
         handlePhotoUpload={handlePhotoUpload}
         setUploaded={setUploaded}

@@ -24,7 +24,10 @@ export default IndexPage
 
 // Styles
 const Wrapper = styled.div`
-  background: ${props => (props.uploaded ? "#000004" : "#fff")};
+  background: ${props =>
+    props.uploaded
+      ? "#000004"
+      : "linear-gradient(to right, rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(237,237,237,1) 100%)"};
   background-size: cover;
   height: 100%;
   display: flex;
