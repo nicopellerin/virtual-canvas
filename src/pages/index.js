@@ -24,7 +24,7 @@ export default IndexPage
 
 // Styles
 const Wrapper = styled.div`
-  background: ${props => (props.uploaded ? "#000901" : "#fff")};
+  background: ${props => (props.uploaded ? "#111114" : "#fff")};
   background-size: cover;
   height: 100%;
   display: flex;
