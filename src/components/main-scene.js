@@ -42,7 +42,7 @@ export const MainScene = ({
   const [rotateCanvas, setRotateCanvas] = useState(true)
   const [lightIntensity, setLightIntensity] = useState(4)
   const [showTexture, setShowTexture] = useState(true)
-  const [showBorder, setShowBorder] = useState(false)
+  const [showBorder, setShowBorder] = useState(true)
 
   // const { gl, scene, camera } = useThree()
 
@@ -102,10 +102,10 @@ export const MainScene = ({
   // Directional light
   const RectAreaLightDecl = ({
     color = "white",
-    intensity = 0.1,
+    intensity = 1,
     width = 1000,
     height = 1000,
-    position = [0, 0, -100],
+    position = [0, 0, 0],
     lookAt = [0, 0, 0],
   }) => {
     return (
@@ -136,7 +136,7 @@ export const MainScene = ({
         }}
       >
         <ambientLight intensity={0.8} />
-        <hemisphereLight intensity={0.1} />
+        <hemisphereLight intensity={0.2} />
         {/* <Suspense fallback={null}>
           <Room show={checkedBackground} />
         </Suspense> */}
@@ -149,7 +149,7 @@ export const MainScene = ({
           />
           <Controls rotate={rotateCanvas} />
         </Suspense>
-        <RectAreaLightDecl />
+        {/* <RectAreaLightDecl /> */}
         <spotLight
           castShadow
           position={[-15, 0, 50]}

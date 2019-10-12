@@ -4,6 +4,8 @@ import styled from "styled-components"
 import { Home } from "../components/home"
 import SEO from "../components/seo"
 
+import BG from "../images/vg.jpg"
+
 const IndexPage = () => {
   const [uploaded, setUploaded] = useState(false)
 
@@ -13,7 +15,7 @@ const IndexPage = () => {
         title="virtualcanvas"
         description="Turn your art into a virtual 3D canvas"
       />
-      <Wrapper uploaded={uploaded ? 1 : 0}>
+      <Wrapper uploaded={uploaded ? 1 : 0} background={BG}>
         <Home uploaded={uploaded} setUploaded={setUploaded} />
       </Wrapper>
     </>
@@ -26,8 +28,9 @@ export default IndexPage
 const Wrapper = styled.div`
   background: ${props =>
     props.uploaded
-      ? "#111114"
+      ? "#000004"
       : "linear-gradient(to right, rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(237,237,237,1) 100%)"};
+  /* background: url(${props => props.background}); */
   background-size: cover;
   height: 100%;
   display: flex;
