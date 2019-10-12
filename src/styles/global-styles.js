@@ -7,6 +7,7 @@ export const GlobalStyles = createGlobalStyle`
 
   canvas {
     width: 100vw!important;
+    min-height: 100vh;
     cursor: grab;
   }
 
