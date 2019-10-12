@@ -1,7 +1,7 @@
 module.exports = {
   siteMetadata: {
     title: `virtualcanvas`,
-    description: `Upload your art to a 3D canvas`,
+    description: `Turn your 2D art into 3D`,
     author: `@nicopellerin_io`,
   },
   plugins: [
