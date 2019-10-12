@@ -20,8 +20,8 @@ module.exports = {
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
-        name: `gatsby-starter-default`,
-        short_name: `starter`,
+        name: `filtersnstuff`,
+        short_name: `filtersnstuff`,
         start_url: `/`,
         background_color: `#ff1654`,
         theme_color: `#ff1654`,

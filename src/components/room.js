@@ -1,12 +1,17 @@
 import React, { useState, useEffect } from "react"
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader"
 
+let loaded = false
+
 const Room = ({ show }) => {
   const [model, setModel] = useState()
 
   useEffect(() => {
-    new GLTFLoader().load("/new/scene.gltf", setModel)
-  }, [])
+    if (show && !loaded) {
+      new GLTFLoader().load("/new/scene.gltf", setModel)
+      loaded = true
+    }
+  }, [show])
 
   return model ? (
     <primitive
