@@ -42,7 +42,7 @@ export const MainScene = ({
   const [rotateCanvas, setRotateCanvas] = useState(true)
   const [lightIntensity, setLightIntensity] = useState(4)
   const [showTexture, setShowTexture] = useState(true)
-  const [showBorder, setShowBorder] = useState(true)
+  const [showBorder, setShowBorder] = useState(false)
 
   // const { gl, scene, camera } = useThree()
 

@@ -76,7 +76,7 @@ const Bottom = styled.div`
 `
 
 const UploadButton = styled(motion.button)`
-  background: #ff1654;
+  background: #623cea;
   padding: 1.5rem 3.8rem;
   border: none;
   color: ghostwhite;
@@ -85,7 +85,7 @@ const UploadButton = styled(motion.button)`
   align-items: center;
   font-size: 1.6rem;
   border-radius: 5px;
-  box-shadow: 0 5px #d23b33;
+  box-shadow: 0 5px #623caa;
   cursor: pointer;
 `
 

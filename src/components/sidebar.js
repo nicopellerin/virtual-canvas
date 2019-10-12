@@ -155,7 +155,7 @@ const Wrapper = styled(animated.div)`
     height: 25px;
     width: 25px;
     border-radius: 50%;
-    background: #ff1654;
+    background: #623cea;
     cursor: grab;
     -webkit-appearance: none;
     margin-top: -9px;
@@ -301,7 +301,7 @@ const ZoomTitle = styled.h5`
 const ZoomText = styled.span``
 
 const DownloadButton = styled(motion.button)`
-  background: #ff1654;
+  background: #623cea;
   padding: 1.5rem 3.8rem;
   border: none;
   color: ghostwhite;
@@ -310,7 +310,7 @@ const DownloadButton = styled(motion.button)`
   align-items: center;
   font-size: 1.4rem;
   border-radius: 5px;
-  box-shadow: 0 5px #ff1654;
+  box-shadow: 0 5px #623caa;
   cursor: pointer;
   margin-bottom: 3rem;
 `
