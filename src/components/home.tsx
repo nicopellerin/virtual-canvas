@@ -71,20 +71,28 @@ const MainParent = styled.div`
 `
 
 const Wrapper = styled(motion.div)`
-  background: ${(props: Props) => (props.photoUploaded ? "none" : "#f4f4f4")};
-  padding: ${(props: Props) => (props.photoUploaded ? 0 : "0 6rem")};
+  background: ${(props: { photoUploaded: boolean }) =>
+    props.photoUploaded ? "none" : "#f4f4f4"};
+  padding: ${(props: { photoUploaded: boolean }) =>
+    props.photoUploaded ? 0 : "0 6rem"};
   display: flex;
   justify-content: center;
   min-height: 42rem;
   min-width: 40vw;
   border-radius: 25px;
-  box-shadow: ${(props: Props) =>
+  box-shadow: ${(props: { photoUploaded: boolean }) =>
     props.photoUploaded ? "none" : "0 0 15px rgba(0, 0, 0, 0.15)"};
   transition: padding 1000ms;
+
+  @media (max-width: 700px) {
+    min-width: 320px;
+    padding: 0 1rem;
+  }
 `
 
 const Tag = styled.h6`
-  display: ${(props: Props) => (props.photoUploaded ? "none" : "block")};
+  display: ${(props: { photoUploaded: boolean }) =>
+    props.photoUploaded ? "none" : "block"};
   margin-top: 40px;
   text-align: center;
   font-size: 1.4rem;
@@ -92,4 +100,8 @@ const Tag = styled.h6`
   font-family: "Nunito Sans", sans-serif;
   letter-spacing: 0.2px;
   color: #555;
+
+  @media (max-width: 700px) {
+    font-size: 1.2rem;
+  }
 `

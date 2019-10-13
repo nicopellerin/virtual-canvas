@@ -3,7 +3,7 @@ import styled from "styled-components"
 import { MdCloudUpload } from "react-icons/md"
 import { motion } from "framer-motion"
 
-import Logo from "../images/logo-home.svg"
+import LogoHome from "../images/logo-home.svg"
 
 interface Props {
   handlePhotoUpload: (e: React.ChangeEvent<HTMLInputElement>) => void
@@ -19,7 +19,7 @@ export const HomeCard = ({
   return (
     <Wrapper>
       <Top>
-        <img src={Logo} alt="logo" width={410} />
+        <Logo src={LogoHome} alt="logo" />
         <Tag>Turn your art into a virtual 3D canvas</Tag>
       </Top>
       <Bottom>
@@ -59,6 +59,10 @@ const Wrapper = styled.div`
   flex-direction: column;
   position: relative;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
+
+  @media (max-width: 700px) {
+    min-width: 320px;
+  }
 `
 
 const Top = styled.div`
@@ -94,6 +98,11 @@ const UploadButton = styled(motion.button)`
   border-radius: 5px;
   box-shadow: 0 5px #623caa;
   cursor: pointer;
+
+  @media (max-width: 700px) {
+    font-size: 1.4rem;
+    padding: 1.2rem 3rem;
+  }
 `
 
 const Tag = styled.span`
@@ -104,4 +113,16 @@ const Tag = styled.span`
   text-align: center;
   margin-top: 1.2rem;
   color: #555;
+
+  @media (max-width: 700px) {
+    font-size: 1.4rem;
+  }
+`
+
+const Logo = styled.img`
+  width: 410px;
+
+  @media (max-width: 700px) {
+    width: 275px;
+  }
 `
