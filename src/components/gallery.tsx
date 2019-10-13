@@ -22,74 +22,84 @@ export const Gallery = ({
 
   const slideInOut = useSpring({
     transform: toggle
-      ? "translate3d(-50%, -50%, 0)"
-      : "translate3d(0, -50%, 0)",
+      ? "translate3d(-85%, -50%, 0)"
+      : "translate3d(0%, -50%, 0)",
     config: { mass: 1, tension: 120, friction: 18 },
   })
 
   return (
-    <animated.div
-      style={
-        (slideInOut,
-        { position: "absolute", zIndex: 1000, top: "50%", left: 0 })
-      }
+    <Wrapper
+      style={slideInOut}
+      onClick={() => setToggle(prevState => !prevState)}
     >
-      <div style={{ position: "relative", height: "400px" }}>
-        <div
-          onClick={() => setToggle(prev => !prev)}
-          style={{
-            transform: "translateY(-50%)",
-            background: photoGallery
-              ? "rgba(255,255,255, 0.05)"
-              : "rgba(255, 255, 255, 0.05)",
-            width: 80,
-            height: 400,
-            overflowY: "auto",
-            display: "grid",
-            gridTemplateColumns: "1fr",
-            gridTemplateRows: `repeat(${photoGallery.length}, 75px)`,
-            justifyItems: "center",
-            paddingTop: 20,
-            marginBottom: 20,
-            gridGap: 5,
-            borderTopRightRadius: 23,
-            borderBottomRightRadius: 23,
-            boxShadow: "4px 0 15px rgba(0, 0, 0, 0.1)",
-          }}
-        >
+      <Container>
+        <Grid photoGalleryLength={photoGallery.length}>
           {photoGallery.map(photo => (
-            <img
+            <Thumbnail
               src={photo.src}
               key={photo.src}
-              alt=""
+              alt="Preview thumbnail"
               width={60}
               height={60}
-              style={{
-                borderRadius: "50%",
-                cursor: "pointer",
-              }}
-              onClick={() => {
+              onClick={e => {
+                e.stopPropagation()
                 setPhotoPreview(photo.src)
                 setPhotoRatio(photo.ratio)
               }}
             />
           ))}
-        </div>
-        <Text>Gallery</Text>
-      </div>
-    </animated.div>
+        </Grid>
+      </Container>
+      <Text>Gallery</Text>
+    </Wrapper>
   )
 }
 
 export default Gallery
 
 // Styles
+const Wrapper = styled(animated.div)`
+  position: absolute;
+  z-index: 1000;
+  top: 50%;
+  left: 0;
+`
+
+const Container = styled.div`
+  position: relative;
+  height: 400px;
+`
+
+const Grid = styled.div`
+  background: rgba(255, 255, 255, 0.05);
+  width: 85px;
+  height: 400px;
+  overflow-y: auto;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: repeat(${props => props.photoGalleryLength}, 75px);
+  justify-items: center;
+  padding-top: 20px;
+  margin-bottom: 20px;
+  grid-gap: 5px;
+  border-top-right-radius: 23px;
+  border-bottom-right-radius: 23px;
+  box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
+`
+
+const Thumbnail = styled.img`
+  border-radius: 50%;
+  cursor: pointer;
+`
+
 const Text = styled.span`
   display: block;
   transform: rotate(90deg);
   color: #999;
   position: absolute;
-  left: 65px;
-  top: -20px;
+  left: 60px;
+  padding-left: 20px;
+  top: calc(50% - 2rem);
   font-size: 1.4rem;
+  cursor: pointer;
 `

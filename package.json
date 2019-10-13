@@ -37,7 +37,8 @@
     "react-tooltip": "^3.11.1",
     "styled-components": "^4.4.0",
     "three": "^0.109.0",
-    "typeface-inter": "^3.10.0"
+    "typeface-inter": "^3.10.0",
+    "typeface-nunito-sans": "^0.0.72"
   },
   "devDependencies": {
     "prettier": "^1.18.2"
