@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect, Suspense } from "react"
+import React, { useRef, useState, useEffect, Suspense, Dispatch } from "react"
 import * as THREE from "three"
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
 import { Canvas, extend, useThree, useRender } from "react-three-fiber"
@@ -8,23 +8,39 @@ import uniforms from "../three/uniforms"
 import { Sidebar } from "./sidebar"
 import { Box } from "./box"
 import { Logo } from "./logo"
-import Room from "./room"
 import Gallery from "./gallery"
 import Tips from "./tips"
 
 uniforms.init(THREE)
 
+interface Props {
+  photoPreview: string
+  setPhotoPreview: Dispatch<string>
+  photoRatio: number
+  setPhotoRatio: Dispatch<number>
+  photoGallery: Photo[]
+  setPhotoGallery: Dispatch<any>
+  photoUploaded: boolean
+  setPhotoUploaded: Dispatch<boolean>
+  handlePhotoUpload: () => void
+}
+
+interface Photo {
+  src: string
+  ratio: number
+}
+
 export const MainScene = ({
   photoPreview,
-  handlePhotoUpload,
-  photoRatio,
-  photoGallery,
   setPhotoPreview,
-  setPhotoRatio,
+  photoGallery,
   setPhotoGallery,
-  setPhotoUploaded,
+  photoRatio,
+  setPhotoRatio,
   photoUploaded,
-}) => {
+  setPhotoUploaded,
+  handlePhotoUpload,
+}: Props) => {
   extend({ OrbitControls })
 
   useEffect(() => {
@@ -37,12 +53,12 @@ export const MainScene = ({
     }
   }, [photoRatio])
 
-  const [checkedBackground, setCheckedBackground] = useState<Boolean>(false)
-  const [setUploaded] = useState<Boolean>(true)
-  const [rotateCanvas, setRotateCanvas] = useState<Boolean>(true)
-  const [lightIntensity, setLightIntensity] = useState<Number>(4)
-  const [showTexture, setShowTexture] = useState<Boolean>(true)
-  const [showBorder, setShowBorder] = useState<Boolean>(true)
+  const [checkedBackground, setCheckedBackground] = useState<boolean>(false)
+  const [setUploaded] = useState<boolean>(true)
+  const [rotateCanvas, setRotateCanvas] = useState<boolean>(true)
+  const [lightIntensity, setLightIntensity] = useState<number>(4)
+  const [showTexture, setShowTexture] = useState<boolean>(true)
+  const [showBorder, setShowBorder] = useState<boolean>(true)
 
   // const { gl, scene, camera } = useThree()
 
@@ -72,7 +88,7 @@ export const MainScene = ({
 
   // Control canvas
   const Controls = ({ rotate }: { rotate: boolean }) => {
-    const orbitRef = useRef()
+    const orbitRef = useRef(null)
     const { camera, gl } = useThree()
 
     useRender(() => {
@@ -97,29 +113,6 @@ export const MainScene = ({
         args={[camera, gl.domElement]}
         ref={orbitRef}
         zoomEnabled
-      />
-    )
-  }
-
-  // Directional light
-  const RectAreaLightDecl = ({
-    color = "white",
-    intensity = 1,
-    width = 1000,
-    height = 1000,
-    position = [0, 0, 0],
-    lookAt = [0, 0, 0],
-  }) => {
-    return (
-      <rectAreaLight
-        intensity={intensity}
-        position={position}
-        color={color}
-        width={width}
-        height={height}
-        delay={2}
-        penumbra={1}
-        onUpdate={self => self.lookAt(...lookAt)}
       />
     )
   }
@@ -150,7 +143,6 @@ export const MainScene = ({
           />
           <Controls rotate={rotateCanvas} />
         </Suspense>
-        {/* <RectAreaLightDecl /> */}
         <spotLight
           castShadow
           position={[-15, 0, 50]}

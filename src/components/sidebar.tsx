@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react"
+import React, { useRef, useState, Dispatch } from "react"
 import { motion } from "framer-motion"
 import { MdAddAPhoto, MdAdd, MdRemove, MdPhotoCamera } from "react-icons/md"
 import styled from "styled-components"
@@ -11,13 +11,13 @@ import Logo from "../images/logo-text.svg"
 interface Props {
   handlePhotoUpload: () => void
   rotateCanvas: boolean
-  setRotateCanvas: any
+  setRotateCanvas: Dispatch<Boolean>
   lightIntensity: number
-  setLightIntensity: any
+  setLightIntensity: Dispatch<Number>
   showTexture: boolean
-  setShowTexture: any
+  setShowTexture: Dispatch<Boolean>
   showBorder: boolean
-  setShowBorder: any
+  setShowBorder: Dispatch<Boolean>
 }
 
 export const Sidebar = ({
