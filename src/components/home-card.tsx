@@ -101,7 +101,7 @@ const UploadButton = styled(motion.button)`
   align-items: center;
   font-size: 1.6rem;
   border-radius: 5px;
-  box-shadow: 0 5px #623caa;
+  box-shadow: 0 5px #4923d1;
   cursor: pointer;
 
   @media (max-width: 700px) {

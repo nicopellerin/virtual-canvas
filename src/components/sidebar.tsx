@@ -311,7 +311,7 @@ const DownloadButton = styled(motion.button)`
   align-items: center;
   font-size: 1.4rem;
   border-radius: 5px;
-  box-shadow: 0 5px #623caa;
+  box-shadow: 0 5px #4923d1;
   cursor: pointer;
   margin-bottom: 3rem;
 `
