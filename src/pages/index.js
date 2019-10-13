@@ -29,8 +29,7 @@ const Wrapper = styled.div`
   background: ${props =>
     props.uploaded
       ? "#000004"
-      : "linear-gradient(to right, rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(237,237,237,1) 100%)"};
-  /* background: url(${props => props.background}); */
+      : `linear-gradient(45deg, rgba(255,255,255,0.9) 0%, rgba(246,246,246,0.92) 47%, rgba(237,237,237,0.95) 100%), url(${props.background})`};
   background-size: cover;
   height: 100%;
   display: flex;

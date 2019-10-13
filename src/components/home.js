@@ -61,12 +61,12 @@ const MainParent = styled.div`
 `
 
 const Wrapper = styled(motion.div)`
-  background: ${props => (props.photoUploaded ? "none" : "#111")};
+  background: ${props => (props.photoUploaded ? "none" : "#f4f4f4")};
   padding: ${props => (props.photoUploaded ? 0 : "0 6rem")};
   display: flex;
   justify-content: center;
   min-height: 42rem;
-  min-width: 55vw;
+  min-width: 40vw;
   border-radius: 25px;
   box-shadow: ${props =>
     props.photoUploaded ? "none" : "0 0 15px rgba(0, 0, 0, 0.15)"};
@@ -78,7 +78,7 @@ const Tag = styled.h6`
   margin-top: 40px;
   text-align: center;
   font-size: 1.2rem;
-  font-weight: 400;
-  color: #555;
-  letter-spacing: 2.3px;
+  font-weight: 500;
+  color: #623caa;
+  /* letter-spacing: 2px; */
 `

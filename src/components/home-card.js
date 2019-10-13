@@ -42,16 +42,16 @@ export const HomeCard = ({ handlePhotoUpload, setUploaded }) => {
 // Styles
 const Wrapper = styled.div`
   background: ghostwhite;
-  min-width: 670px;
   width: 100%;
   min-height: 100%;
+  min-width: 620px;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
   position: relative;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
-  border-radius: 25px;
+  /* border-radius: 25px; */
 `
 
 const Top = styled.div`
@@ -91,9 +91,10 @@ const UploadButton = styled(motion.button)`
 
 const Tag = styled.span`
   font-size: 1.4rem;
-  font-weight: 400;
+  font-weight: 500;
   text-align: center;
   margin-top: 1.8rem;
-  color: #555;
-  letter-spacing: 2.3px;
+  color: #623caa;
+  /* font-style: italic; */
+  /* letter-spacing: 0.5px; */
 `
