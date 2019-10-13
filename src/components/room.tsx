@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from "react"
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader"
 
-let loaded = false
-
-const Room = ({ show }) => {
-  const [model, setModel] = useState()
+const Room = ({ show }: { show: boolean }) => {
+  const [model, setModel] = useState<any>()
 
   useEffect(() => {
     new GLTFLoader().load("/other/scene.gltf", setModel)

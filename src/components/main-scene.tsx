@@ -37,12 +37,12 @@ export const MainScene = ({
     }
   }, [photoRatio])
 
-  const [checkedBackground, setCheckedBackground] = useState(false)
-  const [setUploaded] = useState(true)
-  const [rotateCanvas, setRotateCanvas] = useState(true)
-  const [lightIntensity, setLightIntensity] = useState(4)
-  const [showTexture, setShowTexture] = useState(true)
-  const [showBorder, setShowBorder] = useState(true)
+  const [checkedBackground, setCheckedBackground] = useState<Boolean>(false)
+  const [setUploaded] = useState<Boolean>(true)
+  const [rotateCanvas, setRotateCanvas] = useState<Boolean>(true)
+  const [lightIntensity, setLightIntensity] = useState<Number>(4)
+  const [showTexture, setShowTexture] = useState<Boolean>(true)
+  const [showBorder, setShowBorder] = useState<Boolean>(true)
 
   // const { gl, scene, camera } = useThree()
 
@@ -53,31 +53,33 @@ export const MainScene = ({
   //   []
   // )
 
-  function saveAsImage(gl, scene, camera) {
-    var w = window.open("", "")
-    w.document.title = "Screenshot"
-    //w.document.body.style.backgroundColor = "red";
-    var img = new Image()
-    let canvas
-    img.onload = function() {
-      canvas = document.querySelector("#main-image")
-      console.log(canvas)
-    }
-    // Without 'preserveDrawingBuffer' set to true, we must render now
-    // gl.render(scene, camera)
-    // img.src = canvas.toDataURL()
-    console.log("IMG", img)
-    w.document.body.appendChild(img)
-  }
+  // function saveAsImage(gl, scene, camera) {
+  //   var w = window.open("", "")
+  //   w.document.title = "Screenshot"
+  //   //w.document.body.style.backgroundColor = "red";
+  //   var img = new Image()
+  //   let canvas
+  //   img.onload = function() {
+  //     canvas = document.querySelector("#main-image")
+  //     console.log(canvas)
+  //   }
+  //   // Without 'preserveDrawingBuffer' set to true, we must render now
+  //   // gl.render(scene, camera)
+  //   // img.src = canvas.toDataURL()
+  //   console.log("IMG", img)
+  //   w.document.body.appendChild(img)
+  // }
 
   // Control canvas
-  const Controls = ({ rotate }) => {
+  const Controls = ({ rotate }: { rotate: boolean }) => {
     const orbitRef = useRef()
     const { camera, gl } = useThree()
 
     useRender(() => {
-      orbitRef.current.update()
-    })
+      if (orbitRef.current) {
+        orbitRef.current.update()
+      }
+    }, false)
 
     return (
       <orbitControls
@@ -128,11 +130,10 @@ export const MainScene = ({
         id="main-image"
         // vr
         camera={{ position: [0, -4, -1] }}
-        onCreated={({ gl, scene, camera }) => {
+        onCreated={({ gl }) => {
           gl.shadowMap.enabled = true
           gl.shadowMap.type = THREE.PCFSoftShadowMap
           document.body.appendChild(WEBVR.createButton(gl))
-          gl.preserveDrawingBuffer = true
         }}
       >
         <ambientLight intensity={0.8} />
@@ -180,7 +181,6 @@ export const MainScene = ({
         setShowTexture={setShowTexture}
         showBorder={showBorder}
         setShowBorder={setShowBorder}
-        saveAsImage={saveAsImage}
       />
       <Gallery
         setPhotoRatio={setPhotoRatio}

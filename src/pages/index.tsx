@@ -7,7 +7,7 @@ import SEO from "../components/seo"
 import BG from "../images/vg.jpg"
 
 const IndexPage = () => {
-  const [uploaded, setUploaded] = useState(false)
+  const [uploaded, setUploaded] = useState<Boolean>(false)
 
   return (
     <>

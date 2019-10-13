@@ -1,7 +1,13 @@
 import React from "react"
 import styled from "styled-components"
 
-const Checkbox = ({ className, checked, ...props }) => (
+interface Props {
+  className: string
+  checked: boolean
+  props: any
+}
+
+const Checkbox = ({ className, checked, ...props }: Props) => (
   <CheckboxContainer className={className}>
     <HiddenCheckbox checked={checked} {...props} />
     <StyledCheckbox checked={checked}>

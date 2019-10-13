@@ -2,8 +2,23 @@ import React, { useState } from "react"
 import { useSpring, animated } from "react-spring"
 import styled from "styled-components"
 
-export const Gallery = ({ photoGallery, setPhotoPreview, setPhotoRatio }) => {
-  const [toggle, setToggle] = useState(false)
+interface Props {
+  photoGallery: Photo[]
+  setPhotoPreview: (photo: {}) => string
+  setPhotoRatio: (photo: {}) => number
+}
+
+interface Photo {
+  src: string
+  ratio: number
+}
+
+export const Gallery = ({
+  photoGallery,
+  setPhotoPreview,
+  setPhotoRatio,
+}: Props) => {
+  const [toggle, setToggle] = useState<Boolean>(false)
 
   const slideInOut = useSpring({
     transform: toggle

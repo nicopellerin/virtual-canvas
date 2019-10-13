@@ -4,7 +4,14 @@ import { TextureLoader } from "three/src/loaders/TextureLoader"
 import { useLoader, useFrame } from "react-three-fiber"
 import { useSpring, a } from "react-spring/three"
 
-export const Box = ({ url, photoRatio, showTexture, showBorder }) => {
+interface Props {
+  url: string
+  photoRatio: number
+  showTexture: boolean
+  showBorder: boolean
+}
+
+export const Box = ({ url, photoRatio, showTexture, showBorder }: Props) => {
   // Load image on box
   const [texture] = useLoader(THREE.TextureLoader, [url])
 
@@ -17,10 +24,11 @@ export const Box = ({ url, photoRatio, showTexture, showBorder }) => {
 
   // Dolly back and forth effect
   const ref = useRef()
-  useFrame(
-    ({ clock }) =>
-      (ref.current.position.z = Math.sin(clock.getElapsedTime()) * 0.1)
-  )
+  useFrame(({ clock }) => {
+    if (ref.current) {
+      ref.current.position.z = Math.sin(clock.getElapsedTime()) * 0.1
+    }
+  })
 
   return (
     <group ref={ref}>

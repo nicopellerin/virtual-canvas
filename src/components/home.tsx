@@ -5,12 +5,22 @@ import { motion } from "framer-motion"
 import { HomeCard } from "./home-card"
 import { MainScene } from "./main-scene"
 
-export const Home = ({ setUploaded, uploaded }) => {
-  const [photoUploaded, setPhotoUploaded] = useState(false)
-  const [checkedBackground] = useState(false)
-  const [photoPreview, setPhotoPreview] = useState()
-  const [photoRatio, setPhotoRatio] = useState(0)
-  const [photoGallery, setPhotoGallery] = useState([])
+interface Props {
+  setUploaded: any
+  uploaded: boolean
+}
+
+interface Photo {
+  src: string
+  ratio: number
+}
+
+export const Home = ({ setUploaded, uploaded }: Props) => {
+  const [photoUploaded, setPhotoUploaded] = useState<Boolean>(false)
+  const [checkedBackground] = useState<Boolean>(false)
+  const [photoPreview, setPhotoPreview] = useState<String>("")
+  const [photoRatio, setPhotoRatio] = useState<Number>(0)
+  const [photoGallery, setPhotoGallery] = useState<Photo[]>([])
 
   const handlePhotoUpload = e => {
     const { files } = e.target

@@ -8,9 +8,19 @@ import Checkbox from "./checkbox"
 
 import Logo from "../images/logo-text.svg"
 
+interface Props {
+  handlePhotoUpload: () => void
+  rotateCanvas: boolean
+  setRotateCanvas: any
+  lightIntensity: number
+  setLightIntensity: any
+  showTexture: boolean
+  setShowTexture: any
+  showBorder: boolean
+  setShowBorder: any
+}
+
 export const Sidebar = ({
-  checkedBackground,
-  setCheckedBackground,
   handlePhotoUpload,
   rotateCanvas,
   setRotateCanvas,
@@ -20,11 +30,10 @@ export const Sidebar = ({
   setShowTexture,
   showBorder,
   setShowBorder,
-  saveAsImage,
-}) => {
-  const [toggle, setToggle] = useState(false)
+}: Props) => {
+  const [toggle, setToggle] = useState<Boolean>(false)
 
-  const fileInputRef = useRef()
+  const fileInputRef = useRef(null)
 
   const slideInOut = useSpring({
     transform: toggle ? "translate3d(0, -50%, 0)" : "translate3d(88%, -50%, 0)",
@@ -46,7 +55,7 @@ export const Sidebar = ({
               <label>
                 <Checkbox
                   checked={rotateCanvas}
-                  onChange={() => setRotateCanvas(prev => !prev)}
+                  onChange={() => setRotateCanvas(prevState => !prevState)}
                 />
                 <RotateCheckboxLabel>Auto-rotate</RotateCheckboxLabel>
               </label>
@@ -109,7 +118,11 @@ export const Sidebar = ({
           <ResetButton
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            onClick={() => fileInputRef.current.click()}
+            onClick={() => {
+              if (fileInputRef.current) {
+                fileInputRef.current.click()
+              }
+            }}
           >
             <MdAddAPhoto style={{ marginRight: 10 }} />
             Add image to gallery

@@ -5,8 +5,13 @@ import { motion } from "framer-motion"
 
 import Logo from "../images/logo-home.svg"
 
-export const HomeCard = ({ handlePhotoUpload, setUploaded }) => {
-  const fileInputRef = useRef()
+interface Props {
+  handlePhotoUpload: () => void
+  setUploaded: any
+}
+
+export const HomeCard = ({ handlePhotoUpload, setUploaded }: Props) => {
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   return (
     <Wrapper>
@@ -28,7 +33,11 @@ export const HomeCard = ({ handlePhotoUpload, setUploaded }) => {
           <UploadButton
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            onClick={() => fileInputRef.current.click()}
+            onClick={() => {
+              if (fileInputRef.current) {
+                fileInputRef.current.click()
+              }
+            }}
           >
             <MdCloudUpload style={{ marginRight: 10 }} />
             Upload image

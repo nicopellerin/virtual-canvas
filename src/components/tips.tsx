@@ -11,11 +11,11 @@ const tips = [
 const cookieExists = cookie.get("show_tips")
 
 const Tips = () => {
-  const [tip, setTip] = useState("")
+  const [tip, setTip] = useState<String>("")
 
   useEffect(() => {
     if (cookieExists) {
-      return null
+      return
     }
     timer()
     cookie.set("show_tips", "nope")
