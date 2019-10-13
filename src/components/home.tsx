@@ -37,30 +37,27 @@ export const Home = ({ setUploaded, uploaded }: Props): ReactElement => {
 
   return (
     <MainParent uploaded={uploaded ? true : false}>
-      <Wrapper photoUploaded={uploaded ? true : false}>
-        {!uploaded ? (
+      {!uploaded ? (
+        <Wrapper photoUploaded={uploaded ? true : false}>
           <HomeCard
             handlePhotoUpload={handlePhotoUpload}
             setUploaded={setUploaded}
           />
-        ) : (
-          <MainScene
-            setPhotoGallery={setPhotoGallery}
-            photoPreview={photoPreview}
-            checkedBackground={checkedBackground}
-            setPhotoPreview={setPhotoPreview}
-            handlePhotoUpload={handlePhotoUpload}
-            photoGallery={photoGallery}
-            photoRatio={photoRatio}
-            setPhotoRatio={setPhotoRatio}
-            photoUploaded={photoUploaded}
-            setPhotoUploaded={setPhotoUploaded}
-          />
-        )}
-      </Wrapper>
-      <Tag photoUploaded={uploaded ? 1 : 0}>
-        Made in Montreal by Nico Pellerin
-      </Tag>
+        </Wrapper>
+      ) : (
+        <MainScene
+          setPhotoGallery={setPhotoGallery}
+          photoPreview={photoPreview}
+          checkedBackground={checkedBackground}
+          setPhotoPreview={setPhotoPreview}
+          handlePhotoUpload={handlePhotoUpload}
+          photoGallery={photoGallery}
+          photoRatio={photoRatio}
+          setPhotoRatio={setPhotoRatio}
+          photoUploaded={photoUploaded}
+          setPhotoUploaded={setPhotoUploaded}
+        />
+      )}
     </MainParent>
   )
 }

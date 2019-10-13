@@ -17,33 +17,38 @@ export const HomeCard = ({
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   return (
-    <Wrapper>
-      <Top>
-        <Logo src={LogoHome} alt="logo" />
-        <Tag>Turn your art into a virtual 3D canvas</Tag>
-      </Top>
-      <Bottom>
-        <form onSubmit={e => e.preventDefault()}>
-          <input
-            type="file"
-            style={{ display: "none" }}
-            ref={fileInputRef}
-            onChange={e => {
-              handlePhotoUpload(e)
-              setUploaded(true)
-            }}
-          />
-          <UploadButton
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            onClick={() => fileInputRef.current && fileInputRef.current.click()}
-          >
-            <MdCloudUpload style={{ marginRight: 10 }} />
-            Upload image
-          </UploadButton>
-        </form>
-      </Bottom>
-    </Wrapper>
+    <>
+      <Wrapper>
+        <Top>
+          <Logo src={LogoHome} alt="logo" />
+          <Tag>Turn your art into a virtual 3D canvas</Tag>
+        </Top>
+        <Bottom>
+          <form onSubmit={e => e.preventDefault()}>
+            <input
+              type="file"
+              style={{ display: "none" }}
+              ref={fileInputRef}
+              onChange={e => {
+                handlePhotoUpload(e)
+                setUploaded(true)
+              }}
+            />
+            <UploadButton
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() =>
+                fileInputRef.current && fileInputRef.current.click()
+              }
+            >
+              <MdCloudUpload style={{ marginRight: 10 }} />
+              Upload image
+            </UploadButton>
+          </form>
+        </Bottom>
+      </Wrapper>
+      <FooterText>Made in Montreal by Nico Pellerin</FooterText>
+    </>
   )
 }
 
@@ -116,6 +121,22 @@ const Tag = styled.span`
 
   @media (max-width: 700px) {
     font-size: 1.4rem;
+  }
+`
+
+const FooterText = styled.h6`
+  position: absolute;
+  bottom: 1rem;
+  display: block;
+  text-align: center;
+  font-size: 1.4rem;
+  font-weight: 600;
+  font-family: "Nunito Sans", sans-serif;
+  letter-spacing: 0.2px;
+  color: #555;
+
+  @media (max-width: 700px) {
+    font-size: 1.2rem;
   }
 `
 
