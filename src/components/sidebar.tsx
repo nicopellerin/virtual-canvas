@@ -9,15 +9,15 @@ import Checkbox from "./checkbox"
 import Logo from "../images/logo-text.svg"
 
 interface Props {
-  handlePhotoUpload: () => void
+  handlePhotoUpload: (e: Event) => void
   rotateCanvas: boolean
-  setRotateCanvas: Dispatch<Boolean>
+  setRotateCanvas: Dispatch<boolean>
   lightIntensity: number
-  setLightIntensity: Dispatch<Number>
+  setLightIntensity: Dispatch<number>
   showTexture: boolean
-  setShowTexture: Dispatch<Boolean>
+  setShowTexture: Dispatch<boolean>
   showBorder: boolean
-  setShowBorder: Dispatch<Boolean>
+  setShowBorder: Dispatch<boolean>
 }
 
 export const Sidebar = ({
@@ -31,7 +31,7 @@ export const Sidebar = ({
   showBorder,
   setShowBorder,
 }: Props) => {
-  const [toggle, setToggle] = useState<Boolean>(false)
+  const [toggle, setToggle] = useState<boolean>(false)
 
   const fileInputRef = useRef(null)
 
@@ -118,11 +118,7 @@ export const Sidebar = ({
           <ResetButton
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            onClick={() => {
-              if (fileInputRef.current) {
-                fileInputRef.current.click()
-              }
-            }}
+            onClick={() => fileInputRef.current && fileInputRef.current.click()}
           >
             <MdAddAPhoto style={{ marginRight: 10 }} />
             Add image to gallery
@@ -159,7 +155,6 @@ const Wrapper = styled(animated.div)`
     width: 100%;
     height: 8.4px;
     cursor: grab;
-    animate: 0.2s;
     background: #f4f4f4;
     border-radius: 1.3px;
     border: 0.2px solid #010101;
@@ -180,7 +175,6 @@ const Wrapper = styled(animated.div)`
     width: 100%;
     height: 8.4px;
     cursor: grab;
-    animate: 0.2s;
     background: #3071a9;
     border-radius: 1.3px;
     border: 0.2px solid #010101;
@@ -196,7 +190,6 @@ const Wrapper = styled(animated.div)`
     width: 100%;
     height: 8.4px;
     cursor: pointer;
-    animate: 0.2s;
     background: transparent;
     border-color: transparent;
     border-width: 16px 0;
@@ -263,17 +256,6 @@ const RotateCheckbox = styled.div`
 `
 
 const RotateCheckboxLabel = styled.span`
-  font-size: 13px;
-  margin-left: 10px;
-  font-weight: 500;
-`
-
-const BackdropCheckbox = styled.div`
-  margin-top: 10px;
-  margin-bottom: 10px;
-`
-
-const BackdropCheckboxLabel = styled.span`
   font-size: 13px;
   margin-left: 10px;
   font-weight: 500;
@@ -353,12 +335,6 @@ const TempLogo = styled.h1`
   display: flex;
   align-items: center;
 `
-
-const LogoStyled = styled.img`
-  width: 40px;
-  margin-right: 12px;
-`
-
 const ToggleButton = styled.button`
   position: absolute;
   left: 0.3rem;

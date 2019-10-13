@@ -1,4 +1,4 @@
-import React, { useRef } from "react"
+import React, { useRef, Dispatch } from "react"
 import styled from "styled-components"
 import { MdCloudUpload } from "react-icons/md"
 import { motion } from "framer-motion"
@@ -6,8 +6,8 @@ import { motion } from "framer-motion"
 import Logo from "../images/logo-home.svg"
 
 interface Props {
-  handlePhotoUpload: () => void
-  setUploaded: any
+  handlePhotoUpload: (e: React.ChangeEvent<HTMLInputElement>) => void
+  setUploaded: Dispatch<boolean>
 }
 
 export const HomeCard = ({ handlePhotoUpload, setUploaded }: Props) => {
@@ -33,11 +33,7 @@ export const HomeCard = ({ handlePhotoUpload, setUploaded }: Props) => {
           <UploadButton
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            onClick={() => {
-              if (fileInputRef.current) {
-                fileInputRef.current.click()
-              }
-            }}
+            onClick={() => fileInputRef.current && fileInputRef.current.click()}
           >
             <MdCloudUpload style={{ marginRight: 10 }} />
             Upload image
@@ -60,7 +56,6 @@ const Wrapper = styled.div`
   flex-direction: column;
   position: relative;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
-  /* border-radius: 25px; */
 `
 
 const Top = styled.div`
@@ -104,6 +99,4 @@ const Tag = styled.span`
   text-align: center;
   margin-top: 1.8rem;
   color: #623caa;
-  /* font-style: italic; */
-  /* letter-spacing: 0.5px; */
 `

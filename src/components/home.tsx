@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react"
+import React, { useState } from "react"
 import styled from "styled-components"
 import { motion } from "framer-motion"
 
@@ -16,28 +16,28 @@ interface Photo {
 }
 
 export const Home = ({ setUploaded, uploaded }: Props) => {
-  const [photoUploaded, setPhotoUploaded] = useState<Boolean>(false)
-  const [checkedBackground] = useState<Boolean>(false)
-  const [photoPreview, setPhotoPreview] = useState<String>("")
-  const [photoRatio, setPhotoRatio] = useState<Number>(0)
+  const [photoUploaded, setPhotoUploaded] = useState<boolean>(false)
+  const [checkedBackground] = useState<boolean>(false)
+  const [photoPreview, setPhotoPreview] = useState<string>("")
+  const [photoRatio, setPhotoRatio] = useState<number>(0)
   const [photoGallery, setPhotoGallery] = useState<Photo[]>([])
 
-  const handlePhotoUpload = e => {
-    const { files } = e.target
+  const handlePhotoUpload = (e: Event) => {
+    const { files } = e.target as HTMLInputElement
 
     let img = new Image()
     img.onload = function() {
       setPhotoRatio(this.width / this.height)
     }
 
-    img.src = URL.createObjectURL(files[0])
+    img.src = URL.createObjectURL(files && files[0])
     setPhotoPreview(img.src)
     setPhotoUploaded(true)
   }
 
   return (
-    <MainParent uploaded={uploaded ? 1 : 0}>
-      <Wrapper photoUploaded={uploaded ? 1 : 0}>
+    <MainParent uploaded={uploaded ? true : false}>
+      <Wrapper photoUploaded={uploaded ? true : false}>
         {!uploaded ? (
           <HomeCard
             handlePhotoUpload={handlePhotoUpload}
@@ -59,7 +59,7 @@ export const Home = ({ setUploaded, uploaded }: Props) => {
         )}
       </Wrapper>
       <Tag photoUploaded={uploaded ? 1 : 0}>
-        Made in Montreal by Nico Pellerin :)
+        Made in Montreal by Nico Pellerin
       </Tag>
     </MainParent>
   )
@@ -90,5 +90,4 @@ const Tag = styled.h6`
   font-size: 1.2rem;
   font-weight: 500;
   color: #623caa;
-  /* letter-spacing: 2px; */
 `

@@ -2,16 +2,13 @@ import React, { useRef, useState, useEffect, Suspense, Dispatch } from "react"
 import * as THREE from "three"
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
 import { Canvas, extend, useThree, useRender } from "react-three-fiber"
-import { WEBVR } from "./WebVR"
-import uniforms from "../three/uniforms"
+// import { WEBVR } from "./WebVR"
 
 import { Sidebar } from "./sidebar"
 import { Box } from "./box"
 import { Logo } from "./logo"
 import Gallery from "./gallery"
 import Tips from "./tips"
-
-uniforms.init(THREE)
 
 interface Props {
   photoPreview: string
@@ -126,7 +123,7 @@ export const MainScene = ({
         onCreated={({ gl }) => {
           gl.shadowMap.enabled = true
           gl.shadowMap.type = THREE.PCFSoftShadowMap
-          document.body.appendChild(WEBVR.createButton(gl))
+          // document.body.appendChild(WEBVR.createButton(gl))
         }}
       >
         <ambientLight intensity={0.8} />

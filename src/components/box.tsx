@@ -2,7 +2,6 @@ import React, { useRef, useMemo } from "react"
 import * as THREE from "three"
 import { TextureLoader } from "three/src/loaders/TextureLoader"
 import { useLoader, useFrame } from "react-three-fiber"
-import { useSpring, a } from "react-spring/three"
 
 interface Props {
   url: string
@@ -23,7 +22,7 @@ export const Box = ({ url, photoRatio, showTexture, showBorder }: Props) => {
   const bump = useMemo(() => new TextureLoader().load("/canvas.jpg"), [])
 
   // Dolly back and forth effect
-  const ref = useRef()
+  const ref = useRef(null)
   useFrame(({ clock }) => {
     if (ref.current) {
       ref.current.position.z = Math.sin(clock.getElapsedTime()) * 0.1
@@ -32,18 +31,18 @@ export const Box = ({ url, photoRatio, showTexture, showBorder }: Props) => {
 
   return (
     <group ref={ref}>
-      <a.mesh castShadow rotation={[0, 0, 0]}>
+      <mesh castShadow rotation={[0, 0, 0]}>
         <boxBufferGeometry
           attach="geometry"
           args={[3.5 * photoRatio, 3.5, 0.2]}
         />
-        <a.meshBasicMaterial
+        <meshBasicMaterial
           attach="material"
           map={canvasTexture}
           args={[2, 2, 2]}
         />
-      </a.mesh>
-      <a.mesh receiveShadow rotation={[0, 0, 0]} position={[0, 0, 0.112]}>
+      </mesh>
+      <mesh receiveShadow rotation={[0, 0, 0]} position={[0, 0, 0.112]}>
         <planeBufferGeometry
           attach="geometry"
           args={
@@ -59,7 +58,7 @@ export const Box = ({ url, photoRatio, showTexture, showBorder }: Props) => {
           shininess={2}
           args={[2, 2, 2]}
         />
-      </a.mesh>
+      </mesh>
     </group>
   )
 }
