@@ -91,5 +91,5 @@ const Tag = styled.h6`
   font-weight: 600;
   font-family: "Nunito Sans", sans-serif;
   letter-spacing: 0.2px;
-  color: #623caa;
+  color: #555;
 `

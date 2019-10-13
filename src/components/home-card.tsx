@@ -100,5 +100,5 @@ const Tag = styled.span`
   letter-spacing: 0.2px;
   text-align: center;
   margin-top: 1.2rem;
-  color: #623caa;
+  color: #555;
 `

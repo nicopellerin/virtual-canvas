@@ -4,7 +4,7 @@ module.exports = {
     description: `Turn your art into a virtual 3D canvas`,
     author: `@nicopellerin_io`,
     url: "https://virtualcanvas.app", // No trailing slash allowed!
-    image: "/og3.png", // Path to your image you placed in the 'static' folder
+    image: "/og4.png", // Path to your image you placed in the 'static' folder
   },
   plugins: [
     `gatsby-plugin-react-helmet`,
@@ -25,8 +25,8 @@ module.exports = {
         name: `virtualcanvas`,
         short_name: `virtualcanvas`,
         start_url: `/`,
-        background_color: `#ff1654`,
-        theme_color: `#ff1654`,
+        background_color: `#623caa`,
+        theme_color: `#623caa`,
         display: `minimal-ui`,
         icon: `src/images/favicon.png`, // This path is relative to the root of the site.
       },
