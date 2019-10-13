@@ -99,6 +99,6 @@ const Tag = styled.span`
   font-family: "Nunito Sans", sans-serif;
   letter-spacing: 0.2px;
   text-align: center;
-  margin-top: 1.8rem;
+  margin-top: 1.2rem;
   color: #623caa;
 `
