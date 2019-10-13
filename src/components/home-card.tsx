@@ -1,4 +1,4 @@
-import React, { useRef, Dispatch } from "react"
+import React, { useRef, Dispatch, ReactElement, SetStateAction } from "react"
 import styled from "styled-components"
 import { MdCloudUpload } from "react-icons/md"
 import { motion } from "framer-motion"
@@ -7,10 +7,13 @@ import Logo from "../images/logo-home.svg"
 
 interface Props {
   handlePhotoUpload: (e: React.ChangeEvent<HTMLInputElement>) => void
-  setUploaded: Dispatch<boolean>
+  setUploaded: Dispatch<SetStateAction<boolean>>
 }
 
-export const HomeCard = ({ handlePhotoUpload, setUploaded }: Props) => {
+export const HomeCard = ({
+  handlePhotoUpload,
+  setUploaded,
+}: Props): ReactElement => {
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   return (

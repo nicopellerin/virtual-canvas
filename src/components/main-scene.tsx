@@ -1,8 +1,16 @@
-import React, { useRef, useState, useEffect, Suspense, Dispatch } from "react"
+import React, {
+  useRef,
+  useState,
+  useEffect,
+  Suspense,
+  Dispatch,
+  SetStateAction,
+  ReactElement,
+} from "react"
 import * as THREE from "three"
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
 import { Canvas, extend, useThree, useRender } from "react-three-fiber"
-// import { WEBVR } from "./WebVR"
+import { WEBVR } from "./WebVR"
 
 import { Sidebar } from "./sidebar"
 import { Box } from "./box"
@@ -12,13 +20,13 @@ import Tips from "./tips"
 
 interface Props {
   photoPreview: string
-  setPhotoPreview: Dispatch<string>
+  setPhotoPreview: Dispatch<SetStateAction<string>>
   photoRatio: number
-  setPhotoRatio: Dispatch<number>
+  setPhotoRatio: Dispatch<SetStateAction<number>>
   photoGallery: Photo[]
-  setPhotoGallery: Dispatch<any>
+  setPhotoGallery: Dispatch<SetStateAction<Photo[]>>
   photoUploaded: boolean
-  setPhotoUploaded: Dispatch<boolean>
+  setPhotoUploaded: Dispatch<SetStateAction<boolean>>
   handlePhotoUpload: () => void
 }
 
@@ -37,7 +45,7 @@ export const MainScene = ({
   photoUploaded,
   setPhotoUploaded,
   handlePhotoUpload,
-}: Props) => {
+}: Props): ReactElement => {
   extend({ OrbitControls })
 
   useEffect(() => {
@@ -123,7 +131,7 @@ export const MainScene = ({
         onCreated={({ gl }) => {
           gl.shadowMap.enabled = true
           gl.shadowMap.type = THREE.PCFSoftShadowMap
-          // document.body.appendChild(WEBVR.createButton(gl))
+          document.body.appendChild(WEBVR.createButton(gl))
         }}
       >
         <ambientLight intensity={0.8} />

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, ReactElement } from "react"
 import styled from "styled-components"
 import { motion } from "framer-motion"
 import cookie from "js-cookie"
@@ -10,8 +10,8 @@ const tips = [
 
 const cookieExists = cookie.get("show_tips")
 
-const Tips = () => {
-  const [tip, setTip] = useState<String>("")
+const Tips = (): ReactElement => {
+  const [tip, setTip] = useState<string>("")
 
   useEffect(() => {
     if (cookieExists) {

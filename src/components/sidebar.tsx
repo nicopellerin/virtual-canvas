@@ -1,4 +1,10 @@
-import React, { useRef, useState, Dispatch } from "react"
+import React, {
+  useRef,
+  useState,
+  Dispatch,
+  SetStateAction,
+  ReactElement,
+} from "react"
 import { motion } from "framer-motion"
 import { MdAddAPhoto, MdAdd, MdRemove, MdPhotoCamera } from "react-icons/md"
 import styled from "styled-components"
@@ -11,13 +17,13 @@ import Logo from "../images/logo-text.svg"
 interface Props {
   handlePhotoUpload: (e: Event) => void
   rotateCanvas: boolean
-  setRotateCanvas: Dispatch<boolean>
+  setRotateCanvas: Dispatch<SetStateAction<boolean>>
   lightIntensity: number
-  setLightIntensity: Dispatch<number>
+  setLightIntensity: Dispatch<SetStateAction<number>>
   showTexture: boolean
-  setShowTexture: Dispatch<boolean>
+  setShowTexture: Dispatch<SetStateAction<boolean>>
   showBorder: boolean
-  setShowBorder: Dispatch<boolean>
+  setShowBorder: Dispatch<SetStateAction<boolean>>
 }
 
 export const Sidebar = ({
@@ -30,7 +36,7 @@ export const Sidebar = ({
   setShowTexture,
   showBorder,
   setShowBorder,
-}: Props) => {
+}: Props): ReactElement => {
   const [toggle, setToggle] = useState<boolean>(false)
 
   const fileInputRef = useRef(null)

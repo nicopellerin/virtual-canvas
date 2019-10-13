@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, Dispatch, SetStateAction, ReactElement } from "react"
 import styled from "styled-components"
 import { motion } from "framer-motion"
 
@@ -6,7 +6,7 @@ import { HomeCard } from "./home-card"
 import { MainScene } from "./main-scene"
 
 interface Props {
-  setUploaded: any
+  setUploaded: Dispatch<SetStateAction<boolean>>
   uploaded: boolean
 }
 
@@ -15,7 +15,7 @@ interface Photo {
   ratio: number
 }
 
-export const Home = ({ setUploaded, uploaded }: Props) => {
+export const Home = ({ setUploaded, uploaded }: Props): ReactElement => {
   const [photoUploaded, setPhotoUploaded] = useState<boolean>(false)
   const [checkedBackground] = useState<boolean>(false)
   const [photoPreview, setPhotoPreview] = useState<string>("")
@@ -71,20 +71,20 @@ const MainParent = styled.div`
 `
 
 const Wrapper = styled(motion.div)`
-  background: ${props => (props.photoUploaded ? "none" : "#f4f4f4")};
-  padding: ${props => (props.photoUploaded ? 0 : "0 6rem")};
+  background: ${(props: Props) => (props.photoUploaded ? "none" : "#f4f4f4")};
+  padding: ${(props: Props) => (props.photoUploaded ? 0 : "0 6rem")};
   display: flex;
   justify-content: center;
   min-height: 42rem;
   min-width: 40vw;
   border-radius: 25px;
-  box-shadow: ${props =>
+  box-shadow: ${(props: Props) =>
     props.photoUploaded ? "none" : "0 0 15px rgba(0, 0, 0, 0.15)"};
   transition: padding 1000ms;
 `
 
 const Tag = styled.h6`
-  display: ${props => (props.photoUploaded ? "none" : "block")};
+  display: ${(props: Props) => (props.photoUploaded ? "none" : "block")};
   margin-top: 40px;
   text-align: center;
   font-size: 1.4rem;

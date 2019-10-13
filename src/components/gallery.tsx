@@ -1,11 +1,11 @@
-import React, { useState } from "react"
+import React, { useState, Dispatch, SetStateAction, ReactElement } from "react"
 import { useSpring, animated } from "react-spring"
 import styled from "styled-components"
 
 interface Props {
   photoGallery: Photo[]
-  setPhotoPreview: (photo: {}) => string
-  setPhotoRatio: (photo: {}) => number
+  setPhotoPreview: Dispatch<SetStateAction<string>>
+  setPhotoRatio: Dispatch<SetStateAction<number>>
 }
 
 interface Photo {
@@ -17,8 +17,8 @@ export const Gallery = ({
   photoGallery,
   setPhotoPreview,
   setPhotoRatio,
-}: Props) => {
-  const [toggle, setToggle] = useState<Boolean>(false)
+}: Props): ReactElement => {
+  const [toggle, setToggle] = useState<boolean>(false)
 
   const slideInOut = useSpring({
     transform: toggle
@@ -77,7 +77,10 @@ const Grid = styled.div`
   overflow-y: auto;
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: repeat(${props => props.photoGalleryLength}, 75px);
+  grid-template-rows: repeat(
+    ${(props: { photoGalleryLength: number }) => props.photoGalleryLength},
+    75px
+  );
   justify-items: center;
   padding-top: 20px;
   margin-bottom: 20px;

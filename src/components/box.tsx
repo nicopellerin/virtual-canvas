@@ -1,4 +1,10 @@
-import React, { useRef, useMemo } from "react"
+import React, {
+  useRef,
+  useMemo,
+  Dispatch,
+  SetStateAction,
+  ReactElement,
+} from "react"
 import * as THREE from "three"
 import { TextureLoader } from "three/src/loaders/TextureLoader"
 import { useLoader, useFrame } from "react-three-fiber"
@@ -6,11 +12,16 @@ import { useLoader, useFrame } from "react-three-fiber"
 interface Props {
   url: string
   photoRatio: number
-  showTexture: boolean
-  showBorder: boolean
+  showTexture: Dispatch<SetStateAction<boolean>>
+  showBorder: Dispatch<SetStateAction<boolean>>
 }
 
-export const Box = ({ url, photoRatio, showTexture, showBorder }: Props) => {
+export const Box = ({
+  url,
+  photoRatio,
+  showTexture,
+  showBorder,
+}: Props): ReactElement => {
   // Load image on box
   const [texture] = useLoader(THREE.TextureLoader, [url])
 
@@ -22,7 +33,7 @@ export const Box = ({ url, photoRatio, showTexture, showBorder }: Props) => {
   const bump = useMemo(() => new TextureLoader().load("/canvas.jpg"), [])
 
   // Dolly back and forth effect
-  const ref = useRef()
+  const ref = useRef(null)
   useFrame(({ clock }) => {
     if (ref.current) {
       ref.current.position.z = Math.sin(clock.getElapsedTime()) * 0.1
