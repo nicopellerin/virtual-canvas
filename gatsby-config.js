@@ -4,7 +4,7 @@ module.exports = {
     description: `Turn your art into a virtual 3D canvas`,
     author: `@nicopellerin_io`,
     url: "https://virtualcanvas.app", // No trailing slash allowed!
-    image: "/og2.png", // Path to your image you placed in the 'static' folder
+    image: "/og3.png", // Path to your image you placed in the 'static' folder
   },
   plugins: [
     `gatsby-plugin-react-helmet`,

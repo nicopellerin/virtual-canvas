@@ -22,7 +22,7 @@ export const Box = ({ url, photoRatio, showTexture, showBorder }: Props) => {
   const bump = useMemo(() => new TextureLoader().load("/canvas.jpg"), [])
 
   // Dolly back and forth effect
-  const ref = useRef(null)
+  const ref = useRef()
   useFrame(({ clock }) => {
     if (ref.current) {
       ref.current.position.z = Math.sin(clock.getElapsedTime()) * 0.1
