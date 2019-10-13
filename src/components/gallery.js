@@ -25,7 +25,7 @@ export const Gallery = ({ photoGallery, setPhotoPreview, setPhotoRatio }) => {
           style={{
             transform: "translateY(-50%)",
             background: photoGallery
-              ? "rgba(255,255,255, 0.02)"
+              ? "rgba(255,255,255, 0.05)"
               : "rgba(255, 255, 255, 0.05)",
             width: 80,
             height: 400,
