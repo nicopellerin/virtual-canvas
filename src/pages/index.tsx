@@ -12,7 +12,7 @@ const IndexPage = () => {
   return (
     <>
       <SEO
-        title="virtualcanvas"
+        title="Virtual Canvas"
         description="Turn your art into a virtual 3D canvas"
       />
       <Wrapper uploaded={uploaded ? 1 : 0} background={BG}>

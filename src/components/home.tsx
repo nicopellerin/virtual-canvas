@@ -86,19 +86,3 @@ const Wrapper = styled(motion.div)`
     padding: 0 1rem;
   }
 `
-
-const Tag = styled.h6`
-  display: ${(props: { photoUploaded: boolean }) =>
-    props.photoUploaded ? "none" : "block"};
-  margin-top: 40px;
-  text-align: center;
-  font-size: 1.4rem;
-  font-weight: 600;
-  font-family: "Nunito Sans", sans-serif;
-  letter-spacing: 0.2px;
-  color: #555;
-
-  @media (max-width: 700px) {
-    font-size: 1.2rem;
-  }
-`

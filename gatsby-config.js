@@ -1,6 +1,6 @@
 module.exports = {
   siteMetadata: {
-    title: `virtualcanvas`,
+    title: `Virtual Canvas`,
     description: `Turn your art into a virtual 3D canvas`,
     author: `@nicopellerin_io`,
     url: "https://virtualcanvas.app", // No trailing slash allowed!
