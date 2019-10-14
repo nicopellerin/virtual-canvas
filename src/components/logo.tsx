@@ -2,11 +2,16 @@ import React from "react"
 import styled from "styled-components"
 
 import LogoCanvas from "../images/canvas.svg"
+import LogoCanvasDark from "../images/canvas-dark.svg"
 
-export const Logo = () => {
+interface Props {
+  backgroundColor: boolean
+}
+
+export const Logo = ({ backgroundColor }: Props) => {
   return (
     <Wrapper>
-      <img src={LogoCanvas} alt="logo" width={40} />
+      <img src={backgroundColor ? LogoCanvasDark : LogoCanvas} width={40} />
     </Wrapper>
   )
 }

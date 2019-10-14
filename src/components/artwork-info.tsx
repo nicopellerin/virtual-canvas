@@ -4,11 +4,13 @@ import styled from "styled-components"
 import { ArtworkContext } from "../context/artwork-context"
 
 export const ArtworkInfo = () => {
-  const { artworkName } = useContext(ArtworkContext)
+  const { artworkName, backgroundColor } = useContext(ArtworkContext)
 
   return (
     <Wrapper>
-      <Name>{artworkName}</Name>
+      <Name backgroundColor={backgroundColor ? true : false}>
+        {artworkName}
+      </Name>
     </Wrapper>
   )
 }
@@ -21,5 +23,5 @@ const Wrapper = styled.div`
 `
 
 const Name = styled.h2`
-  color: #f4f4f4;
+  color: ${props => (props.backgroundColor ? "#333" : "#f4f4f4")};
 `

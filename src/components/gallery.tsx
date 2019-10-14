@@ -24,7 +24,7 @@ export const Gallery = ({
 }: Props) => {
   const [toggle, setToggle] = useState<boolean>(false)
 
-  const { setArtworkName } = useContext(ArtworkContext)
+  const { setArtworkName, backgroundColor } = useContext(ArtworkContext)
 
   const slideInOut = useSpring({
     transform: toggle
@@ -57,7 +57,7 @@ export const Gallery = ({
           ))}
         </Grid>
       </Container>
-      <Text>Gallery</Text>
+      <Text backgroundColor={backgroundColor ? true : false}>Gallery</Text>
     </Wrapper>
   )
 }
@@ -105,7 +105,7 @@ const Thumbnail = styled.img`
 const Text = styled.span`
   display: block;
   transform: rotate(90deg);
-  color: #999;
+  color: ${props => (props.backgroundColor ? "#333" : "#999")};
   position: absolute;
   left: 60px;
   padding-left: 20px;

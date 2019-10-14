@@ -60,6 +60,7 @@ export const MainScene = ({
     showTexture,
     showBorder,
     setArtworkName,
+    backgroundColor,
   } = useContext(ArtworkContext)
 
   useEffect(() => {
@@ -124,6 +125,11 @@ export const MainScene = ({
   return (
     <div>
       <Canvas
+        style={{
+          background: backgroundColor
+            ? "linear-gradient(45deg, rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(237,237,237,1) 100%"
+            : "#000004",
+        }}
         id="main-image"
         // vr
         camera={{
@@ -132,14 +138,11 @@ export const MainScene = ({
         onCreated={({ gl }) => {
           gl.shadowMap.enabled = true
           gl.shadowMap.type = THREE.PCFSoftShadowMap
-          document.body.appendChild(WEBVR.createButton(gl))
+          // document.body.appendChild(WEBVR.createButton(gl))
         }}
       >
         <ambientLight intensity={0.8} />
         <hemisphereLight intensity={0.2} />
-        {/* <Suspense fallback={null}>
-          <Room show={checkedBackground} />
-        </Suspense> */}
         <Suspense fallback={null}>
           <Box
             url={photoPreview}
@@ -164,7 +167,7 @@ export const MainScene = ({
         />
       </Canvas>
       <Tips />
-      <Logo />
+      <Logo backgroundColor={backgroundColor} />
       <Sidebar
         handlePhotoUpload={handlePhotoUpload}
         checkedBackground={checkedBackground}

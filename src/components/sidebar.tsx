@@ -58,6 +58,8 @@ export const Sidebar = ({
     setShowBorder,
     artworkName,
     setArtworkName,
+    backgroundColor,
+    setBackgroundColor,
   } = useContext(ArtworkContext)
 
   const fileInputRef = useRef(null)
@@ -74,7 +76,7 @@ export const Sidebar = ({
   }
 
   return (
-    <div>
+    <>
       <Wrapper toggle={toggle ? 1 : 0} style={slideInOut}>
         <ToggleButton onClick={() => setToggle(prev => !prev)}>
           {toggle ? <MdRemove size={26} /> : <MdAdd size={26} />}
@@ -93,33 +95,52 @@ export const Sidebar = ({
                 />
               </InputFieldRow>
             </form>
-            <RotateCheckbox>
-              <label>
-                <Checkbox
-                  checked={rotateCanvas}
-                  onChange={() => setRotateCanvas(prevState => !prevState)}
-                />
-                <RotateCheckboxLabel>Auto-rotate</RotateCheckboxLabel>
-              </label>
-            </RotateCheckbox>
-            <BorderCheckbox>
-              <label>
-                <Checkbox
-                  checked={showBorder}
-                  onChange={() => setShowBorder(prevState => !prevState)}
-                />
-                <BorderCheckboxLabel>Border</BorderCheckboxLabel>
-              </label>
-            </BorderCheckbox>
-            <TextureCheckbox>
-              <label>
-                <Checkbox
-                  checked={showTexture}
-                  onChange={() => setShowTexture(prevState => !prevState)}
-                />
-                <TextureCheckboxLabel>Texture</TextureCheckboxLabel>
-              </label>
-            </TextureCheckbox>
+            <CheckboxGrid>
+              <div>
+                <RotateCheckbox>
+                  <label>
+                    <Checkbox
+                      checked={rotateCanvas}
+                      onChange={() => setRotateCanvas(prevState => !prevState)}
+                    />
+                    <RotateCheckboxLabel>Auto-rotate</RotateCheckboxLabel>
+                  </label>
+                </RotateCheckbox>
+                <BorderCheckbox>
+                  <label>
+                    <Checkbox
+                      checked={showBorder}
+                      onChange={() => setShowBorder(prevState => !prevState)}
+                    />
+                    <BorderCheckboxLabel>Border</BorderCheckboxLabel>
+                  </label>
+                </BorderCheckbox>
+                <TextureCheckbox>
+                  <label>
+                    <Checkbox
+                      checked={showTexture}
+                      onChange={() => setShowTexture(prevState => !prevState)}
+                    />
+                    <TextureCheckboxLabel>Texture</TextureCheckboxLabel>
+                  </label>
+                </TextureCheckbox>
+              </div>
+              <div>
+                <BackgroudCheckbox>
+                  <label>
+                    <Checkbox
+                      checked={backgroundColor}
+                      onChange={() =>
+                        setBackgroundColor(prevState => !prevState)
+                      }
+                    />
+                    <BackgroudCheckboxLabel>
+                      Light background
+                    </BackgroudCheckboxLabel>
+                  </label>
+                </BackgroudCheckbox>
+              </div>
+            </CheckboxGrid>
           </Elements>
           <ZoomRange>
             <ZoomTitle>Spotlight intensity</ZoomTitle>
@@ -159,7 +180,7 @@ export const Sidebar = ({
         </Container>
         <Bar />
       </Wrapper>
-    </div>
+    </>
   )
 }
 
@@ -283,6 +304,11 @@ const Elements = styled.div`
   flex-direction: column;
 `
 
+const CheckboxGrid = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+`
+
 const InputFieldRow = styled.div`
   margin-bottom: 2.8rem;
 `
@@ -334,6 +360,15 @@ const TextureCheckbox = styled.div`
 
 const TextureCheckboxLabel = styled.span`
   font-size: 14px;
+  margin-left: 10px;
+  font-weight: 500;
+  color: #333;
+`
+
+const BackgroudCheckbox = styled.div``
+
+const BackgroudCheckboxLabel = styled.span`
+  font-size: 1.4rem;
   margin-left: 10px;
   font-weight: 500;
   color: #333;
