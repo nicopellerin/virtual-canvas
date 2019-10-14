@@ -127,7 +127,9 @@ export const MainScene = ({
       <Canvas
         id="main-image"
         // vr
-        camera={{ position: [0, -4, -1] }}
+        camera={{
+          position: window.innerWidth > 800 ? [0, -4, -1] : [0, -4, 8],
+        }}
         onCreated={({ gl }) => {
           gl.shadowMap.enabled = true
           gl.shadowMap.type = THREE.PCFSoftShadowMap

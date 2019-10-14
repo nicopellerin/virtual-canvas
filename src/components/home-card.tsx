@@ -6,7 +6,7 @@ import { motion } from "framer-motion"
 import LogoHome from "../images/logo-home.svg"
 
 interface Props {
-  handlePhotoUpload: (e: React.ChangeEvent<HTMLInputElement>) => void
+  handlePhotoUpload: (e: React.FormEvent<HTMLInputElement>) => void
   setUploaded: Dispatch<SetStateAction<boolean>>
 }
 
@@ -38,7 +38,7 @@ export const HomeCard = ({ handlePhotoUpload, setUploaded }: Props) => {
                 fileInputRef.current && fileInputRef.current.click()
               }
             >
-              <MdCloudUpload style={{ marginRight: 10 }} />
+              <CloudUploadIcon />
               Upload image
             </UploadButton>
           </form>
@@ -64,6 +64,7 @@ const Wrapper = styled.div`
 
   @media (max-width: 700px) {
     min-width: 320px;
+    border-radius: 23px;
   }
 `
 
@@ -104,6 +105,16 @@ const UploadButton = styled(motion.button)`
   @media (max-width: 700px) {
     font-size: 1.4rem;
     padding: 1.2rem 3rem;
+  }
+`
+
+const CloudUploadIcon = styled(MdCloudUpload)`
+  font-size: 2rem;
+  margin-right: 8px;
+
+  @media (max-width: 700px) {
+    font-size: 1.8rem;
+    margin-right: 7px;
   }
 `
 

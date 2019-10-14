@@ -22,7 +22,7 @@ export const Home = ({ setUploaded, uploaded }: Props) => {
   const [photoRatio, setPhotoRatio] = useState<number>(0)
   const [photoGallery, setPhotoGallery] = useState<Photo[]>([])
 
-  const handlePhotoUpload = (e: Event) => {
+  const handlePhotoUpload = (e: React.FormEvent<HTMLFontElement>) => {
     const { files } = e.target as HTMLInputElement
 
     let img = new Image()
