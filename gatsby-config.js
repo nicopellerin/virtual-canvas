@@ -35,12 +35,6 @@ module.exports = {
       resolve: `gatsby-plugin-google-analytics`,
       options: {
         trackingId: "UA-149856310-1",
-        // Defines where to place the tracking script - `true` in the head and `false` in the body
-        head: false,
-        // Any additional optional fields
-        sampleRate: 5,
-        siteSpeedSampleRate: 10,
-        cookieDomain: "virtualcanvas.app",
       },
     },
     `gatsby-plugin-typescript`,
