@@ -181,7 +181,7 @@ const Wrapper = styled(animated.div)`
     width: 100%;
     height: 8.4px;
     cursor: grab;
-    background: #3071a9;
+    background: #623cea;
     border-radius: 1.3px;
     border: 0.2px solid #010101;
   }
@@ -202,12 +202,12 @@ const Wrapper = styled(animated.div)`
     color: transparent;
   }
   input[type="range"]::-ms-fill-lower {
-    background: #2a6495;
+    background: #623cea;
     border: 0.2px solid #010101;
     border-radius: 2.6px;
   }
   input[type="range"]::-ms-fill-upper {
-    background: #3071a9;
+    background: #623cea;
     border: 0.2px solid #010101;
     border-radius: 2.6px;
     /* box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d; */
@@ -222,10 +222,10 @@ const Wrapper = styled(animated.div)`
     cursor: pointer;
   }
   input[type="range"]:focus::-ms-fill-lower {
-    background: #3071a9;
+    background: #623cea;
   }
   input[type="range"]:focus::-ms-fill-upper {
-    background: #367ebd;
+    background: #623cea;
   }
 `
 

@@ -11,7 +11,7 @@ const tips = [
 const cookieExists = cookie.get("show_tips")
 
 const Tips = (): ReactElement => {
-  const [tip, setTip] = useState<string>("")
+  const [tip, setTip] = useState<any>()
 
   useEffect(() => {
     if (cookieExists) {
@@ -36,7 +36,7 @@ const Tips = (): ReactElement => {
 
     return interval
   }
-  return <Wrapper>{tip}</Wrapper>
+  return <Wrapper data-test="tips-app">{tip}</Wrapper>
 }
 
 export default Tips
