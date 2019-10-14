@@ -16,12 +16,7 @@ interface Props {
   showBorder: Dispatch<SetStateAction<boolean>>
 }
 
-export const Box = ({
-  url,
-  photoRatio,
-  showTexture,
-  showBorder,
-}: Props): ReactElement => {
+export const Box = ({ url, photoRatio, showTexture, showBorder }: Props) => {
   // Load image on box
   const [texture] = useLoader(THREE.TextureLoader, [url])
 

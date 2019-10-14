@@ -45,7 +45,7 @@ export const MainScene = ({
   photoUploaded,
   setPhotoUploaded,
   handlePhotoUpload,
-}: Props): ReactElement => {
+}: Props) => {
   extend({ OrbitControls })
 
   useEffect(() => {

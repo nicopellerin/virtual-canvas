@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from "react"
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader"
 
-const Room = ({ show }: { show: boolean }) => {
+interface Props {
+  show: boolean
+}
+
+const Room = ({ show }: Props) => {
   const [model, setModel] = useState<any>()
 
   useEffect(() => {

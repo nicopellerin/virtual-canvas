@@ -36,7 +36,7 @@ export const Sidebar = ({
   setShowTexture,
   showBorder,
   setShowBorder,
-}: Props): ReactElement => {
+}: Props) => {
   const [toggle, setToggle] = useState<boolean>(false)
 
   const fileInputRef = useRef(null)

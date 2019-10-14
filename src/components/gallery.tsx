@@ -17,7 +17,7 @@ export const Gallery = ({
   photoGallery,
   setPhotoPreview,
   setPhotoRatio,
-}: Props): ReactElement => {
+}: Props) => {
   const [toggle, setToggle] = useState<boolean>(false)
 
   const slideInOut = useSpring({
