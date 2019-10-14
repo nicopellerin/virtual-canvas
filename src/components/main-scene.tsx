@@ -1,22 +1,25 @@
 import React, {
   useRef,
-  useState,
+  useContext,
   useEffect,
   Suspense,
   Dispatch,
   SetStateAction,
-  ReactElement,
 } from "react"
 import * as THREE from "three"
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
 import { Canvas, extend, useThree, useRender } from "react-three-fiber"
 import { WEBVR } from "./WebVR"
+import uuid from "uuid/v4"
 
 import { Sidebar } from "./sidebar"
+import { ArtworkInfo } from "./artwork-info"
 import { Box } from "./box"
 import { Logo } from "./logo"
 import Gallery from "./gallery"
 import Tips from "./tips"
+
+import { ArtworkContext } from "../context/artwork-context"
 
 interface Props {
   photoPreview: string
@@ -31,8 +34,10 @@ interface Props {
 }
 
 interface Photo {
+  id: number
   src: string
   ratio: number
+  name: string
 }
 
 export const MainScene = ({
@@ -48,31 +53,25 @@ export const MainScene = ({
 }: Props) => {
   extend({ OrbitControls })
 
+  const {
+    checkedBackground,
+    rotateCanvas,
+    lightIntensity,
+    showTexture,
+    showBorder,
+    setArtworkName,
+  } = useContext(ArtworkContext)
+
   useEffect(() => {
     if (photoRatio && photoUploaded) {
       setPhotoGallery([
         ...photoGallery,
-        { src: photoPreview, ratio: photoRatio },
+        { id: uuid(), src: photoPreview, ratio: photoRatio, name: "" },
       ])
       setPhotoUploaded(false)
+      setArtworkName("")
     }
   }, [photoRatio])
-
-  const [checkedBackground, setCheckedBackground] = useState<boolean>(false)
-  const [setUploaded] = useState<boolean>(true)
-  const [rotateCanvas, setRotateCanvas] = useState<boolean>(true)
-  const [lightIntensity, setLightIntensity] = useState<number>(4)
-  const [showTexture, setShowTexture] = useState<boolean>(true)
-  const [showBorder, setShowBorder] = useState<boolean>(true)
-
-  // const { gl, scene, camera } = useThree()
-
-  // const mouse = useRef([0, 0])
-  // const onMouseMove = useCallback(
-  //   ({ clientX: x, clientY: y }) =>
-  //     (mouse.current = [x - window.innerWidth / 2, y - window.innerHeight / 2]),
-  //   []
-  // )
 
   // function saveAsImage(gl, scene, camera) {
   //   var w = window.open("", "")
@@ -168,24 +167,18 @@ export const MainScene = ({
       <Logo />
       <Sidebar
         handlePhotoUpload={handlePhotoUpload}
-        setUploaded={setUploaded}
         checkedBackground={checkedBackground}
         setPhotoUploaded={setPhotoUploaded}
-        setCheckedBackground={setCheckedBackground}
-        setRotateCanvas={setRotateCanvas}
-        rotateCanvas={rotateCanvas}
-        lightIntensity={lightIntensity}
-        setLightIntensity={setLightIntensity}
-        showTexture={showTexture}
-        setShowTexture={setShowTexture}
-        showBorder={showBorder}
-        setShowBorder={setShowBorder}
+        photoGallery={photoGallery}
+        setPhotoGallery={setPhotoGallery}
+        photoPreview={photoPreview}
       />
       <Gallery
+        photoGallery={photoGallery}
         setPhotoRatio={setPhotoRatio}
         setPhotoPreview={setPhotoPreview}
-        photoGallery={photoGallery}
       />
+      <ArtworkInfo />
     </div>
   )
 }

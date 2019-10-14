@@ -1,9 +1,9 @@
 import React, {
   useRef,
   useState,
+  useContext,
   Dispatch,
   SetStateAction,
-  ReactElement,
 } from "react"
 import { motion } from "framer-motion"
 import { MdAddAPhoto, MdAdd, MdRemove, MdPhotoCamera } from "react-icons/md"
@@ -11,6 +11,8 @@ import styled from "styled-components"
 import { useSpring, animated } from "react-spring"
 
 import Checkbox from "./checkbox"
+
+import { ArtworkContext } from "../context/artwork-context"
 
 import Logo from "../images/logo-text.svg"
 
@@ -24,20 +26,39 @@ interface Props {
   setShowTexture: Dispatch<SetStateAction<boolean>>
   showBorder: boolean
   setShowBorder: Dispatch<SetStateAction<boolean>>
+  artworkName: string
+  setArtworkName: Dispatch<SetStateAction<string>>
+  photoGallery: Photo[]
+  setPhotoGallery: Dispatch<SetStateAction<Photo>>
+  photoPreview: string
+}
+
+interface Photo {
+  id: number
+  src: string
+  ratio: number
+  name: string
 }
 
 export const Sidebar = ({
   handlePhotoUpload,
-  rotateCanvas,
-  setRotateCanvas,
-  lightIntensity,
-  setLightIntensity,
-  showTexture,
-  setShowTexture,
-  showBorder,
-  setShowBorder,
+  photoPreview,
+  photoGallery,
 }: Props) => {
   const [toggle, setToggle] = useState<boolean>(false)
+
+  const {
+    rotateCanvas,
+    setRotateCanvas,
+    lightIntensity,
+    setLightIntensity,
+    showTexture,
+    setShowTexture,
+    showBorder,
+    setShowBorder,
+    artworkName,
+    setArtworkName,
+  } = useContext(ArtworkContext)
 
   const fileInputRef = useRef(null)
 
@@ -45,6 +66,12 @@ export const Sidebar = ({
     transform: toggle ? "translate3d(0, -50%, 0)" : "translate3d(88%, -50%, 0)",
     config: { mass: 1, tension: 120, friction: 18 },
   })
+
+  const handleArtworkSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    const photo = photoGallery.find(url => url.src === photoPreview)
+    photo.name = artworkName
+  }
 
   return (
     <div>
@@ -57,6 +84,15 @@ export const Sidebar = ({
             <img src={Logo} alt="logo" width={270} />
           </TempLogo>
           <Elements>
+            <form onSubmit={handleArtworkSubmit}>
+              <InputFieldRow>
+                <Label style={{ display: "block" }}>Artwork name</Label>
+                <InputField
+                  value={artworkName}
+                  onChange={e => setArtworkName(e.target.value)}
+                />
+              </InputFieldRow>
+            </form>
             <RotateCheckbox>
               <label>
                 <Checkbox
@@ -84,15 +120,6 @@ export const Sidebar = ({
                 <TextureCheckboxLabel>Texture</TextureCheckboxLabel>
               </label>
             </TextureCheckbox>
-            {/* <BackdropCheckbox>
-              <label>
-                <Checkbox
-                  checked={checkedBackground}
-                  onChange={() => setCheckedBackground(prevState => !prevState)}
-                />
-                <BackdropCheckboxLabel>VR backdrop</BackdropCheckboxLabel>
-              </label>
-            </BackdropCheckbox> */}
           </Elements>
           <ZoomRange>
             <ZoomTitle>Spotlight intensity</ZoomTitle>
@@ -256,15 +283,38 @@ const Elements = styled.div`
   flex-direction: column;
 `
 
+const InputFieldRow = styled.div`
+  margin-bottom: 2.8rem;
+`
+
+const Label = styled.label`
+  font-size: 1.4rem;
+  font-weight: 500;
+  margin-bottom: 5px;
+  color: #333;
+`
+
+const InputField = styled.input`
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  border: none;
+  background: #f4f4f4;
+  font-size: 1.4rem;
+  color: #333;
+  font-family: inherit;
+`
+
 const RotateCheckbox = styled.div`
   margin-top: 0;
   margin-bottom: 5;
 `
 
 const RotateCheckboxLabel = styled.span`
-  font-size: 13px;
+  font-size: 1.4rem;
   margin-left: 10px;
   font-weight: 500;
+  color: #333;
 `
 
 const BorderCheckbox = styled.div`
@@ -272,9 +322,10 @@ const BorderCheckbox = styled.div`
 `
 
 const BorderCheckboxLabel = styled.span`
-  font-size: 13px;
+  font-size: 1.4rem;
   margin-left: 10px;
   font-weight: 500;
+  color: #333;
 `
 
 const TextureCheckbox = styled.div`
@@ -282,9 +333,10 @@ const TextureCheckbox = styled.div`
 `
 
 const TextureCheckboxLabel = styled.span`
-  font-size: 13px;
+  font-size: 14px;
   margin-left: 10px;
   font-weight: 500;
+  color: #333;
 `
 
 const ZoomRange = styled.div`
@@ -297,9 +349,12 @@ const ZoomRange = styled.div`
 const ZoomTitle = styled.h5`
   font-size: 14px;
   margin-bottom: 10px;
+  color: #333;
 `
 
-const ZoomText = styled.span``
+const ZoomText = styled.span`
+  color: #333;
+`
 
 const DownloadButton = styled(motion.button)`
   background: #623cea;

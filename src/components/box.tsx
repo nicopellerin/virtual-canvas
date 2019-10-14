@@ -1,10 +1,4 @@
-import React, {
-  useRef,
-  useMemo,
-  Dispatch,
-  SetStateAction,
-  ReactElement,
-} from "react"
+import React, { useRef, useMemo, Dispatch, SetStateAction } from "react"
 import * as THREE from "three"
 import { TextureLoader } from "three/src/loaders/TextureLoader"
 import { useLoader, useFrame } from "react-three-fiber"

@@ -1,6 +1,8 @@
-import React, { useState, Dispatch, SetStateAction, ReactElement } from "react"
+import React, { useState, useContext, Dispatch, SetStateAction } from "react"
 import { useSpring, animated } from "react-spring"
 import styled from "styled-components"
+
+import { ArtworkContext } from "../context/artwork-context"
 
 interface Props {
   photoGallery: Photo[]
@@ -9,8 +11,10 @@ interface Props {
 }
 
 interface Photo {
+  id: string
   src: string
   ratio: number
+  name: string
 }
 
 export const Gallery = ({
@@ -19,6 +23,8 @@ export const Gallery = ({
   setPhotoRatio,
 }: Props) => {
   const [toggle, setToggle] = useState<boolean>(false)
+
+  const { setArtworkName } = useContext(ArtworkContext)
 
   const slideInOut = useSpring({
     transform: toggle
@@ -37,7 +43,7 @@ export const Gallery = ({
           {photoGallery.map(photo => (
             <Thumbnail
               src={photo.src}
-              key={photo.src}
+              key={photo.id}
               alt="Preview thumbnail"
               width={60}
               height={60}
@@ -45,6 +51,7 @@ export const Gallery = ({
                 e.stopPropagation()
                 setPhotoPreview(photo.src)
                 setPhotoRatio(photo.ratio)
+                setArtworkName(photo.name)
               }}
             />
           ))}
