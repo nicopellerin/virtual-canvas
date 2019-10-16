@@ -374,7 +374,7 @@ const Add = styled.div`
   position: absolute;
   right: -32px;
   top: 28px;
-  cursor: "pointer";
+  cursor: pointer;
 `
 
 const RotateCheckbox = styled.div`
