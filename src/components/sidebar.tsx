@@ -11,8 +11,6 @@ import {
   MdAdd,
   MdRemove,
   MdPhotoCamera,
-  MdCheckCircle,
-  MdSave,
   MdAddCircle,
 } from "react-icons/md"
 import styled from "styled-components"
@@ -74,6 +72,7 @@ export const Sidebar: React.FC<Props> = ({
   } = useContext(ArtworkContext)
 
   const fileInputRef = useRef(null)
+  const artworkFieldRef = useRef(null)
 
   const slideInOut = useSpring({
     transform: toggle ? "translate3d(0, -50%, 0)" : "translate3d(88%, -50%, 0)",
@@ -89,6 +88,7 @@ export const Sidebar: React.FC<Props> = ({
     if (artworkName) {
       setShowSuccessMsg(true)
       setSubmitted(true)
+      artworkFieldRef.current.blur()
     }
   }
 
@@ -108,8 +108,9 @@ export const Sidebar: React.FC<Props> = ({
                 <Label style={{ display: "block" }}>Artwork name</Label>
                 <InputField
                   value={artworkName}
+                  ref={artworkFieldRef}
                   // onFocus={() => {}} ### TODO: Set focused state, add delete button if text.length === 0
-                  onBlur={() => {}}
+                  // onBlur={() => {}}
                   onChange={e => {
                     setSubmitted(false)
                     setArtworkName(e.target.value)
