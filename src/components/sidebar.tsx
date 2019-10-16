@@ -11,6 +11,7 @@ import styled from "styled-components"
 import { useSpring, animated } from "react-spring"
 
 import Checkbox from "./checkbox"
+import { Toast } from "./toast"
 
 import { ArtworkContext } from "../context/artwork-context"
 
@@ -40,12 +41,13 @@ interface Photo {
   name: string
 }
 
-export const Sidebar = ({
+export const Sidebar: React.FC<Props> = ({
   handlePhotoUpload,
   photoPreview,
   photoGallery,
-}: Props) => {
+}) => {
   const [toggle, setToggle] = useState<boolean>(false)
+  const [showSuccessMsg, setShowSuccessMsg] = useState<boolean>(false)
 
   const {
     rotateCanvas,
@@ -71,8 +73,13 @@ export const Sidebar = ({
 
   const handleArtworkSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+
     const photo = photoGallery.find(url => url.src === photoPreview)
     photo.name = artworkName
+
+    if (artworkName) {
+      setShowSuccessMsg(true)
+    }
   }
 
   return (
@@ -180,6 +187,13 @@ export const Sidebar = ({
         </Container>
         <Bar />
       </Wrapper>
+      {showSuccessMsg && (
+        <Toast
+          message="Saved name to artwork"
+          resetState={() => setShowSuccessMsg(false)}
+          delay={3000}
+        />
+      )}
     </>
   )
 }
