@@ -69,6 +69,8 @@ export const Sidebar: React.FC<Props> = ({
     setArtworkName,
     backgroundColor,
     setBackgroundColor,
+    rotateIncrement,
+    setRotateIncrement,
   } = useContext(ArtworkContext)
 
   const fileInputRef = useRef(null)
@@ -168,6 +170,19 @@ export const Sidebar: React.FC<Props> = ({
                     />
                     <BackgroudCheckboxLabel>
                       Light background
+                    </BackgroudCheckboxLabel>
+                  </label>
+                </BackgroudCheckbox>
+                <BackgroudCheckbox>
+                  <label>
+                    <Checkbox
+                      checked={rotateIncrement}
+                      onChange={() =>
+                        setRotateIncrement(prevState => !prevState)
+                      }
+                    />
+                    <BackgroudCheckboxLabel>
+                      Rotate 90˚ CW
                     </BackgroudCheckboxLabel>
                   </label>
                 </BackgroudCheckbox>
@@ -412,7 +427,9 @@ const TextureCheckboxLabel = styled.span`
   color: #333;
 `
 
-const BackgroudCheckbox = styled.div``
+const BackgroudCheckbox = styled.div`
+  margin-bottom: 10px;
+`
 
 const BackgroudCheckboxLabel = styled.span`
   font-size: 1.4rem;

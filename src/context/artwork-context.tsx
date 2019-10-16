@@ -14,6 +14,7 @@ export const ArtworkProvider = ({ children }: Props) => {
   const [showBorder, setShowBorder] = useState<boolean>(true)
   const [artworkName, setArtworkName] = useState<string>("")
   const [backgroundColor, setBackgroundColor] = useState(false)
+  const [rotateIncrement, setRotateIncrement] = useState(false)
 
   const value = useMemo(() => {
     return {
@@ -31,6 +32,8 @@ export const ArtworkProvider = ({ children }: Props) => {
       setArtworkName,
       backgroundColor,
       setBackgroundColor,
+      rotateIncrement,
+      setRotateIncrement,
     }
   }, [
     checkedBackground,
@@ -40,6 +43,7 @@ export const ArtworkProvider = ({ children }: Props) => {
     showBorder,
     artworkName,
     backgroundColor,
+    rotateIncrement,
   ])
 
   return (

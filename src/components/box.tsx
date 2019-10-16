@@ -8,6 +8,7 @@ interface Props {
   photoRatio: number
   showTexture: Dispatch<SetStateAction<boolean>>
   showBorder: Dispatch<SetStateAction<boolean>>
+  rotateIncrement: boolean
 }
 
 export const Box: React.FC<Props> = ({
@@ -15,6 +16,7 @@ export const Box: React.FC<Props> = ({
   photoRatio,
   showTexture,
   showBorder,
+  rotateIncrement,
 }) => {
   // Load image on box
   const [texture] = useLoader(THREE.TextureLoader, [url])
@@ -35,7 +37,7 @@ export const Box: React.FC<Props> = ({
   })
 
   return (
-    <group ref={ref}>
+    <group ref={ref} rotation={rotateIncrement ? [0, 0, 1.57] : [0, 0, 0]}>
       <mesh castShadow rotation={[0, 0, 0]}>
         <boxBufferGeometry
           attach="geometry"

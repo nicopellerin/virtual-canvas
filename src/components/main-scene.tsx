@@ -61,6 +61,7 @@ export const MainScene: React.FC<Props> = ({
     showBorder,
     setArtworkName,
     backgroundColor,
+    rotateIncrement,
   } = useContext(ArtworkContext)
 
   useEffect(() => {
@@ -149,6 +150,7 @@ export const MainScene: React.FC<Props> = ({
             photoRatio={photoRatio}
             showTexture={showTexture}
             showBorder={showBorder}
+            rotateIncrement={rotateIncrement}
           />
           <Controls rotate={rotateCanvas} />
         </Suspense>
