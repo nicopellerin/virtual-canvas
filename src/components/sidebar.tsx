@@ -6,7 +6,15 @@ import React, {
   SetStateAction,
 } from "react"
 import { motion } from "framer-motion"
-import { MdAddAPhoto, MdAdd, MdRemove, MdPhotoCamera } from "react-icons/md"
+import {
+  MdAddAPhoto,
+  MdAdd,
+  MdRemove,
+  MdPhotoCamera,
+  MdCheckCircle,
+  MdSave,
+  MdAddCircle,
+} from "react-icons/md"
 import styled from "styled-components"
 import { useSpring, animated } from "react-spring"
 
@@ -48,6 +56,7 @@ export const Sidebar: React.FC<Props> = ({
 }) => {
   const [toggle, setToggle] = useState<boolean>(false)
   const [showSuccessMsg, setShowSuccessMsg] = useState<boolean>(false)
+  const [submitted, setSubmitted] = useState<boolean>(false)
 
   const {
     rotateCanvas,
@@ -79,6 +88,7 @@ export const Sidebar: React.FC<Props> = ({
 
     if (artworkName) {
       setShowSuccessMsg(true)
+      setSubmitted(true)
     }
   }
 
@@ -98,8 +108,22 @@ export const Sidebar: React.FC<Props> = ({
                 <Label style={{ display: "block" }}>Artwork name</Label>
                 <InputField
                   value={artworkName}
-                  onChange={e => setArtworkName(e.target.value)}
+                  // onFocus={() => {}} ### TODO: Set focused state, add delete button if text.length === 0
+                  onBlur={() => {}}
+                  onChange={e => {
+                    setSubmitted(false)
+                    setArtworkName(e.target.value)
+                  }}
                 />
+                {artworkName.length > 0 && !submitted && (
+                  <Add>
+                    <MdAddCircle
+                      size={24}
+                      color="green"
+                      onClick={handleArtworkSubmit}
+                    />
+                  </Add>
+                )}
               </InputFieldRow>
             </form>
             <CheckboxGrid>
@@ -325,6 +349,7 @@ const CheckboxGrid = styled.div`
 
 const InputFieldRow = styled.div`
   margin-bottom: 2.8rem;
+  position: relative;
 `
 
 const Label = styled.label`
@@ -343,6 +368,13 @@ const InputField = styled.input`
   font-size: 1.4rem;
   color: #333;
   font-family: inherit;
+`
+
+const Add = styled.div`
+  position: absolute;
+  right: -32px;
+  top: 28px;
+  cursor: "pointer";
 `
 
 const RotateCheckbox = styled.div`
