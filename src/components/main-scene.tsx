@@ -40,7 +40,7 @@ interface Photo {
   name: string
 }
 
-export const MainScene = ({
+export const MainScene: React.FC<Props> = ({
   photoPreview,
   setPhotoPreview,
   photoGallery,
@@ -50,7 +50,7 @@ export const MainScene = ({
   photoUploaded,
   setPhotoUploaded,
   handlePhotoUpload,
-}: Props) => {
+}) => {
   extend({ OrbitControls })
 
   const {

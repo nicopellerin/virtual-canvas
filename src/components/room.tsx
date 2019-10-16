@@ -5,7 +5,7 @@ interface Props {
   show: boolean
 }
 
-const Room = ({ show }: Props) => {
+const Room: React.FC<Props> = ({ show }) => {
   const [model, setModel] = useState<any>()
 
   useEffect(() => {

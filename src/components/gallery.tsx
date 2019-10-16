@@ -17,11 +17,11 @@ interface Photo {
   name: string
 }
 
-export const Gallery = ({
+export const Gallery: React.FC<Props> = ({
   photoGallery,
   setPhotoPreview,
   setPhotoRatio,
-}: Props) => {
+}) => {
   const [toggle, setToggle] = useState<boolean>(false)
 
   const { setArtworkName, backgroundColor } = useContext(ArtworkContext)

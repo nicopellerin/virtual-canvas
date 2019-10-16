@@ -6,7 +6,7 @@ interface Props {
   checked: boolean
 }
 
-const Checkbox = ({ className, checked, ...props }: Props) => (
+const Checkbox: React.FC<Props> = ({ className, checked, ...props }) => (
   <CheckboxContainer className={className}>
     <HiddenCheckbox checked={checked} {...props} />
     <StyledCheckbox checked={checked}>

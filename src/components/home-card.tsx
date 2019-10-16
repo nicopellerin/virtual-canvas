@@ -10,7 +10,10 @@ interface Props {
   setUploaded: Dispatch<SetStateAction<boolean>>
 }
 
-export const HomeCard = ({ handlePhotoUpload, setUploaded }: Props) => {
+export const HomeCard: React.FC<Props> = ({
+  handlePhotoUpload,
+  setUploaded,
+}) => {
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   return (

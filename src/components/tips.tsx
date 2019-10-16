@@ -10,7 +10,7 @@ const tips = [
 
 const cookieExists = cookie.get("show_tips")
 
-const Tips = () => {
+const Tips: React.FC = () => {
   const [tip, setTip] = useState<ReactNode>()
 
   useEffect(() => {

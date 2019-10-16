@@ -15,7 +15,7 @@ interface Photo {
   ratio: number
 }
 
-export const Home = ({ setUploaded, uploaded }: Props) => {
+export const Home: React.FC<Props> = ({ setUploaded, uploaded }) => {
   const [photoUploaded, setPhotoUploaded] = useState<boolean>(false)
   const [checkedBackground] = useState<boolean>(false)
   const [photoPreview, setPhotoPreview] = useState<string>("")

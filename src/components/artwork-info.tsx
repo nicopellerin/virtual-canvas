@@ -3,7 +3,7 @@ import styled from "styled-components"
 
 import { ArtworkContext } from "../context/artwork-context"
 
-export const ArtworkInfo = () => {
+export const ArtworkInfo: React.FC = () => {
   const { artworkName, backgroundColor } = useContext(ArtworkContext)
 
   return (

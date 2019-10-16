@@ -8,7 +8,7 @@ interface Props {
   backgroundColor: boolean
 }
 
-export const Logo = ({ backgroundColor }: Props) => {
+export const Logo: React.FC<Props> = ({ backgroundColor }) => {
   return (
     <Wrapper>
       <img src={backgroundColor ? LogoCanvasDark : LogoCanvas} width={40} />
