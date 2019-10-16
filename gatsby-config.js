@@ -7,6 +7,12 @@ module.exports = {
     image: "/og4.png", // Path to your image you placed in the 'static' folder
   },
   plugins: [
+    {
+      resolve: `gatsby-plugin-google-analytics`,
+      options: {
+        trackingId: "UA-149856310-1",
+      },
+    },
     `gatsby-plugin-react-helmet`,
     `gatsby-plugin-styled-components`,
     {
@@ -32,15 +38,9 @@ module.exports = {
         icon: `src/images/favicon.png`, // This path is relative to the root of the site.
       },
     },
-    {
-      resolve: `gatsby-plugin-google-gtag`,
-      options: {
-        trackingIds: ["UA-149856310-1"],
-      },
-    },
     `gatsby-plugin-typescript`,
     // this (optional) plugin enables Progressive Web App + Offline functionality
     // To learn more, visit: https://gatsby.dev/offline
-    `gatsby-plugin-offline`,
+    // `gatsby-plugin-offline`,
   ],
 }
