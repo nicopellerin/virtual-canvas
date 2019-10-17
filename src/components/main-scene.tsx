@@ -20,6 +20,7 @@ import Gallery from "./gallery"
 import Tips from "./tips"
 
 import { ArtworkContext } from "../context/artwork-context"
+import AddArtwork from "./add-artwork"
 
 interface Props {
   photoPreview: string
@@ -31,6 +32,7 @@ interface Props {
   photoUploaded: boolean
   setPhotoUploaded: Dispatch<SetStateAction<boolean>>
   handlePhotoUpload: () => void
+  setUploaded: Dispatch<SetStateAction<boolean>>
 }
 
 interface Photo {
@@ -50,6 +52,7 @@ export const MainScene: React.FC<Props> = ({
   photoUploaded,
   setPhotoUploaded,
   handlePhotoUpload,
+  setUploaded,
 }) => {
   extend({ OrbitControls })
 
@@ -180,10 +183,17 @@ export const MainScene: React.FC<Props> = ({
       />
       <Gallery
         photoGallery={photoGallery}
+        setPhotoGallery={setPhotoGallery}
         setPhotoRatio={setPhotoRatio}
         setPhotoPreview={setPhotoPreview}
       />
       <ArtworkInfo />
+      {photoGallery.length === 0 && (
+        <AddArtwork
+          handlePhotoUpload={handlePhotoUpload}
+          setUploaded={setUploaded}
+        />
+      )}
     </div>
   )
 }

@@ -56,6 +56,7 @@ export const Home: React.FC<Props> = ({ setUploaded, uploaded }) => {
           setPhotoRatio={setPhotoRatio}
           photoUploaded={photoUploaded}
           setPhotoUploaded={setPhotoUploaded}
+          setUploaded={setUploaded}
         />
       )}
     </MainParent>

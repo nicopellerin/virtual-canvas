@@ -1,11 +1,13 @@
 import React, { useState, useContext, Dispatch, SetStateAction } from "react"
 import { useSpring, animated } from "react-spring"
 import styled from "styled-components"
+import { MdClose } from "react-icons/md"
 
 import { ArtworkContext } from "../context/artwork-context"
 
 interface Props {
   photoGallery: Photo[]
+  setPhotoGallery: Dispatch<SetStateAction<Photo[]>>
   setPhotoPreview: Dispatch<SetStateAction<string>>
   setPhotoRatio: Dispatch<SetStateAction<number>>
 }
@@ -19,12 +21,26 @@ interface Photo {
 
 export const Gallery: React.FC<Props> = ({
   photoGallery,
+  setPhotoGallery,
   setPhotoPreview,
   setPhotoRatio,
 }) => {
   const [toggle, setToggle] = useState<boolean>(false)
 
   const { setArtworkName, backgroundColor } = useContext(ArtworkContext)
+
+  const removeArtwork = (e, id: {}): void => {
+    e.stopPropagation()
+    const index = photoGallery.findIndex(photo => photo.id === id)
+
+    if (index >= 0) {
+      setPhotoGallery(prevState => {
+        const copy = [...prevState]
+        copy.splice(index, 1)
+        return copy
+      })
+    }
+  }
 
   const slideInOut = useSpring({
     transform: toggle
@@ -40,21 +56,34 @@ export const Gallery: React.FC<Props> = ({
     >
       <Container>
         <Grid photoGalleryLength={photoGallery.length}>
-          {photoGallery.map(photo => (
-            <Thumbnail
-              src={photo.src}
-              key={photo.id}
-              alt="Preview thumbnail"
-              width={60}
-              height={60}
-              onClick={e => {
-                e.stopPropagation()
-                setPhotoPreview(photo.src)
-                setPhotoRatio(photo.ratio)
-                setArtworkName(photo.name)
-              }}
-            />
-          ))}
+          {photoGallery.map((photo, index) => {
+            const prevItem = photoGallery[index - 1]
+            return (
+              <ThumbnailWrapper>
+                <Thumbnail
+                  src={photo.src}
+                  key={photo.id}
+                  alt="Preview thumbnail"
+                  width={60}
+                  height={60}
+                  onClick={e => {
+                    e.stopPropagation()
+                    setPhotoPreview(photo.src)
+                    setPhotoRatio(photo.ratio)
+                    setArtworkName(photo.name)
+                  }}
+                />
+                <CloseIcon
+                  size={16}
+                  color="white"
+                  onClick={e => {
+                    setPhotoPreview(prevItem ? prevItem.src : null)
+                    removeArtwork(e, photo.id)
+                  }}
+                />
+              </ThumbnailWrapper>
+            )
+          })}
         </Grid>
       </Container>
       <Text backgroundColor={backgroundColor ? true : false}>Gallery</Text>
@@ -97,9 +126,28 @@ const Grid = styled.div`
   box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
 `
 
+const ThumbnailWrapper = styled.div`
+  position: relative;
+`
+
 const Thumbnail = styled.img`
   border-radius: 50%;
   cursor: pointer;
+`
+
+const CloseIcon = styled(MdClose)`
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: #111;
+  border-radius: 50%;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 300ms ease-in-out;
+
+  ${ThumbnailWrapper}:hover & {
+    opacity: 1;
+  }
 `
 
 const Text = styled.span`
