@@ -9,7 +9,8 @@ interface Props {
 }
 
 const AddArtwork: React.FC<Props> = ({ handlePhotoUpload, setUploaded }) => {
-  const [show, setShow] = useState(false)
+  const [show, setShow] = useState<boolean>(false)
+
   const fileInputRef = useRef(null)
 
   useEffect(() => {

@@ -1,4 +1,10 @@
-import React, { useState, useContext, Dispatch, SetStateAction } from "react"
+import React, {
+  useState,
+  useContext,
+  useEffect,
+  Dispatch,
+  SetStateAction,
+} from "react"
 import { useSpring, animated } from "react-spring"
 import styled from "styled-components"
 import { MdClose } from "react-icons/md"
@@ -25,9 +31,15 @@ export const Gallery: React.FC<Props> = ({
   setPhotoPreview,
   setPhotoRatio,
 }) => {
-  const [toggle, setToggle] = useState<boolean>(false)
+  const [toggle, setToggle] = useState<boolean>(true)
 
   const { setArtworkName, backgroundColor } = useContext(ArtworkContext)
+
+  useEffect(() => {
+    if (photoGallery && photoGallery.length === 0) {
+      setToggle(false)
+    }
+  }, [photoGallery])
 
   const removeArtwork = (e, id: {}): void => {
     e.stopPropagation()
@@ -44,8 +56,8 @@ export const Gallery: React.FC<Props> = ({
 
   const slideInOut = useSpring({
     transform: toggle
-      ? "translate3d(-85%, -50%, 0)"
-      : "translate3d(0%, -50%, 0)",
+      ? "translate3d(0%, -50%, 0)"
+      : "translate3d(-86%, -50%, 0)",
     config: { mass: 1, tension: 120, friction: 18 },
   })
 
@@ -53,11 +65,13 @@ export const Gallery: React.FC<Props> = ({
     <Wrapper
       style={slideInOut}
       onClick={() => setToggle(prevState => !prevState)}
+      disabled={photoGallery.length === 0}
     >
       <Container>
         <Grid photoGalleryLength={photoGallery.length}>
           {photoGallery.map((photo, index) => {
             const prevItem = photoGallery[index - 1]
+            const nextItem = photoGallery[index + 1]
             return (
               <ThumbnailWrapper>
                 <Thumbnail
@@ -77,7 +91,13 @@ export const Gallery: React.FC<Props> = ({
                   size={16}
                   color="white"
                   onClick={e => {
-                    setPhotoPreview(prevItem ? prevItem.src : null)
+                    if (prevItem) {
+                      setPhotoPreview(prevItem.src)
+                    } else if (nextItem) {
+                      setPhotoPreview(nextItem.src)
+                    } else {
+                      setPhotoPreview(null)
+                    }
                     removeArtwork(e, photo.id)
                   }}
                 />
@@ -99,6 +119,7 @@ const Wrapper = styled(animated.div)`
   z-index: 1000;
   top: 50%;
   left: 0;
+  pointer-events: ${props => (props.disabled ? "none" : "all")};
 `
 
 const Container = styled.div`
