@@ -1,4 +1,4 @@
-import React, { useRef } from "react"
+import React, { useRef, useState, useEffect } from "react"
 import styled from "styled-components"
 import { MdCloudUpload } from "react-icons/md"
 import { motion } from "framer-motion"
@@ -9,29 +9,40 @@ interface Props {
 }
 
 const AddArtwork: React.FC<Props> = ({ handlePhotoUpload, setUploaded }) => {
+  const [show, setShow] = useState(false)
   const fileInputRef = useRef(null)
 
+  useEffect(() => {
+    setTimeout(() => {
+      setShow(true)
+    }, 500)
+  }, [])
+
   return (
-    <Wrapper>
-      <Title>No artwork detected</Title>
-      <input
-        type="file"
-        style={{ display: "none" }}
-        ref={fileInputRef}
-        onChange={e => {
-          handlePhotoUpload(e)
-          setUploaded(true)
-        }}
-      />
-      <UploadButton
-        whileHover={{ scale: 1.02 }}
-        whileTap={{ scale: 0.98 }}
-        onClick={() => fileInputRef.current && fileInputRef.current.click()}
-      >
-        <CloudUploadIcon />
-        Upload image
-      </UploadButton>
-    </Wrapper>
+    <>
+      {show && (
+        <Wrapper>
+          <Title>No artwork detected</Title>
+          <input
+            type="file"
+            style={{ display: "none" }}
+            ref={fileInputRef}
+            onChange={e => {
+              handlePhotoUpload(e)
+              setUploaded(true)
+            }}
+          />
+          <UploadButton
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            onClick={() => fileInputRef.current && fileInputRef.current.click()}
+          >
+            <CloudUploadIcon />
+            Upload image
+          </UploadButton>
+        </Wrapper>
+      )}
+    </>
   )
 }
 
