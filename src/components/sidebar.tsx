@@ -2,6 +2,7 @@ import React, {
   useRef,
   useState,
   useContext,
+  useEffect,
   Dispatch,
   SetStateAction,
 } from "react"
@@ -73,6 +74,12 @@ export const Sidebar: React.FC<Props> = ({
     setRotateIncrement,
   } = useContext(ArtworkContext)
 
+  useEffect(() => {
+    if (photoGallery && photoGallery.length === 0) {
+      setToggle(false)
+    }
+  })
+
   const fileInputRef = useRef(null)
   const artworkFieldRef = useRef(null)
 
@@ -97,7 +104,12 @@ export const Sidebar: React.FC<Props> = ({
   return (
     <>
       <Wrapper toggle={toggle ? 1 : 0} style={slideInOut}>
-        <ToggleButton onClick={() => setToggle(prev => !prev)}>
+        <ToggleButton
+          onClick={() => {
+            setToggle(prev => !prev)
+          }}
+          disabled={photoGallery.length === 0}
+        >
           {toggle ? <MdRemove size={26} /> : <MdAdd size={26} />}
         </ToggleButton>
         <Container>
@@ -505,4 +517,5 @@ const ToggleButton = styled.button`
   background: none;
   border: none;
   outline: none;
+  pointer-events: ${props => (props.disabled ? "none" : "all")};
 `
