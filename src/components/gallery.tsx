@@ -93,10 +93,13 @@ export const Gallery: React.FC<Props> = ({
                   onClick={e => {
                     if (prevItem) {
                       setPhotoPreview(prevItem.src)
+                      setArtworkName(prevItem.name)
                     } else if (nextItem) {
                       setPhotoPreview(nextItem.src)
+                      setArtworkName(nextItem.name)
                     } else {
                       setPhotoPreview(null)
+                      setArtworkName("")
                     }
                     removeArtwork(e, photo.id)
                   }}
