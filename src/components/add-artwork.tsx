@@ -23,7 +23,7 @@ const AddArtwork: React.FC<Props> = ({ handlePhotoUpload, setUploaded }) => {
     <motion.div
       style={{ opacity: 0 }}
       animate={{ opacity: [0, 0.2, 1] }}
-      transition={{ delay: 0.5, duration: 0.5 }}
+      transition={{ delay: 0.5, duration: 0.2 }}
     >
       {show && (
         <Wrapper>
