@@ -20,7 +20,11 @@ const AddArtwork: React.FC<Props> = ({ handlePhotoUpload, setUploaded }) => {
   }, [])
 
   return (
-    <>
+    <motion.div
+      style={{ opacity: 0 }}
+      animate={{ opacity: [0, 0.2, 1] }}
+      transition={{ delay: 0.5, duration: 0.5 }}
+    >
       {show && (
         <Wrapper>
           <Title>No artwork detected</Title>
@@ -43,7 +47,7 @@ const AddArtwork: React.FC<Props> = ({ handlePhotoUpload, setUploaded }) => {
           </UploadButton>
         </Wrapper>
       )}
-    </>
+    </motion.div>
   )
 }
 
