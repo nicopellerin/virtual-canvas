@@ -7,13 +7,10 @@ import LogoHome from "../images/logo-home.svg"
 
 interface Props {
   handlePhotoUpload: (e: React.FormEvent<HTMLInputElement>) => void
-  setUploaded: Dispatch<SetStateAction<boolean>>
+  loader: string
 }
 
-export const HomeCard: React.FC<Props> = ({
-  handlePhotoUpload,
-  setUploaded,
-}) => {
+export const HomeCard: React.FC<Props> = ({ handlePhotoUpload, loader }) => {
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   return (
@@ -31,7 +28,6 @@ export const HomeCard: React.FC<Props> = ({
               ref={fileInputRef}
               onChange={e => {
                 handlePhotoUpload(e)
-                setUploaded(true)
               }}
             />
             <UploadButton
@@ -42,7 +38,7 @@ export const HomeCard: React.FC<Props> = ({
               }
             >
               <CloudUploadIcon />
-              Upload image
+              {loader ? loader : "Upload image"}
             </UploadButton>
           </form>
         </Bottom>

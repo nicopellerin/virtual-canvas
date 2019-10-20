@@ -8,6 +8,7 @@ import React, {
 import { useSpring, animated } from "react-spring"
 import styled from "styled-components"
 import { MdClose } from "react-icons/md"
+import axios from "axios"
 
 import { ArtworkContext } from "../context/artwork-context"
 
@@ -41,9 +42,11 @@ export const Gallery: React.FC<Props> = ({
     }
   }, [photoGallery])
 
-  const removeArtwork = (e, id: {}): void => {
+  const removeArtwork = async (e, id: {}): void => {
     e.stopPropagation()
     const index = photoGallery.findIndex(photo => photo.id === id)
+
+    await axios.delete(`http://localhost:4000/artwork/${id}`)
 
     if (index >= 0) {
       setPhotoGallery(prevState => {

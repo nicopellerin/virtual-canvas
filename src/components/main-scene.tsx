@@ -11,6 +11,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
 import { Canvas, extend, useThree, useRender } from "react-three-fiber"
 import { WEBVR } from "./WebVR"
 import uuid from "uuid/v4"
+import axios from "axios"
 
 import { Sidebar } from "./sidebar"
 import { ArtworkInfo } from "./artwork-info"
@@ -67,33 +68,16 @@ export const MainScene: React.FC<Props> = ({
     rotateIncrement,
   } = useContext(ArtworkContext)
 
-  useEffect(() => {
-    if (photoRatio && photoUploaded) {
-      setPhotoGallery([
-        ...photoGallery,
-        { id: uuid(), src: photoPreview, ratio: photoRatio, name: "" },
-      ])
-      setPhotoUploaded(false)
-      setArtworkName("")
-    }
-  }, [photoRatio])
+  // const getAllArtwork = () => {
+  //       const test = await axios.get("http://localhost:4000/artwork")
 
-  // function saveAsImage(gl, scene, camera) {
-  //   var w = window.open("", "")
-  //   w.document.title = "Screenshot"
-  //   //w.document.body.style.backgroundColor = "red";
-  //   var img = new Image()
-  //   let canvas
-  //   img.onload = function() {
-  //     canvas = document.querySelector("#main-image")
-  //     console.log(canvas)
-  //   }
-  //   // Without 'preserveDrawingBuffer' set to true, we must render now
-  //   // gl.render(scene, camera)
-  //   // img.src = canvas.toDataURL()
-  //   console.log("IMG", img)
-  //   w.document.body.appendChild(img)
   // }
+
+  // useEffect(() => {
+  //   if (photoRatio && photoUploaded) {
+
+  //   }
+  // }, [photoRatio])
 
   // Control canvas
   const Controls = ({ rotate }: { rotate: boolean }) => {
