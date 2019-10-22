@@ -46,7 +46,7 @@ export const Gallery: React.FC<Props> = ({
     e.stopPropagation()
     const index = photoGallery.findIndex(photo => photo.id === id)
 
-    await axios.delete(`https://api.virtualcanvas.app:8080/${id}`)
+    await axios.delete(`https://api.virtualcanvas.app/${id}`)
 
     if (index >= 0) {
       setPhotoGallery(prevState => {

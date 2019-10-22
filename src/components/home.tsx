@@ -76,15 +76,11 @@ export const Home: React.FC<Props> = ({ setUploaded, uploaded }) => {
         src: res.data.secure_url,
       }
 
-      const info = await axios.post(
-        "https://api.virtualcanvas.app:8080",
-        image,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      )
+      const info = await axios.post("https://api.virtualcanvas.app", image, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
 
       setPhotoGallery([...photoGallery, JSON.parse(info.config.data)])
       setPhotoUploaded(false)
@@ -95,7 +91,7 @@ export const Home: React.FC<Props> = ({ setUploaded, uploaded }) => {
   }
 
   const getAllArtwork = async () => {
-    const res = await axios.get("https://api.virtualcanvas.app:8080")
+    const res = await axios.get("https://api.virtualcanvas.app")
 
     if (res.data.length > 0) {
       setUploaded(true)
