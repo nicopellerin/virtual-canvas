@@ -1,4 +1,4 @@
-import React, { useRef, Dispatch, SetStateAction } from "react"
+import React, { useRef } from "react"
 import styled from "styled-components"
 import { MdCloudUpload } from "react-icons/md"
 import { motion } from "framer-motion"
