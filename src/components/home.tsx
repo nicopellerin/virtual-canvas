@@ -95,7 +95,7 @@ export const Home: React.FC<Props> = ({ setUploaded, uploaded }) => {
   }
 
   const getAllArtwork = async () => {
-    const res = await axios.get("http://206.189.194.60:8080/")
+    const res = await axios.get("https://api.virtualcanvas.app:8080")
 
     if (res.data.length > 0) {
       setUploaded(true)
