@@ -76,11 +76,15 @@ export const Home: React.FC<Props> = ({ setUploaded, uploaded }) => {
         src: res.data.secure_url,
       }
 
-      const info = await axios.post("http://206.189.194.60:8080", image, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
+      const info = await axios.post(
+        "https://api.virtualcanvas.app:8080",
+        image,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
 
       setPhotoGallery([...photoGallery, JSON.parse(info.config.data)])
       setPhotoUploaded(false)

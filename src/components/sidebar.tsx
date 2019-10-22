@@ -95,7 +95,7 @@ export const Sidebar: React.FC<Props> = ({
     const photo = photoGallery.find(url => url.src === photoPreview)
     photo.name = artworkName
 
-    await axios.put(`http://206.189.194.60:8080/${photo.id}`, photo)
+    await axios.put(`https://api.virtualcanvas.app:8080/${photo.id}`, photo)
 
     if (artworkName) {
       setShowSuccessMsg(true)
