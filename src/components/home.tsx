@@ -1,4 +1,10 @@
-import React, { useState, useContext, Dispatch, SetStateAction } from "react"
+import React, {
+  useState,
+  useEffect,
+  useContext,
+  Dispatch,
+  SetStateAction,
+} from "react"
 import styled from "styled-components"
 import { motion } from "framer-motion"
 import axios from "axios"
@@ -70,7 +76,7 @@ export const Home: React.FC<Props> = ({ setUploaded, uploaded }) => {
         src: res.data.secure_url,
       }
 
-      const info = await axios.post("http://localhost:4000/artwork", image, {
+      const info = await axios.post("http://206.189.194.60:8080", image, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -83,6 +89,21 @@ export const Home: React.FC<Props> = ({ setUploaded, uploaded }) => {
       console.error(err)
     }
   }
+
+  const getAllArtwork = async () => {
+    const res = await axios.get("http://206.189.194.60:8080/")
+
+    if (res.data.length > 0) {
+      setUploaded(true)
+      setPhotoGallery(res.data)
+      setPhotoPreview(res.data[0].src)
+      setPhotoRatio(res.data[0].ratio)
+    }
+  }
+
+  useEffect(() => {
+    getAllArtwork()
+  }, [uploaded])
 
   return (
     <MainParent uploaded={uploaded ? true : false}>

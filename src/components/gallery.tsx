@@ -46,7 +46,7 @@ export const Gallery: React.FC<Props> = ({
     e.stopPropagation()
     const index = photoGallery.findIndex(photo => photo.id === id)
 
-    await axios.delete(`http://localhost:4000/artwork/${id}`)
+    await axios.delete(`http://206.189.194.60:8080/${id}`)
 
     if (index >= 0) {
       setPhotoGallery(prevState => {

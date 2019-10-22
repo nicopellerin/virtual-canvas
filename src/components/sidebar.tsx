@@ -16,6 +16,7 @@ import {
 } from "react-icons/md"
 import styled from "styled-components"
 import { useSpring, animated } from "react-spring"
+import axios from "axios"
 
 import Checkbox from "./checkbox"
 import { Toast } from "./toast"
@@ -88,11 +89,13 @@ export const Sidebar: React.FC<Props> = ({
     config: { mass: 1, tension: 120, friction: 18 },
   })
 
-  const handleArtworkSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleArtworkSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
     const photo = photoGallery.find(url => url.src === photoPreview)
     photo.name = artworkName
+
+    await axios.put(`http://206.189.194.60:8080/${photo.id}`, photo)
 
     if (artworkName) {
       setShowSuccessMsg(true)
