@@ -98,6 +98,7 @@ export const Home: React.FC<Props> = ({ setUploaded, uploaded }) => {
       setPhotoGallery(res.data)
       setPhotoPreview(res.data[0].src)
       setPhotoRatio(res.data[0].ratio)
+      setArtworkName(res.data[0].name)
     }
   }
 

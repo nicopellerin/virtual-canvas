@@ -68,17 +68,6 @@ export const MainScene: React.FC<Props> = ({
     rotateIncrement,
   } = useContext(ArtworkContext)
 
-  // const getAllArtwork = () => {
-  //       const test = await axios.get("http://localhost:4000/artwork")
-
-  // }
-
-  // useEffect(() => {
-  //   if (photoRatio && photoUploaded) {
-
-  //   }
-  // }, [photoRatio])
-
   // Control canvas
   const Controls = ({ rotate }: { rotate: boolean }) => {
     const orbitRef = useRef(null)
