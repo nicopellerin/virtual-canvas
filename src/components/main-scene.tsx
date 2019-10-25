@@ -164,6 +164,7 @@ export const MainScene: React.FC<Props> = ({
         <AddArtwork
           handlePhotoUpload={handlePhotoUpload}
           setUploaded={setUploaded}
+          loader={loader}
         />
       )}
     </div>

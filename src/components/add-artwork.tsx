@@ -6,9 +6,14 @@ import { motion } from "framer-motion"
 interface Props {
   handlePhotoUpload: (e: React.FormEvent<HTMLInputElement>) => void
   setUploaded: Dispatch<SetStateAction<boolean>>
+  loader: string
 }
 
-const AddArtwork: React.FC<Props> = ({ handlePhotoUpload, setUploaded }) => {
+const AddArtwork: React.FC<Props> = ({
+  handlePhotoUpload,
+  setUploaded,
+  loader,
+}) => {
   const [show, setShow] = useState<boolean>(false)
 
   const fileInputRef = useRef(null)
@@ -32,6 +37,7 @@ const AddArtwork: React.FC<Props> = ({ handlePhotoUpload, setUploaded }) => {
             type="file"
             style={{ display: "none" }}
             ref={fileInputRef}
+            accept="image/x-png,image/jpeg"
             onChange={e => {
               handlePhotoUpload(e)
               setUploaded(true)
@@ -43,7 +49,7 @@ const AddArtwork: React.FC<Props> = ({ handlePhotoUpload, setUploaded }) => {
             onClick={() => fileInputRef.current && fileInputRef.current.click()}
           >
             <CloudUploadIcon />
-            Upload image
+            {loader ? loader : "Upload image"}
           </UploadButton>
         </Wrapper>
       )}
@@ -71,7 +77,7 @@ const Title = styled.h1`
 
 const UploadButton = styled(motion.button)`
   background: #623cea;
-  padding: 1.5rem 3.8rem;
+  padding: 1.5rem 3.5rem;
   border: none;
   color: ghostwhite;
   display: flex;
@@ -80,6 +86,7 @@ const UploadButton = styled(motion.button)`
   font-size: 1.6rem;
   border-radius: 5px;
   box-shadow: 0 5px #4923d1;
+  width: 25rem;
   cursor: pointer;
 
   @media (max-width: 700px) {

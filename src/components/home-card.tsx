@@ -26,6 +26,7 @@ export const HomeCard: React.FC<Props> = ({ handlePhotoUpload, loader }) => {
               type="file"
               style={{ display: "none" }}
               ref={fileInputRef}
+              accept="image/x-png,image/jpeg"
               onChange={e => {
                 handlePhotoUpload(e)
               }}

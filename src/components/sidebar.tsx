@@ -230,6 +230,7 @@ export const Sidebar: React.FC<Props> = ({
             type="file"
             style={{ display: "none" }}
             ref={fileInputRef}
+            accept="image/x-png,image/jpeg"
             onChange={e => {
               handlePhotoUpload(e)
             }}
