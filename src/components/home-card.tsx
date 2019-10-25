@@ -1,16 +1,27 @@
-import React, { useRef } from "react"
+import React, { useRef, useState } from "react"
 import styled from "styled-components"
 import { MdCloudUpload } from "react-icons/md"
 import { motion } from "framer-motion"
+
+import { Toast } from "../components/toast"
 
 import LogoHome from "../images/logo-home.svg"
 
 interface Props {
   handlePhotoUpload: (e: React.FormEvent<HTMLInputElement>) => void
   loader: string
+  errMsg: string
+  setErrMsg: any
 }
 
-export const HomeCard: React.FC<Props> = ({ handlePhotoUpload, loader }) => {
+export const HomeCard: React.FC<Props> = ({
+  handlePhotoUpload,
+  loader,
+  errMsg,
+  setErrMsg,
+}) => {
+  // const [showErrMessage, setShowErrorMessage] = useState<boolean>(false)
+
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   return (
@@ -45,6 +56,14 @@ export const HomeCard: React.FC<Props> = ({ handlePhotoUpload, loader }) => {
         </Bottom>
       </Wrapper>
       <FooterText>Made in Montreal by Nico Pellerin</FooterText>
+      {errMsg && (
+        <Toast
+          error
+          message={errMsg}
+          resetState={() => setErrMsg("")}
+          delay={3000}
+        />
+      )}
     </>
   )
 }

@@ -9,12 +9,14 @@ interface Props {
   message: string
   resetState: any
   delay?: number
+  error?: boolean
 }
 
 export const Toast: React.FC<Props> = ({
   message,
   resetState,
   delay = 2000,
+  error,
 }) => {
   const [show, setShow] = useState<boolean>(true)
 
@@ -29,7 +31,7 @@ export const Toast: React.FC<Props> = ({
     <Portal>
       {show && (
         <motion.div animate={{ y: [20, 0], opacity: [0, 1] }}>
-          <Wrapper>
+          <Wrapper error={error}>
             <Text>
               <MdCheckCircle size={16} style={{ marginRight: 7 }} />
               {message}
@@ -50,6 +52,7 @@ const Wrapper = styled(motion.div)`
   padding: 1.5rem 2rem;
   border-radius: 5px;
   background: green;
+  ${props => props.error && `background: red`};
 `
 
 const Text = styled.span`

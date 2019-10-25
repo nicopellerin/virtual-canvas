@@ -30,13 +30,20 @@ export const Home: React.FC<Props> = ({ setUploaded, uploaded }) => {
   const [photoPreview, setPhotoPreview] = useState<string>("")
   const [photoRatio, setPhotoRatio] = useState<number>(0)
   const [photoGallery, setPhotoGallery] = useState<Photo[]>([])
-  const [loader, setLoader] = useState(null)
-  const [loaded, setLoaded] = useState(false)
+  const [loader, setLoader] = useState<string>("")
+  const [loaded, setLoaded] = useState<boolean>(false)
+  const [errMsg, setErrMsg] = useState<string>("")
 
   const { setArtworkName } = useContext(ArtworkContext)
 
   const handlePhotoUpload = async (e: React.FormEvent<HTMLFontElement>) => {
     const { files } = e.target as HTMLInputElement
+
+    const maxAllowedSize = 1 * 1024 * 1024
+    if (files[0].size > maxAllowedSize) {
+      setErrMsg("Maximum file size is 5mb")
+      return null
+    }
 
     const data = new FormData()
     data.append("file", files[0])
@@ -114,6 +121,8 @@ export const Home: React.FC<Props> = ({ setUploaded, uploaded }) => {
             handlePhotoUpload={handlePhotoUpload}
             setUploaded={setUploaded}
             loader={loader}
+            errMsg={errMsg}
+            setErrMsg={setErrMsg}
           />
         </Wrapper>
       ) : (
