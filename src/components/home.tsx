@@ -36,10 +36,12 @@ export const Home: React.FC<Props> = ({ setUploaded, uploaded }) => {
 
   const { setArtworkName } = useContext(ArtworkContext)
 
+  const user = false
+
   const handlePhotoUpload = async (e: React.FormEvent<HTMLFontElement>) => {
     const { files } = e.target as HTMLInputElement
 
-    const maxAllowedSize = 1 * 1024 * 1024
+    const maxAllowedSize = 5 * 1024 * 1024
     if (files[0].size > maxAllowedSize) {
       setErrMsg("Maximum file size is 5mb")
       return null
@@ -49,51 +51,53 @@ export const Home: React.FC<Props> = ({ setUploaded, uploaded }) => {
     data.append("file", files[0])
     data.append("upload_preset", "virtual_canvas")
 
-    try {
-      const res = await axios.post(
-        "https://api.cloudinary.com/v1_1/dl9mctxsb/image/upload",
-        data,
-        {
-          onUploadProgress: progressEvent => {
-            setLoader(
-              Math.round((progressEvent.loaded / progressEvent.total) * 100) +
-                "%"
-            )
-            if (progressEvent.loaded === progressEvent.total) {
-              setLoader("Finished uploading :)")
-              setLoaded(true)
-              setTimeout(() => {
-                setLoader("")
-              }, 1000)
-            }
-          },
+    if (user) {
+      try {
+        const res = await axios.post(
+          "https://api.cloudinary.com/v1_1/dl9mctxsb/image/upload",
+          data,
+          {
+            onUploadProgress: progressEvent => {
+              setLoader(
+                Math.round((progressEvent.loaded / progressEvent.total) * 100) +
+                  "%"
+              )
+              if (progressEvent.loaded === progressEvent.total) {
+                setLoader("Finished uploading :)")
+                setLoaded(true)
+                setTimeout(() => {
+                  setLoader("")
+                }, 1000)
+              }
+            },
+          }
+        )
+
+        setPhotoPreview(res.data.secure_url)
+        setPhotoRatio(res.data.width / res.data.height)
+
+        setPhotoUploaded(true)
+        setUploaded(true)
+
+        const image = {
+          id: uuid(),
+          name: "",
+          ratio: res.data.width / res.data.height,
+          src: res.data.secure_url,
         }
-      )
 
-      setPhotoPreview(res.data.secure_url)
-      setPhotoRatio(res.data.width / res.data.height)
+        const info = await axios.post("https://api.virtualcanvas.app", image, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
 
-      setPhotoUploaded(true)
-      setUploaded(true)
-
-      const image = {
-        id: uuid(),
-        name: "",
-        ratio: res.data.width / res.data.height,
-        src: res.data.secure_url,
+        setPhotoGallery([...photoGallery, JSON.parse(info.config.data)])
+        setPhotoUploaded(false)
+        setArtworkName("")
+      } catch (err) {
+        console.error(err)
       }
-
-      const info = await axios.post("https://api.virtualcanvas.app", image, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-
-      setPhotoGallery([...photoGallery, JSON.parse(info.config.data)])
-      setPhotoUploaded(false)
-      setArtworkName("")
-    } catch (err) {
-      console.error(err)
     }
   }
 
