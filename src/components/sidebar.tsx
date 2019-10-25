@@ -61,6 +61,8 @@ export const Sidebar: React.FC<Props> = ({
   const [submitted, setSubmitted] = useState<boolean>(false)
   const [fieldFocused, setFieldFocused] = useState<boolean>(false)
 
+  const user = false
+
   const {
     rotateCanvas,
     setRotateCanvas,
@@ -98,7 +100,9 @@ export const Sidebar: React.FC<Props> = ({
     const photo = photoGallery.find(url => url.src === photoPreview)
     photo.name = artworkName
 
-    await axios.put(`https://api.virtualcanvas.app/${photo.id}`, photo)
+    if (user) {
+      await axios.put(`https://api.virtualcanvas.app/${photo.id}`, photo)
+    }
 
     if (artworkName) {
       setShowSuccessMsg(true)

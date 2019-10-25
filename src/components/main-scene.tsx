@@ -1,6 +1,7 @@
 import React, {
   useRef,
   useContext,
+  useEffect,
   Suspense,
   Dispatch,
   SetStateAction,
@@ -9,6 +10,7 @@ import * as THREE from "three"
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
 import { Canvas, extend, useThree, useRender } from "react-three-fiber"
 import { WEBVR } from "./WebVR"
+import uuid from "uuid/v4"
 
 import { Sidebar } from "./sidebar"
 import { ArtworkInfo } from "./artwork-info"
@@ -56,6 +58,8 @@ export const MainScene: React.FC<Props> = ({
 }) => {
   extend({ OrbitControls })
 
+  const user = false
+
   const {
     checkedBackground,
     rotateCanvas,
@@ -64,7 +68,21 @@ export const MainScene: React.FC<Props> = ({
     showBorder,
     backgroundColor,
     rotateIncrement,
+    setArtworkName,
   } = useContext(ArtworkContext)
+
+  if (!user) {
+    useEffect(() => {
+      if (photoRatio && photoUploaded) {
+        setPhotoGallery([
+          ...photoGallery,
+          { id: uuid(), src: photoPreview, ratio: photoRatio, name: "" },
+        ])
+        setPhotoUploaded(false)
+        setArtworkName("")
+      }
+    }, [photoRatio])
+  }
 
   // Control canvas
   const Controls = ({ rotate }: { rotate: boolean }) => {

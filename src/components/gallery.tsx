@@ -36,6 +36,8 @@ export const Gallery: React.FC<Props> = ({
 
   const { setArtworkName, backgroundColor } = useContext(ArtworkContext)
 
+  const user = false
+
   useEffect(() => {
     if (photoGallery && photoGallery.length === 0) {
       setToggle(false)
@@ -46,7 +48,9 @@ export const Gallery: React.FC<Props> = ({
     e.stopPropagation()
     const index = photoGallery.findIndex(photo => photo.id === id)
 
-    await axios.delete(`https://api.virtualcanvas.app/${id}`)
+    if (user) {
+      await axios.delete(`https://api.virtualcanvas.app/${id}`)
+    }
 
     if (index >= 0) {
       setPhotoGallery(prevState => {

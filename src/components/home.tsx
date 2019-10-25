@@ -47,11 +47,11 @@ export const Home: React.FC<Props> = ({ setUploaded, uploaded }) => {
       return null
     }
 
-    const data = new FormData()
-    data.append("file", files[0])
-    data.append("upload_preset", "virtual_canvas")
-
     if (user) {
+      const data = new FormData()
+      data.append("file", files[0])
+      data.append("upload_preset", "virtual_canvas")
+
       try {
         const res = await axios.post(
           "https://api.cloudinary.com/v1_1/dl9mctxsb/image/upload",
@@ -98,24 +98,36 @@ export const Home: React.FC<Props> = ({ setUploaded, uploaded }) => {
       } catch (err) {
         console.error(err)
       }
-    }
-  }
+    } else {
+      let img = new Image()
+      img.onload = function() {
+        setPhotoRatio(this.width / this.height)
+      }
 
-  const getAllArtwork = async () => {
-    const res = await axios.get("https://api.virtualcanvas.app")
-
-    if (res.data.length > 0) {
+      img.src = URL.createObjectURL(files && files[0])
+      setPhotoPreview(img.src)
+      setPhotoUploaded(true)
       setUploaded(true)
-      setPhotoGallery(res.data)
-      setPhotoPreview(res.data[0].src)
-      setPhotoRatio(res.data[0].ratio)
-      setArtworkName(res.data[0].name)
     }
   }
 
-  useEffect(() => {
-    getAllArtwork()
-  }, [uploaded])
+  if (user) {
+    const getAllArtwork = async () => {
+      const res = await axios.get("https://api.virtualcanvas.app")
+
+      if (res.data.length > 0) {
+        setUploaded(true)
+        setPhotoGallery(res.data)
+        setPhotoPreview(res.data[0].src)
+        setPhotoRatio(res.data[0].ratio)
+        setArtworkName(res.data[0].name)
+      }
+    }
+
+    useEffect(() => {
+      getAllArtwork()
+    }, [uploaded])
+  }
 
   return (
     <MainParent uploaded={uploaded ? true : false}>
