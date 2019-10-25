@@ -52,7 +52,7 @@ export const Home: React.FC<Props> = ({ setUploaded, uploaded }) => {
               Math.round((progressEvent.loaded / progressEvent.total) * 100) +
                 "%"
             )
-            if (loader === 100 + "%") {
+            if (progressEvent.loaded === progressEvent.total) {
               setLoader("Finished uploading :)")
               setLoaded(true)
               setTimeout(() => {
@@ -129,6 +129,7 @@ export const Home: React.FC<Props> = ({ setUploaded, uploaded }) => {
           photoUploaded={photoUploaded}
           setPhotoUploaded={setPhotoUploaded}
           setUploaded={setUploaded}
+          loader={loader}
         />
       )}
     </MainParent>

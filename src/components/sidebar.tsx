@@ -40,6 +40,7 @@ interface Props {
   photoGallery: Photo[]
   setPhotoGallery: Dispatch<SetStateAction<Photo>>
   photoPreview: string
+  loader: string
 }
 
 interface Photo {
@@ -53,10 +54,12 @@ export const Sidebar: React.FC<Props> = ({
   handlePhotoUpload,
   photoPreview,
   photoGallery,
+  loader,
 }) => {
   const [toggle, setToggle] = useState<boolean>(false)
   const [showSuccessMsg, setShowSuccessMsg] = useState<boolean>(false)
   const [submitted, setSubmitted] = useState<boolean>(false)
+  const [fieldFocused, setFieldFocused] = useState<boolean>(false)
 
   const {
     rotateCanvas,
@@ -126,14 +129,14 @@ export const Sidebar: React.FC<Props> = ({
                 <InputField
                   value={artworkName}
                   ref={artworkFieldRef}
-                  // onFocus={() => {}} ### TODO: Set focused state, add delete button if text.length === 0
-                  // onBlur={() => {}}
+                  onFocus={() => setFieldFocused(true)}
+                  onBlur={() => setFieldFocused(false)}
                   onChange={e => {
                     setSubmitted(false)
                     setArtworkName(e.target.value)
                   }}
                 />
-                {artworkName.length > 0 && !submitted && (
+                {artworkName.length > 0 && !submitted && fieldFocused && (
                   <Add>
                     <MdAddCircle
                       size={24}
@@ -231,14 +234,14 @@ export const Sidebar: React.FC<Props> = ({
               handlePhotoUpload(e)
             }}
           />
-          <ResetButton
+          <AddArtButton
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={() => fileInputRef.current && fileInputRef.current.click()}
           >
             <MdAddAPhoto style={{ marginRight: 10 }} />
-            Add image to gallery
-          </ResetButton>
+            {loader ? loader : "Add image to gallery"}
+          </AddArtButton>
         </Container>
         <Bar />
       </Wrapper>
@@ -485,7 +488,7 @@ const DownloadButton = styled(motion.button)`
   margin-bottom: 3rem;
 `
 
-const ResetButton = styled(motion.button)`
+const AddArtButton = styled(motion.button)`
   background: ghostwhite;
   padding: 1rem 3rem;
   border: 1px solid #333;
@@ -497,7 +500,7 @@ const ResetButton = styled(motion.button)`
   border-radius: 5px;
   box-shadow: 0 5px #333;
   cursor: pointer;
-  width: 21rem;
+  width: 23rem;
   margin: 0 auto;
 `
 

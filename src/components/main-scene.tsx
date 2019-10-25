@@ -1,7 +1,6 @@
 import React, {
   useRef,
   useContext,
-  useEffect,
   Suspense,
   Dispatch,
   SetStateAction,
@@ -10,8 +9,6 @@ import * as THREE from "three"
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
 import { Canvas, extend, useThree, useRender } from "react-three-fiber"
 import { WEBVR } from "./WebVR"
-import uuid from "uuid/v4"
-import axios from "axios"
 
 import { Sidebar } from "./sidebar"
 import { ArtworkInfo } from "./artwork-info"
@@ -34,6 +31,7 @@ interface Props {
   setPhotoUploaded: Dispatch<SetStateAction<boolean>>
   handlePhotoUpload: () => void
   setUploaded: Dispatch<SetStateAction<boolean>>
+  loader: string
 }
 
 interface Photo {
@@ -54,6 +52,7 @@ export const MainScene: React.FC<Props> = ({
   setPhotoUploaded,
   handlePhotoUpload,
   setUploaded,
+  loader,
 }) => {
   extend({ OrbitControls })
 
@@ -63,7 +62,6 @@ export const MainScene: React.FC<Props> = ({
     lightIntensity,
     showTexture,
     showBorder,
-    setArtworkName,
     backgroundColor,
     rotateIncrement,
   } = useContext(ArtworkContext)
@@ -153,6 +151,7 @@ export const MainScene: React.FC<Props> = ({
         photoGallery={photoGallery}
         setPhotoGallery={setPhotoGallery}
         photoPreview={photoPreview}
+        loader={loader}
       />
       <Gallery
         photoGallery={photoGallery}
