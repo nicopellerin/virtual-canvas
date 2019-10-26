@@ -6,8 +6,9 @@ import BG from "../images/vg.jpg"
 import LogoHome from "../images/logo-text.svg"
 import { Link } from "gatsby"
 
-const LoginPage = () => {
+const SignupPage = () => {
   const [username, setUsername] = useState("")
+  const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
 
   const handleLogin = e => {
@@ -24,7 +25,7 @@ const LoginPage = () => {
     <Wrapper background={BG}>
       <Card>
         <Logo src={LogoHome} alt="logo" />
-        <Title>Sign into your account</Title>
+        <Title>Sign up for an account</Title>
         <form onSubmit={handleLogin} autoComplete="false" auto>
           <FieldRow>
             <InputField
@@ -36,6 +37,15 @@ const LoginPage = () => {
           </FieldRow>
           <FieldRow>
             <InputField
+              name="email"
+              id="email"
+              type="email"
+              placeholder="Email"
+              onChange={e => setEmail(e.target.value)}
+            />
+          </FieldRow>
+          <FieldRow>
+            <InputField
               name="password"
               id="password"
               type="password"
@@ -43,11 +53,11 @@ const LoginPage = () => {
               onChange={e => setPassword(e.target.value)}
             />
           </FieldRow>
-          <Button>Sign in</Button>
+          <Button>Sign up</Button>
         </form>
         <Text>
-          <Link to="/signup">
-            Don't have an account? Click here to sign up!
+          <Link to="/login">
+            Already have an account? Click here to sign in!
           </Link>
         </Text>
       </Card>
@@ -56,7 +66,7 @@ const LoginPage = () => {
   )
 }
 
-export default LoginPage
+export default SignupPage
 
 // Styles
 const Wrapper = styled.div`

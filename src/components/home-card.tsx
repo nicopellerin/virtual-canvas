@@ -93,6 +93,7 @@ const Top = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  padding: 5rem 0;
 `
 
 const Bottom = styled.div`
