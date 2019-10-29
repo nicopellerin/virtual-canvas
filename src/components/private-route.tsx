@@ -6,7 +6,9 @@ const authCookie = cookie.getJSON("vc_token")
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
   if (!authCookie) {
-    navigate("/login")
+    if (typeof window !== "undefined") {
+      navigate("/login")
+    }
     return null
   }
 

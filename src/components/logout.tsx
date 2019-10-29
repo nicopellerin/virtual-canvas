@@ -7,7 +7,9 @@ import { navigate } from "gatsby"
 const Logout = () => {
   const handleLogout = () => {
     cookie.remove("vc_token")
-    navigate("/login")
+    if (typeof window !== "undefined") {
+      navigate("/login")
+    }
   }
 
   return (

@@ -76,9 +76,5 @@
   },
   "bugs": {
     "url": "https://github.com/gatsbyjs/gatsby/issues"
-  },
-  "browserslist": [
-    ">0.25%",
-    "not dead"
-  ]
+  }
 }

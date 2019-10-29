@@ -39,7 +39,9 @@ const LoginPage = () => {
         setLoggedIn(true)
         cookie.set("vc_token", res.data)
         setTimeout(() => {
-          window.location.replace("/app")
+          if (typeof window !== "undefined") {
+            window.location.replace("/app")
+          }
         }, 1000)
       }
     } catch (err) {
