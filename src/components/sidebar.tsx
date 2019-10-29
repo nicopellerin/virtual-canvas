@@ -104,11 +104,15 @@ export const Sidebar: React.FC<Props> = ({
     const photo = photoGallery.find(url => url.src === photoPreview)
     photo.name = artworkName
 
-    await axios.patch(`http://localhost:8080/api/artwork/${photo.id}`, photo, {
-      headers: {
-        Token: token,
-      },
-    })
+    await axios.patch(
+      `https://api.virtualcanvas.app/api/artwork/${photo.id}`,
+      photo,
+      {
+        headers: {
+          Token: token,
+        },
+      }
+    )
 
     if (artworkName) {
       setShowSuccessMsg(true)

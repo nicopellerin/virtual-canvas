@@ -23,11 +23,15 @@ const SignupPage = () => {
     }
 
     try {
-      const res = await axios.post("http://localhost:8080/api/signup", user, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
+      const res = await axios.post(
+        "https://api.virtualcanvas.app/api/signup",
+        user,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
       console.log(res)
     } catch (err) {
       console.error(err)

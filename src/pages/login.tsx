@@ -29,11 +29,15 @@ const LoginPage = () => {
     }
 
     try {
-      const res = await axios.post("http://localhost:8080/api/login", user, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
+      const res = await axios.post(
+        "https://api.virtualcanvas.app/api/login",
+        user,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
       console.log(res)
       if (res.status === 200) {
         setLoggedIn(true)

@@ -50,7 +50,7 @@ export const Gallery: React.FC<Props> = ({
 
     const index = photoGallery.findIndex(photo => photo.id === id)
 
-    await axios.delete(`http://localhost:8080/api/artwork/${id}`, {
+    await axios.delete(`https://api.virtualcanvas.app/api/artwork/${id}`, {
       headers: {
         "Content-Type": "application/json",
         Token: token,

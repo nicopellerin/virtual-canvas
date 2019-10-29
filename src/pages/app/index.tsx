@@ -74,12 +74,16 @@ const IndexAppPage = () => {
           src: res.data.secure_url,
         }
 
-        const info = await axios.post("http://localhost:8080/api/add", image, {
-          headers: {
-            "Content-Type": "application/json",
-            Token: token,
-          },
-        })
+        const info = await axios.post(
+          "https://api.virtualcanvas.app/api/add",
+          image,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Token: token,
+            },
+          }
+        )
 
         console.log("INFO", info)
 
@@ -105,7 +109,7 @@ const IndexAppPage = () => {
   const getAllArtwork = async () => {
     const token = cookie.getJSON("vc_token")
 
-    const res = await axios.get("http://localhost:8080/api/account", {
+    const res = await axios.get("https://api.virtualcanvas.app/api/account", {
       headers: {
         "Content-Type": "application/json",
         Token: token,
