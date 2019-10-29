@@ -9,6 +9,7 @@ import { useSpring, animated } from "react-spring"
 import styled from "styled-components"
 import { MdClose } from "react-icons/md"
 import axios from "axios"
+import cookie from "js-cookie"
 
 import { ArtworkContext } from "../context/artwork-context"
 
@@ -36,21 +37,25 @@ export const Gallery: React.FC<Props> = ({
 
   const { setArtworkName, backgroundColor } = useContext(ArtworkContext)
 
-  const user = false
-
   useEffect(() => {
     if (photoGallery && photoGallery.length === 0) {
       setToggle(false)
     }
   }, [photoGallery])
 
-  const removeArtwork = async (e, id: {}): void => {
+  const removeArtwork = async (e, id): any => {
     e.stopPropagation()
+
+    const token = cookie.getJSON("vc_token")
+
     const index = photoGallery.findIndex(photo => photo.id === id)
 
-    if (user) {
-      await axios.delete(`https://api.virtualcanvas.app/${id}`)
-    }
+    await axios.delete(`http://localhost:8080/api/artwork/${id}`, {
+      headers: {
+        "Content-Type": "application/json",
+        Token: token,
+      },
+    })
 
     if (index >= 0) {
       setPhotoGallery(prevState => {
@@ -77,6 +82,7 @@ export const Gallery: React.FC<Props> = ({
       <Container>
         <Grid photoGalleryLength={photoGallery.length}>
           {photoGallery.map((photo, index) => {
+            console.log("PHOTO", photo)
             const prevItem = photoGallery[index - 1]
             const nextItem = photoGallery[index + 1]
             return (
@@ -101,9 +107,11 @@ export const Gallery: React.FC<Props> = ({
                     if (prevItem) {
                       setPhotoPreview(prevItem.src)
                       setArtworkName(prevItem.name)
+                      setPhotoRatio(prevItem.ratio)
                     } else if (nextItem) {
                       setPhotoPreview(nextItem.src)
                       setArtworkName(nextItem.name)
+                      setPhotoRatio(nextItem.ratio)
                     } else {
                       setPhotoPreview(null)
                       setArtworkName("")

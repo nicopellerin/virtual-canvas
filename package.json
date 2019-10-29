@@ -12,6 +12,7 @@
     "@types/styled-components": "^4.1.19",
     "axios": "^0.19.0",
     "babel-plugin-styled-components": "^1.10.6",
+    "better-react-spinkit": "^2.0.4",
     "enzyme": "^3.10.0",
     "enzyme-adapter-react-16": "^1.15.1",
     "framer-motion": "^1.6.8",
@@ -75,5 +76,9 @@
   },
   "bugs": {
     "url": "https://github.com/gatsbyjs/gatsby/issues"
-  }
+  },
+  "browserslist": [
+    ">0.25%",
+    "not dead"
+  ]
 }

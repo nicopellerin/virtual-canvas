@@ -17,6 +17,8 @@ import {
 import styled from "styled-components"
 import { useSpring, animated } from "react-spring"
 import axios from "axios"
+import cookie from "js-cookie"
+import { navigate } from "gatsby"
 
 import Checkbox from "./checkbox"
 import { Toast } from "./toast"
@@ -97,12 +99,16 @@ export const Sidebar: React.FC<Props> = ({
   const handleArtworkSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
+    const token = cookie.getJSON("vc_token")
+
     const photo = photoGallery.find(url => url.src === photoPreview)
     photo.name = artworkName
 
-    if (user) {
-      await axios.put(`https://api.virtualcanvas.app/${photo.id}`, photo)
-    }
+    await axios.patch(`http://localhost:8080/api/artwork/${photo.id}`, photo, {
+      headers: {
+        Token: token,
+      },
+    })
 
     if (artworkName) {
       setShowSuccessMsg(true)

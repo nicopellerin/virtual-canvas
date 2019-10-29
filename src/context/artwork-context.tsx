@@ -1,6 +1,6 @@
 import React, { useState, useMemo, createContext, ReactNode } from "react"
 
-export const ArtworkContext = createContext()
+export const ArtworkContext = createContext(null)
 
 interface Props {
   children: ReactNode

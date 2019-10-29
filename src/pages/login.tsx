@@ -1,58 +1,121 @@
 import React, { useState } from "react"
 import styled from "styled-components"
 import { motion } from "framer-motion"
+import axios from "axios"
+import { Circle } from "better-react-spinkit"
+import { MdCheckCircle } from "react-icons/md"
+import cookie from "js-cookie"
+import { Link, navigate } from "gatsby"
+import SEO from "../components/seo"
 
 import BG from "../images/vg.jpg"
 import LogoHome from "../images/logo-text.svg"
-import { Link } from "gatsby"
 
 const LoginPage = () => {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
+  const [loading, setLoading] = useState(false)
+  const [loggedIn, setLoggedIn] = useState(false)
+  const [errorMsg, setErrorMsg] = useState("")
 
-  const handleLogin = e => {
+  const handleLogin = async e => {
     e.preventDefault()
+
+    setLoading(true)
+
     const user = {
       username,
       password,
     }
 
-    alert(JSON.stringify(user, null, 2))
+    try {
+      const res = await axios.post("http://localhost:8080/api/login", user, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      console.log(res)
+      if (res.status === 200) {
+        setLoggedIn(true)
+        cookie.set("vc_token", res.data)
+        setTimeout(() => {
+          window.location.replace("/app")
+        }, 1000)
+      }
+    } catch (err) {
+      setErrorMsg("Invalid login! Please try again.")
+      setTimeout(() => setErrorMsg(""), 4000)
+      console.error(err)
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
-    <Wrapper background={BG}>
-      <Card>
-        <Logo src={LogoHome} alt="logo" />
-        <Title>Sign into your account</Title>
-        <form onSubmit={handleLogin} autoComplete="false" auto>
-          <FieldRow>
-            <InputField
-              name="username"
-              id="username"
-              placeholder="Username"
-              onChange={e => setUsername(e.target.value)}
-            />
-          </FieldRow>
-          <FieldRow>
-            <InputField
-              name="password"
-              id="password"
-              type="password"
-              placeholder="Password"
-              onChange={e => setPassword(e.target.value)}
-            />
-          </FieldRow>
-          <Button>Sign in</Button>
-        </form>
-        <Text>
-          <Link to="/signup">
-            Don't have an account? Click here to sign up!
-          </Link>
-        </Text>
-      </Card>
-      <FooterText>Made in Montreal by Nico Pellerin</FooterText>
-    </Wrapper>
+    <>
+      <SEO
+        title="Login | Virtual Canvas"
+        description="Turn your art into a virtual 3D canvas"
+      />
+      <Wrapper background={BG}>
+        <Card>
+          <Logo src={LogoHome} alt="logo" />
+          <Title>Sign in to your account</Title>
+          <form onSubmit={handleLogin} autoComplete="false" auto>
+            <FieldRow>
+              <InputField
+                name="username"
+                id="username"
+                placeholder="Username"
+                onChange={e => setUsername(e.target.value)}
+              />
+            </FieldRow>
+            <FieldRow>
+              <InputField
+                name="password"
+                id="password"
+                type="password"
+                placeholder="Password"
+                onChange={e => setPassword(e.target.value)}
+              />
+            </FieldRow>
+            <div style={{ position: "relative" }}>
+              <Button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                loggedIn={loggedIn ? true : false}
+              >
+                <ButtonContent>
+                  {loading ? (
+                    <>
+                      <Circle color="white" style={{ marginRight: 10 }} />{" "}
+                      Signing in...
+                    </>
+                  ) : loggedIn ? (
+                    <>
+                      <MdCheckCircle
+                        color="white"
+                        style={{ marginRight: 10 }}
+                      />{" "}
+                      Logged in!
+                    </>
+                  ) : (
+                    "Sign in"
+                  )}
+                </ButtonContent>
+              </Button>
+              {errorMsg && <ErrorMsg>{errorMsg}</ErrorMsg>}
+            </div>
+          </form>
+          <Text>
+            <Link to="/signup">
+              Don't have an account? Click here to sign up!
+            </Link>
+          </Text>
+        </Card>
+        <FooterText>Made in Montreal by Nico Pellerin</FooterText>
+      </Wrapper>
+    </>
   )
 }
 
@@ -125,7 +188,7 @@ const InputField = styled.input`
 `
 
 const Button = styled(motion.button)`
-  background: #623cea;
+  background: ${props => (props.loggedIn ? "#62BF04" : "#623cea")};
   padding: 1.5rem 3.8rem;
   min-width: 205px;
   margin-top: 1.5rem;
@@ -133,7 +196,7 @@ const Button = styled(motion.button)`
   color: ghostwhite;
   font-size: 1.6rem;
   border-radius: 5px;
-  box-shadow: 0 5px #4923d1;
+  box-shadow: 0 5px ${props => (props.loggedIn ? "green" : "#4923d1")};
   cursor: pointer;
 
   @media (max-width: 700px) {
@@ -161,4 +224,20 @@ const FooterText = styled.h6`
   @media (max-width: 700px) {
     font-size: 1.2rem;
   }
+`
+
+const ButtonContent = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`
+
+const ErrorMsg = styled.span`
+  position: absolute;
+  left: 50%;
+  bottom: -3.5rem;
+  transform: translateX(-50%);
+  width: 100%;
+  font-size: 1.2rem;
+  color: red;
 `

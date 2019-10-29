@@ -21,6 +21,7 @@ import Tips from "./tips"
 
 import { ArtworkContext } from "../context/artwork-context"
 import AddArtwork from "./add-artwork"
+import Logout from "./logout"
 
 interface Props {
   photoPreview: string
@@ -177,6 +178,7 @@ export const MainScene: React.FC<Props> = ({
         setPhotoRatio={setPhotoRatio}
         setPhotoPreview={setPhotoPreview}
       />
+      <Logout />
       <ArtworkInfo />
       {photoGallery.length === 0 && (
         <AddArtwork

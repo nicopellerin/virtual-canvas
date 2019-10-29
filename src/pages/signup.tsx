@@ -1,68 +1,89 @@
 import React, { useState } from "react"
 import styled from "styled-components"
 import { motion } from "framer-motion"
+import { Link } from "gatsby"
+import axios from "axios"
+import SEO from "../components/seo"
 
 import BG from "../images/vg.jpg"
 import LogoHome from "../images/logo-text.svg"
-import { Link } from "gatsby"
 
 const SignupPage = () => {
   const [username, setUsername] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
 
-  const handleLogin = e => {
+  const handleSignup = async e => {
     e.preventDefault()
     const user = {
       username,
       password,
+      email,
+      images: [],
     }
 
-    alert(JSON.stringify(user, null, 2))
+    try {
+      const res = await axios.post("http://localhost:8080/api/signup", user, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      console.log(res)
+    } catch (err) {
+      console.error(err)
+    }
   }
 
   return (
-    <Wrapper background={BG}>
-      <Card>
-        <Logo src={LogoHome} alt="logo" />
-        <Title>Sign up for an account</Title>
-        <form onSubmit={handleLogin} autoComplete="false" auto>
-          <FieldRow>
-            <InputField
-              name="username"
-              id="username"
-              placeholder="Username"
-              onChange={e => setUsername(e.target.value)}
-            />
-          </FieldRow>
-          <FieldRow>
-            <InputField
-              name="email"
-              id="email"
-              type="email"
-              placeholder="Email"
-              onChange={e => setEmail(e.target.value)}
-            />
-          </FieldRow>
-          <FieldRow>
-            <InputField
-              name="password"
-              id="password"
-              type="password"
-              placeholder="Password"
-              onChange={e => setPassword(e.target.value)}
-            />
-          </FieldRow>
-          <Button>Sign up</Button>
-        </form>
-        <Text>
-          <Link to="/login">
-            Already have an account? Click here to sign in!
-          </Link>
-        </Text>
-      </Card>
-      <FooterText>Made in Montreal by Nico Pellerin</FooterText>
-    </Wrapper>
+    <>
+      <SEO
+        title="Signup | Virtual Canvas"
+        description="Turn your art into a virtual 3D canvas"
+      />
+      <Wrapper background={BG}>
+        <Card>
+          <Logo src={LogoHome} alt="logo" />
+          <Title>Sign up for an account</Title>
+          <form onSubmit={handleSignup} autoComplete="false" auto>
+            <FieldRow>
+              <InputField
+                name="username"
+                id="username"
+                placeholder="Username"
+                onChange={e => setUsername(e.target.value)}
+              />
+            </FieldRow>
+            <FieldRow>
+              <InputField
+                name="email"
+                id="email"
+                type="email"
+                placeholder="Email"
+                onChange={e => setEmail(e.target.value)}
+              />
+            </FieldRow>
+            <FieldRow>
+              <InputField
+                name="password"
+                id="password"
+                type="password"
+                placeholder="Password"
+                onChange={e => setPassword(e.target.value)}
+              />
+            </FieldRow>
+            <Button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+              Sign up
+            </Button>
+          </form>
+          <Text>
+            <Link to="/login">
+              Already have an account? Click here to sign in!
+            </Link>
+          </Text>
+        </Card>
+        <FooterText>Made in Montreal by Nico Pellerin</FooterText>
+      </Wrapper>
+    </>
   )
 }
 
