@@ -42,11 +42,10 @@ const LoginPage = () => {
       if (res.status === 200) {
         setLoggedIn(true)
         cookie.set("vc_token", res.data)
-        setTimeout(() => {
-          if (typeof window !== "undefined") {
-            window.location.replace("/app")
-          }
-        }, 1000)
+
+        if (typeof window !== "undefined") {
+          window.location.replace("/app")
+        }
       }
     } catch (err) {
       setErrorMsg("Invalid login! Please try again.")
