@@ -9,12 +9,12 @@ interface Props {
 export const ArtworkProvider = ({ children }: Props) => {
   const [checkedBackground, setCheckedBackground] = useState<boolean>(false)
   const [rotateCanvas, setRotateCanvas] = useState<boolean>(true)
-  const [lightIntensity, setLightIntensity] = useState<number>(1)
+  const [lightIntensity, setLightIntensity] = useState<number>(0)
   const [showTexture, setShowTexture] = useState<boolean>(true)
   const [showBorder, setShowBorder] = useState<boolean>(true)
   const [artworkName, setArtworkName] = useState<string>("")
-  const [backgroundColor, setBackgroundColor] = useState(false)
-  const [rotateIncrement, setRotateIncrement] = useState(false)
+  const [backgroundColor, setBackgroundColor] = useState<boolean>(false)
+  const [rotateIncrement, setRotateIncrement] = useState<boolean>(false)
 
   const value = useMemo(() => {
     return {
