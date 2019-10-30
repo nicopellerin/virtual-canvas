@@ -1,4 +1,5 @@
 import React from "react"
+import ReactDOM from "react-dom"
 
 import { GlobalStyles } from "./src/styles/global-styles"
 
@@ -14,4 +15,10 @@ export const wrapRootElement = ({ element }) => {
       <GlobalStyles />
     </ArtworkProvider>
   )
+}
+
+export const replaceHydration = () => {
+  return (element, container) => {
+    ReactDOM.createRoot(container).render(element)
+  }
 }
