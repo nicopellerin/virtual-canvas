@@ -5,7 +5,7 @@ import axios from "axios"
 import { Circle } from "better-react-spinkit"
 import { MdCheckCircle } from "react-icons/md"
 import cookie from "js-cookie"
-import { Link, navigate } from "gatsby"
+import { Link } from "gatsby"
 import SEO from "../components/seo"
 
 import BG from "../images/vg.jpg"
@@ -38,7 +38,6 @@ const LoginPage = () => {
           },
         }
       )
-      console.log(res)
       if (res.status === 200) {
         setLoggedIn(true)
         cookie.set("vc_token", res.data)
@@ -50,7 +49,6 @@ const LoginPage = () => {
     } catch (err) {
       setErrorMsg("Invalid login! Please try again.")
       setTimeout(() => setErrorMsg(""), 4000)
-      console.error(err)
     } finally {
       setLoading(false)
     }

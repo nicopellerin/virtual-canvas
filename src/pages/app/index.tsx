@@ -116,7 +116,7 @@ const IndexAppPage = () => {
       },
     })
 
-    if (res.data.images.length > 0) {
+    if (res && res.data && res.data.images && res.data.images.length > 0) {
       setUploaded(true)
       setPhotoGallery(res.data.images)
       setPhotoPreview(res.data.images[0].src)
