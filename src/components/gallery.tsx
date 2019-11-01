@@ -83,7 +83,6 @@ export const Gallery: React.FC<Props> = ({
       <Container>
         <Grid photoGalleryLength={photoGallery.length}>
           {photoGallery.map((photo, index) => {
-            console.log("PHOTO", photo)
             const prevItem = photoGallery[index - 1]
             const nextItem = photoGallery[index + 1]
             return (
