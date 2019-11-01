@@ -26,18 +26,18 @@ module.exports = {
     `gatsby-plugin-sharp`,
     `gatsby-plugin-portal`,
     `gatsby-plugin-netlify`,
-    // {
-    //   resolve: `gatsby-plugin-manifest`,
-    //   options: {
-    //     name: `virtualcanvas`,
-    //     short_name: `virtualcanvas`,
-    //     start_url: `/`,
-    //     background_color: `#623caa`,
-    //     theme_color: `#623caa`,
-    //     display: `minimal-ui`,
-    //     icon: `src/images/favicon.png`, // This path is relative to the root of the site.
-    //   },
-    // },
+    {
+      resolve: `gatsby-plugin-manifest`,
+      options: {
+        name: `virtualcanvas`,
+        short_name: `virtualcanvas`,
+        start_url: `/`,
+        background_color: `#623caa`,
+        theme_color: `#623caa`,
+        display: `minimal-ui`,
+        icon: `src/images/favicon.png`, // This path is relative to the root of the site.
+      },
+    },
     `gatsby-plugin-typescript`,
     // this (optional) plugin enables Progressive Web App + Offline functionality
     // To learn more, visit: https://gatsby.dev/offline
