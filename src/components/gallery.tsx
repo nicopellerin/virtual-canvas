@@ -81,51 +81,49 @@ export const Gallery: React.FC<Props> = ({
       disabled={photoGallery.length === 0}
     >
       <Container>
-        <Suspense fallback={null}>
-          <Grid photoGalleryLength={photoGallery.length}>
-            {photoGallery.map((photo, index) => {
-              console.log("PHOTO", photo)
-              const prevItem = photoGallery[index - 1]
-              const nextItem = photoGallery[index + 1]
-              return (
-                <ThumbnailWrapper>
-                  <Thumbnail
-                    src={photo.src}
-                    key={photo.id}
-                    alt="Preview thumbnail"
-                    width={60}
-                    height={60}
-                    onClick={e => {
-                      e.stopPropagation()
-                      setPhotoPreview(photo.src)
-                      setPhotoRatio(photo.ratio)
-                      setArtworkName(photo.name)
-                    }}
-                  />
-                  <CloseIcon
-                    size={16}
-                    color="white"
-                    onClick={e => {
-                      if (prevItem) {
-                        setPhotoPreview(prevItem.src)
-                        setArtworkName(prevItem.name)
-                        setPhotoRatio(prevItem.ratio)
-                      } else if (nextItem) {
-                        setPhotoPreview(nextItem.src)
-                        setArtworkName(nextItem.name)
-                        setPhotoRatio(nextItem.ratio)
-                      } else {
-                        setPhotoPreview(null)
-                        setArtworkName("")
-                      }
-                      removeArtwork(e, photo.id)
-                    }}
-                  />
-                </ThumbnailWrapper>
-              )
-            })}
-          </Grid>
-        </Suspense>
+        <Grid photoGalleryLength={photoGallery.length}>
+          {photoGallery.map((photo, index) => {
+            console.log("PHOTO", photo)
+            const prevItem = photoGallery[index - 1]
+            const nextItem = photoGallery[index + 1]
+            return (
+              <ThumbnailWrapper>
+                <Thumbnail
+                  src={photo.src}
+                  key={photo.id}
+                  alt="Preview thumbnail"
+                  width={60}
+                  height={60}
+                  onClick={e => {
+                    e.stopPropagation()
+                    setPhotoPreview(photo.src)
+                    setPhotoRatio(photo.ratio)
+                    setArtworkName(photo.name)
+                  }}
+                />
+                <CloseIcon
+                  size={16}
+                  color="white"
+                  onClick={e => {
+                    if (prevItem) {
+                      setPhotoPreview(prevItem.src)
+                      setArtworkName(prevItem.name)
+                      setPhotoRatio(prevItem.ratio)
+                    } else if (nextItem) {
+                      setPhotoPreview(nextItem.src)
+                      setArtworkName(nextItem.name)
+                      setPhotoRatio(nextItem.ratio)
+                    } else {
+                      setPhotoPreview(null)
+                      setArtworkName("")
+                    }
+                    removeArtwork(e, photo.id)
+                  }}
+                />
+              </ThumbnailWrapper>
+            )
+          })}
+        </Grid>
       </Container>
       <Text backgroundColor={backgroundColor ? true : false}>Gallery</Text>
     </Wrapper>

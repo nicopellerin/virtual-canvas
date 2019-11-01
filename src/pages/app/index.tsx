@@ -111,6 +111,7 @@ const IndexAppPage = () => {
 
     const res = await axios.get("https://api.virtualcanvas.app/api/account", {
       headers: {
+        Accept: "application/json",
         "Content-Type": "application/json",
         Token: token,
       },
