@@ -12,6 +12,10 @@ interface Props {
   error?: boolean
 }
 
+interface StyledProps {
+  error: boolean
+}
+
 export const Toast: React.FC<Props> = ({
   message,
   resetState,
@@ -52,7 +56,7 @@ const Wrapper = styled(motion.div)`
   padding: 1.5rem 2rem;
   border-radius: 5px;
   background: green;
-  ${props => props.error && `background: red`};
+  ${(props: StyledProps) => props.error && `background: red`};
 `
 
 const Text = styled.span`

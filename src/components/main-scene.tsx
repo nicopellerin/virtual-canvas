@@ -9,7 +9,6 @@ import React, {
 import * as THREE from "three"
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
 import { Canvas, extend, useThree, useRender } from "react-three-fiber"
-import { WEBVR } from "./WebVR"
 import uuid from "uuid/v4"
 
 import { Sidebar } from "./sidebar"
@@ -38,7 +37,7 @@ interface Props {
 }
 
 interface Photo {
-  id: number
+  id: string
   src: string
   ratio: number
   name: string

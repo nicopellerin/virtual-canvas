@@ -2,7 +2,6 @@ import React, {
   useState,
   useContext,
   useEffect,
-  Suspense,
   Dispatch,
   SetStateAction,
 } from "react"
@@ -14,6 +13,13 @@ import cookie from "js-cookie"
 
 import { ArtworkContext } from "../context/artwork-context"
 
+interface Photo {
+  id: string
+  src: string
+  ratio: number
+  name: string
+}
+
 interface Props {
   photoGallery: Photo[]
   setPhotoGallery: Dispatch<SetStateAction<Photo[]>>
@@ -21,11 +27,9 @@ interface Props {
   setPhotoRatio: Dispatch<SetStateAction<number>>
 }
 
-interface Photo {
-  id: string
-  src: string
-  ratio: number
-  name: string
+interface StyledProps {
+  disabled?: boolean
+  backgroundColor?: boolean
 }
 
 export const Gallery: React.FC<Props> = ({
@@ -44,7 +48,7 @@ export const Gallery: React.FC<Props> = ({
     }
   }, [photoGallery])
 
-  const removeArtwork = async (e, id): any => {
+  const removeArtwork = async (e, id: string): Promise<void> => {
     e.stopPropagation()
 
     const token = cookie.getJSON("vc_token")
@@ -137,7 +141,7 @@ const Wrapper = styled(animated.div)`
   z-index: 1000;
   top: 50%;
   left: 0;
-  pointer-events: ${props => (props.disabled ? "none" : "all")};
+  pointer-events: ${(props: StyledProps) => (props.disabled ? "none" : "all")};
 `
 
 const Container = styled.div`
@@ -192,7 +196,7 @@ const CloseIcon = styled(MdClose)`
 const Text = styled.span`
   display: block;
   transform: rotate(90deg);
-  color: ${props => (props.backgroundColor ? "#333" : "#999")};
+  color: ${(props: StyledProps) => (props.backgroundColor ? "#333" : "#999")};
   position: absolute;
   left: 60px;
   padding-left: 20px;

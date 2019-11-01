@@ -11,6 +11,11 @@ import SEO from "../components/seo"
 import BG from "../images/vg.jpg"
 import LogoHome from "../images/logo-text.svg"
 
+interface StyledProps {
+  background?: string
+  loggedIn?: boolean
+}
+
 const LoginPage = () => {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
@@ -132,7 +137,7 @@ const Wrapper = styled.div`
       rgba(246, 246, 246, 0.92) 47%,
       rgba(237, 237, 237, 0.95) 100%
     ),
-    url(${props => props.background});
+    url(${(props: StyledProps) => props.background});
   background-size: cover;
   height: 100%;
   display: flex;
@@ -142,8 +147,6 @@ const Wrapper = styled.div`
 
 const Card = styled.div`
   background: ghostwhite;
-  /* width: 100%;
-  min-height: 100%; */
   padding: 8rem 4rem;
   min-width: 500px;
   display: flex;
@@ -191,7 +194,8 @@ const InputField = styled.input`
 `
 
 const Button = styled(motion.button)`
-  background: ${props => (props.loggedIn ? "#62BF04" : "#623cea")};
+  background: ${(props: StyledProps) =>
+    props.loggedIn ? "#62BF04" : "#623cea"};
   padding: 1.5rem 3.8rem;
   min-width: 205px;
   margin-top: 1.5rem;
@@ -199,7 +203,8 @@ const Button = styled(motion.button)`
   color: ghostwhite;
   font-size: 1.6rem;
   border-radius: 5px;
-  box-shadow: 0 5px ${props => (props.loggedIn ? "green" : "#4923d1")};
+  box-shadow: 0 5px
+    ${(props: StyledProps) => (props.loggedIn ? "green" : "#4923d1")};
   cursor: pointer;
 
   @media (max-width: 700px) {

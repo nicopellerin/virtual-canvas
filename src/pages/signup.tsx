@@ -10,11 +10,15 @@ import { Circle } from "better-react-spinkit"
 import BG from "../images/vg.jpg"
 import LogoHome from "../images/logo-text.svg"
 
+interface StyledProps {
+  background?: string
+}
+
 const SignupPage = () => {
   const [username, setUsername] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
-  const [loading, setLoading] = useState("")
+  const [loading, setLoading] = useState(false)
   const [errorMsg, setErrorMsg] = useState("")
 
   const handleSignup = async e => {
@@ -131,7 +135,7 @@ const Wrapper = styled.div`
       rgba(246, 246, 246, 0.92) 47%,
       rgba(237, 237, 237, 0.95) 100%
     ),
-    url(${props => props.background});
+    url(${(props: StyledProps) => props.background});
   background-size: cover;
   height: 100%;
   display: flex;
@@ -141,8 +145,6 @@ const Wrapper = styled.div`
 
 const Card = styled.div`
   background: ghostwhite;
-  /* width: 100%;
-  min-height: 100%; */
   padding: 8rem 4rem;
   min-width: 500px;
   display: flex;

@@ -18,7 +18,6 @@ import styled from "styled-components"
 import { useSpring, animated } from "react-spring"
 import axios from "axios"
 import cookie from "js-cookie"
-import { navigate } from "gatsby"
 
 import Checkbox from "./checkbox"
 import { Toast } from "./toast"
@@ -46,7 +45,7 @@ interface Props {
 }
 
 interface Photo {
-  id: number
+  id: string
   src: string
   ratio: number
   name: string
@@ -62,8 +61,6 @@ export const Sidebar: React.FC<Props> = ({
   const [showSuccessMsg, setShowSuccessMsg] = useState<boolean>(false)
   const [submitted, setSubmitted] = useState<boolean>(false)
   const [fieldFocused, setFieldFocused] = useState<boolean>(false)
-
-  const user = false
 
   const {
     rotateCanvas,
@@ -96,7 +93,9 @@ export const Sidebar: React.FC<Props> = ({
     config: { mass: 1, tension: 120, friction: 18 },
   })
 
-  const handleArtworkSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleArtworkSubmit = async (
+    e: React.FormEvent<HTMLFormElement>
+  ): Promise<void> => {
     e.preventDefault()
 
     const token = cookie.getJSON("vc_token")

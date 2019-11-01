@@ -9,16 +9,23 @@ import { ArtworkContext } from "../../context/artwork-context"
 import PrivateRoute from "../../components/private-route"
 import SEO from "../../components/seo"
 
-const IndexAppPage = () => {
+interface Photo {
+  id: string
+  src: string
+  ratio: number
+  name: string
+}
+
+const IndexAppPage: React.FC = () => {
   const [photoUploaded, setPhotoUploaded] = useState<boolean>(false)
   const [checkedBackground] = useState<boolean>(false)
   const [photoPreview, setPhotoPreview] = useState<string>("")
   const [photoRatio, setPhotoRatio] = useState<number>(0)
   const [photoGallery, setPhotoGallery] = useState<Photo[]>([])
   const [loader, setLoader] = useState<string>("")
-  const [loaded, setLoaded] = useState<boolean>(false)
-  const [errMsg, setErrMsg] = useState<string>("")
-  const [uploaded, setUploaded] = useState(true)
+  const [, setLoaded] = useState<boolean>(false)
+  const [, setErrMsg] = useState<string>("")
+  const [, setUploaded] = useState(true)
 
   const { setArtworkName } = useContext(ArtworkContext)
 
