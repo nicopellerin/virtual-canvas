@@ -3,8 +3,8 @@ module.exports = {
     title: `Virtual Canvas`,
     description: `Turn your art into a virtual 3D canvas`,
     author: `@nicopellerin_io`,
-    url: "https://virtualcanvas.app", // No trailing slash allowed!
-    image: "/og4.png", // Path to your image you placed in the 'static' folder
+    url: "https://virtualcanvas.app",
+    image: "/og4.png",
   },
   plugins: [
     {

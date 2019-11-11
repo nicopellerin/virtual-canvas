@@ -6,6 +6,7 @@ import { motion } from "framer-motion"
 import { Toast } from "../components/toast"
 
 import LogoHome from "../images/logo-home.svg"
+import { Link } from "gatsby"
 
 interface Props {
   handlePhotoUpload: (e: React.FormEvent<HTMLInputElement>) => void
@@ -53,6 +54,10 @@ export const HomeCard: React.FC<Props> = ({
               {loader ? loader : "Upload image"}
             </UploadButton>
           </form>
+          {/* <CtaGroup>
+            <Login to="/login">Login</Login>
+            <Signup to="/signup">Signup</Signup>
+          </CtaGroup> */}
         </Bottom>
       </Wrapper>
       <FooterText>Made in Montreal by Nico Pellerin</FooterText>
@@ -102,6 +107,7 @@ const Bottom = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
   height: 8rem;
   width: 100%;
   border-bottom-right-radius: 25px;
@@ -175,4 +181,23 @@ const Logo = styled.img`
   @media (max-width: 700px) {
     width: 275px;
   }
+`
+
+const CtaGroup = styled.div`
+  display: flex;
+  margin-top: 1rem;
+  padding: 2rem 0;
+`
+
+const Login = styled(Link)`
+  margin-right: 1rem;
+  color: #623cea;
+  font-size: 1.4rem;
+  text-decoration: none;
+`
+
+const Signup = styled(Link)`
+  color: #623cea;
+  font-size: 1.4rem;
+  text-decoration: none;
 `

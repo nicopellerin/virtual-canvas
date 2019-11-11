@@ -111,23 +111,23 @@ export const Home: React.FC<Props> = ({ setUploaded, uploaded }) => {
     }
   }
 
-  if (user) {
-    const getAllArtwork = async () => {
-      const res = await axios.get("https://api.virtualcanvas.app")
+  // if (user) {
+  //   const getAllArtwork = async () => {
+  //     const res = await axios.get("https://api.virtualcanvas.app")
 
-      if (res.data.length > 0) {
-        setUploaded(true)
-        setPhotoGallery(res.data)
-        setPhotoPreview(res.data[0].src)
-        setPhotoRatio(res.data[0].ratio)
-        setArtworkName(res.data[0].name)
-      }
-    }
+  //     if (res.data.length > 0) {
+  //       setUploaded(true)
+  //       setPhotoGallery(res.data)
+  //       setPhotoPreview(res.data[0].src)
+  //       setPhotoRatio(res.data[0].ratio)
+  //       setArtworkName(res.data[0].name)
+  //     }
+  //   }
 
-    useEffect(() => {
-      getAllArtwork()
-    }, [uploaded])
-  }
+  //   useEffect(() => {
+  //     getAllArtwork()
+  //   }, [uploaded])
+  // }
 
   return (
     <MainParent uploaded={uploaded ? true : false}>

@@ -7,11 +7,8 @@ import React, {
 } from "react"
 import { useSpring, animated } from "react-spring"
 import styled from "styled-components"
-import { MdClose } from "react-icons/md"
-import axios from "axios"
-import cookie from "js-cookie"
 
-import { ArtworkContext } from "../context/artwork-context"
+import { ArtworkContext } from "../../context/artwork-context"
 
 interface Photo {
   id: string
@@ -22,7 +19,6 @@ interface Photo {
 
 interface Props {
   photoGallery: Photo[]
-  setPhotoGallery: Dispatch<SetStateAction<Photo[]>>
   setPhotoPreview: Dispatch<SetStateAction<string>>
   setPhotoRatio: Dispatch<SetStateAction<number>>
 }
@@ -32,9 +28,8 @@ interface StyledProps {
   backgroundColor?: boolean
 }
 
-const Gallery: React.FC<Props> = ({
+const ProfileGallery: React.FC<Props> = ({
   photoGallery,
-  setPhotoGallery,
   setPhotoPreview,
   setPhotoRatio,
 }) => {
@@ -47,29 +42,6 @@ const Gallery: React.FC<Props> = ({
       setToggle(false)
     }
   }, [photoGallery])
-
-  const removeArtwork = async (e, id: string): Promise<void> => {
-    e.stopPropagation()
-
-    const token = cookie.getJSON("vc_token")
-
-    const index = photoGallery.findIndex(photo => photo.id === id)
-
-    await axios.delete(`https://api.virtualcanvas.app/api/artwork/${id}`, {
-      headers: {
-        "Content-Type": "application/json",
-        Token: token,
-      },
-    })
-
-    if (index >= 0) {
-      setPhotoGallery(prevState => {
-        const copy = [...prevState]
-        copy.splice(index, 1)
-        return copy
-      })
-    }
-  }
 
   const slideInOut = useSpring({
     transform: toggle
@@ -86,9 +58,7 @@ const Gallery: React.FC<Props> = ({
     >
       <Container>
         <Grid photoGalleryLength={photoGallery.length}>
-          {photoGallery.map((photo, index) => {
-            const prevItem = photoGallery[index - 1]
-            const nextItem = photoGallery[index + 1]
+          {photoGallery.map(photo => {
             return (
               <ThumbnailWrapper>
                 <Thumbnail
@@ -104,25 +74,6 @@ const Gallery: React.FC<Props> = ({
                     setArtworkName(photo.name)
                   }}
                 />
-                <CloseIcon
-                  size={16}
-                  color="white"
-                  onClick={e => {
-                    if (prevItem) {
-                      setPhotoPreview(prevItem.src)
-                      setArtworkName(prevItem.name)
-                      setPhotoRatio(prevItem.ratio)
-                    } else if (nextItem) {
-                      setPhotoPreview(nextItem.src)
-                      setArtworkName(nextItem.name)
-                      setPhotoRatio(nextItem.ratio)
-                    } else {
-                      setPhotoPreview(null)
-                      setArtworkName("")
-                    }
-                    removeArtwork(e, photo.id)
-                  }}
-                />
               </ThumbnailWrapper>
             )
           })}
@@ -133,7 +84,7 @@ const Gallery: React.FC<Props> = ({
   )
 }
 
-export default Gallery
+export default ProfileGallery
 
 // Styles
 const Wrapper = styled(animated.div)`
@@ -176,21 +127,6 @@ const ThumbnailWrapper = styled.div`
 const Thumbnail = styled.img`
   border-radius: 50%;
   cursor: pointer;
-`
-
-const CloseIcon = styled(MdClose)`
-  position: absolute;
-  top: 0;
-  right: 0;
-  background: #111;
-  border-radius: 50%;
-  cursor: pointer;
-  opacity: 0;
-  transition: opacity 300ms ease-in-out;
-
-  ${ThumbnailWrapper}:hover & {
-    opacity: 1;
-  }
 `
 
 const Text = styled.span`

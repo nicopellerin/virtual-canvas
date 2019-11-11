@@ -15,5 +15,5 @@
     "removeComments": false,
     "preserveConstEnums": true
   },
-  "include": ["./src/**/*", "index.d.ts"]
+  "include": ["./src/**/*", "index.d.ts", "images.d.ts"]
 }

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, ReactElement, ReactNode } from "react"
+import React, { useState, useEffect, ReactNode } from "react"
 import styled from "styled-components"
 import { motion } from "framer-motion"
 import cookie from "js-cookie"

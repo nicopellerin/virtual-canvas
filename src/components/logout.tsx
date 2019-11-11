@@ -1,12 +1,19 @@
-import React from "react"
+import React, { useContext } from "react"
 import styled from "styled-components"
 import { MdExitToApp } from "react-icons/md"
 import cookie from "js-cookie"
 import { navigate } from "gatsby"
 
+import { UserContext } from "../context/user-context"
+
 const Logout = () => {
+  const { setUserToken } = useContext(UserContext)
+
+  // Logout flow
   const handleLogout = () => {
     cookie.remove("vc_token")
+    setUserToken("")
+
     if (typeof window !== "undefined") {
       navigate("/login")
     }

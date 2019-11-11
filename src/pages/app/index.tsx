@@ -5,9 +5,12 @@ import uuid from "uuid/v4"
 import cookie from "js-cookie"
 
 import { MainScene } from "../../components/main-scene"
-import { ArtworkContext } from "../../context/artwork-context"
 import PrivateRoute from "../../components/private-route"
 import SEO from "../../components/seo"
+import { ProfileScene } from "../../components/profile/profile-scene"
+
+import { ArtworkContext } from "../../context/artwork-context"
+import { UserContext } from "../../context/user-context"
 
 interface Photo {
   id: string
@@ -18,7 +21,6 @@ interface Photo {
 
 const IndexAppPage: React.FC = () => {
   const [photoUploaded, setPhotoUploaded] = useState<boolean>(false)
-  const [checkedBackground] = useState<boolean>(false)
   const [photoPreview, setPhotoPreview] = useState<string>("")
   const [photoRatio, setPhotoRatio] = useState<number>(0)
   const [photoGallery, setPhotoGallery] = useState<Photo[]>([])
@@ -28,8 +30,7 @@ const IndexAppPage: React.FC = () => {
   const [, setUploaded] = useState(true)
 
   const { setArtworkName } = useContext(ArtworkContext)
-
-  const user = false
+  const { userToken } = useContext(UserContext)
 
   const handlePhotoUpload = async (e: React.FormEvent<HTMLFontElement>) => {
     const { files } = e.target as HTMLInputElement
@@ -42,7 +43,7 @@ const IndexAppPage: React.FC = () => {
       return null
     }
 
-    if (!user) {
+    if (token) {
       const data = new FormData()
       data.append("file", files[0])
       data.append("upload_preset", "virtual_canvas")
@@ -92,8 +93,6 @@ const IndexAppPage: React.FC = () => {
           }
         )
 
-        console.log("INFO", info)
-
         setPhotoGallery([...photoGallery, JSON.parse(info.config.data)])
         setPhotoUploaded(false)
         setArtworkName("")
@@ -113,6 +112,7 @@ const IndexAppPage: React.FC = () => {
     }
   }
 
+  // Fetch all images from database
   const getAllArtwork = async () => {
     const token = cookie.getJSON("vc_token")
 
@@ -124,6 +124,7 @@ const IndexAppPage: React.FC = () => {
       },
     })
 
+    // If images, add all images to photoGallery state
     if (res && res.data && res.data.images && res.data.images.length > 0) {
       setUploaded(true)
       setPhotoGallery(res.data.images)
@@ -133,6 +134,7 @@ const IndexAppPage: React.FC = () => {
     }
   }
 
+  // Run function to fetch all images on load
   useEffect(() => {
     getAllArtwork()
   }, [])
@@ -149,7 +151,6 @@ const IndexAppPage: React.FC = () => {
           component={MainScene}
           setPhotoGallery={setPhotoGallery}
           photoPreview={photoPreview}
-          checkedBackground={checkedBackground}
           setPhotoPreview={setPhotoPreview}
           handlePhotoUpload={handlePhotoUpload}
           photoGallery={photoGallery}
@@ -159,6 +160,16 @@ const IndexAppPage: React.FC = () => {
           setPhotoUploaded={setPhotoUploaded}
           setUploaded={setUploaded}
           loader={loader}
+        />
+        <PrivateRoute
+          path="/app/profile"
+          component={ProfileScene}
+          setPhotoGallery={setPhotoGallery}
+          photoPreview={photoPreview}
+          setPhotoPreview={setPhotoPreview}
+          photoGallery={photoGallery}
+          photoRatio={photoRatio}
+          setPhotoRatio={setPhotoRatio}
         />
       </Router>
     </>

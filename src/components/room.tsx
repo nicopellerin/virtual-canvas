@@ -18,7 +18,7 @@ const Room: React.FC<Props> = ({ show }) => {
       scale={[0.8, 0.8, 0.8]}
       object={model.scene}
       position={[280, -15, -160.3]}
-      rotation={[-Math.PI / 2, Math.PI / 2, Math.PI / 2]}
+      rotation={[-Math.PI / 2, Math.PI / 2, Math.PI / 4]}
     />
   ) : null
 }

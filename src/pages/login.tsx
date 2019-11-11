@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useContext } from "react"
 import styled from "styled-components"
 import { motion } from "framer-motion"
 import axios from "axios"
@@ -10,6 +10,8 @@ import SEO from "../components/seo"
 
 import BG from "../images/vg.jpg"
 import LogoHome from "../images/logo-text.svg"
+
+import { UserContext } from "../context/user-context"
 
 interface StyledProps {
   background?: string
@@ -23,6 +25,9 @@ const LoginPage = () => {
   const [loggedIn, setLoggedIn] = useState(false)
   const [errorMsg, setErrorMsg] = useState("")
 
+  const { setUserToken } = useContext(UserContext)
+
+  // Login flow
   const handleLogin = async e => {
     e.preventDefault()
 
@@ -46,6 +51,7 @@ const LoginPage = () => {
       if (res.status === 200) {
         setLoggedIn(true)
         cookie.set("vc_token", res.data)
+        setUserToken(res.data)
 
         if (typeof window !== "undefined") {
           window.location.replace("/app")

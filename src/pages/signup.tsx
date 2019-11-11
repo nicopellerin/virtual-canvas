@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useContext } from "react"
 import styled from "styled-components"
 import { motion } from "framer-motion"
 import { Link } from "gatsby"
@@ -9,6 +9,8 @@ import { Circle } from "better-react-spinkit"
 
 import BG from "../images/vg.jpg"
 import LogoHome from "../images/logo-text.svg"
+
+import { UserContext } from "../context/user-context"
 
 interface StyledProps {
   background?: string
@@ -21,6 +23,9 @@ const SignupPage = () => {
   const [loading, setLoading] = useState(false)
   const [errorMsg, setErrorMsg] = useState("")
 
+  const { setUserToken } = useContext(UserContext)
+
+  // Signup flow
   const handleSignup = async e => {
     e.preventDefault()
 
@@ -44,6 +49,7 @@ const SignupPage = () => {
         }
       )
       cookie.set("vc_token", res.data)
+      setUserToken(res.data)
 
       if (typeof window !== "undefined") {
         window.location.replace("/app")

@@ -3,15 +3,21 @@ import styled from "styled-components"
 
 import LogoCanvas from "../images/canvas.svg"
 import LogoCanvasDark from "../images/canvas-dark.svg"
+import LogoText from "../images/logo-text.svg"
 
 interface Props {
   backgroundColor: boolean
+  full: boolean
 }
 
-export const Logo: React.FC<Props> = ({ backgroundColor }) => {
+export const Logo: React.FC<Props> = ({ backgroundColor, full }) => {
   return (
     <Wrapper>
-      <img src={backgroundColor ? LogoCanvasDark : LogoCanvas} width={40} />
+      {full ? (
+        <img src={backgroundColor ? LogoText : LogoText} width={275} />
+      ) : (
+        <img src={backgroundColor ? LogoCanvasDark : LogoCanvas} width={40} />
+      )}
     </Wrapper>
   )
 }
