@@ -25,10 +25,18 @@ const Main = () => {
     setPhotoPreview(img.src)
   }
 
+  const springAnimation = { type: 'spring', stiffness: 10, damping: 150 }
+
   return (
     <Wrapper>
       <Container>
-        <Content>
+        <Content
+          animate={{
+            x: [-100, 10, 0],
+            opacity: [0, 1],
+            transition: springAnimation,
+          }}
+        >
           <Title>Bring your art to life.</Title>
           <Subtitle>Turn your 2D art into 3D. Try it out below.</Subtitle>
           <input
@@ -72,9 +80,11 @@ const Container = styled.div`
   height: 100%;
 `
 
-const Content = styled.div`
+const Content = styled(motion.div)`
   position: relative;
   z-index: 10;
+  opacity: 0;
+  transform: translateX(-100px);
 `
 
 const Title = styled.h1`
