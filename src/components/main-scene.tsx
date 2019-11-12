@@ -17,10 +17,10 @@ import { Box } from "./box"
 import { Logo } from "./logo"
 import Gallery from "./gallery"
 import Tips from "./tips"
+import AddArtwork from "./add-artwork"
+import Menu from "./menu"
 
 import { ArtworkContext } from "../context/artwork-context"
-import AddArtwork from "./add-artwork"
-import Logout from "./logout"
 
 interface Props {
   photoPreview: string
@@ -177,7 +177,7 @@ export const MainScene: React.FC<Props> = ({
         setPhotoRatio={setPhotoRatio}
         setPhotoPreview={setPhotoPreview}
       />
-      <Logout />
+      <Menu />
       <ArtworkInfo />
       {photoGallery.length === 0 && (
         <AddArtwork

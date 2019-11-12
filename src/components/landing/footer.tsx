@@ -1,0 +1,26 @@
+import React from 'react'
+import styled from 'styled-components'
+
+const Footer = () => {
+  return (
+    <Wrapper>
+      <Text>
+        Copyright &copy; 2019 Virtual Canvas. Made in Montreal by Nico Pellerin.
+      </Text>
+    </Wrapper>
+  )
+}
+
+export default Footer
+
+// Styles
+const Wrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  position: relative;
+  z-index: 10;
+`
+
+const Text = styled.span`
+  font-size: 1.4rem;
+`

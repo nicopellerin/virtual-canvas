@@ -1,4 +1,4 @@
-import { createGlobalStyle } from "styled-components"
+import { createGlobalStyle } from 'styled-components'
 
 export const GlobalStyles = createGlobalStyle`
   *, *:after, *:before {
@@ -10,6 +10,19 @@ export const GlobalStyles = createGlobalStyle`
     min-height: 100vh;
     cursor: grab;
   }
+
+
+#demo-home {
+  canvas {
+    width: 900px !important;
+
+    @media (min-width: 1600px) {
+      width: 1300px !important;
+    }
+  }
+  
+}
+  
 
   html {
     box-sizing: border-box;
@@ -35,4 +48,11 @@ export const GlobalStyles = createGlobalStyle`
   p, span {
     color: #333;
   }
+/* 
+  #demo-image {
+    width: 1000px !important;
+    position: absolute;
+    top: 0;
+    right: 0;
+  } */
 `

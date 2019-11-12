@@ -1,9 +1,15 @@
-import React from "react"
-import styled from "styled-components"
-import { motion } from "framer-motion"
-import { MdAccountCircle } from "react-icons/md"
+import React, { useContext } from 'react'
+import styled from 'styled-components'
+import { motion } from 'framer-motion'
+import { MdAccountCircle } from 'react-icons/md'
+
+import { UserContext } from '../../context/user-context'
 
 const ProfileCta = () => {
+  const { user } = useContext(UserContext)
+
+  if (user) return null
+
   return (
     <Wrapper>
       <a href="/signup" target="_blank" rel="noopener">

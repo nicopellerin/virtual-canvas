@@ -4,20 +4,21 @@ import React, {
   Suspense,
   Dispatch,
   SetStateAction,
-} from "react"
-import * as THREE from "three"
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
-import { Canvas, extend, useThree, useRender } from "react-three-fiber"
+} from 'react'
+import * as THREE from 'three'
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+import { Canvas, extend, useThree, useRender } from 'react-three-fiber'
 
-import { ProfileInfo } from "./profile-info"
-import { ProfileBox } from "./profile-box"
-import ProfileGallery from "./profile-gallery"
-import ProfileControls from "./profile-controls"
-import ProfileCta from "./profile-cta"
+import { ProfileInfo } from './profile-info'
+import { ProfileBox } from './profile-box'
+import ProfileGallery from './profile-gallery'
+import ProfileControls from './profile-controls'
+import ProfileCta from './profile-cta'
 
-import { Logo } from "../logo"
+import { Logo } from '../logo'
 
-import { ArtworkContext } from "../../context/artwork-context"
+import { ArtworkContext } from '../../context/artwork-context'
+import ProfileBack from './profile-back'
 
 interface Props {
   photoPreview: string
@@ -94,8 +95,8 @@ export const ProfileScene: React.FC<Props> = ({
       <Canvas
         style={{
           background: backgroundColor
-            ? "linear-gradient(45deg, rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(237,237,237,1) 100%"
-            : "#000004",
+            ? 'linear-gradient(45deg, rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(237,237,237,1) 100%'
+            : '#000004',
         }}
         id="main-image"
         // vr
@@ -135,6 +136,7 @@ export const ProfileScene: React.FC<Props> = ({
       </Canvas>
       <Logo backgroundColor={backgroundColor} full />
       <ProfileCta />
+      <ProfileBack />
       <ProfileGallery
         photoGallery={photoGallery}
         setPhotoRatio={setPhotoRatio}

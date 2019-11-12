@@ -1,17 +1,18 @@
-import React, { useState, useContext } from "react"
-import styled from "styled-components"
-import { motion } from "framer-motion"
-import axios from "axios"
-import { Circle } from "better-react-spinkit"
-import { MdCheckCircle } from "react-icons/md"
-import cookie from "js-cookie"
-import { Link } from "gatsby"
-import SEO from "../components/seo"
+import React, { useState, useContext } from 'react'
+import styled from 'styled-components'
+import { motion } from 'framer-motion'
+import axios from 'axios'
+import { Circle } from 'better-react-spinkit'
+import { MdCheckCircle } from 'react-icons/md'
+import cookie from 'js-cookie'
+import { Link, navigate } from 'gatsby'
+import SEO from '../components/seo'
 
-import BG from "../images/vg.jpg"
-import LogoHome from "../images/logo-text.svg"
+import BG from '../images/vg.jpg'
+import LogoHome from '../images/logo-text.svg'
 
-import { UserContext } from "../context/user-context"
+import { UserContext } from '../context/user-context'
+import Navbar from '../components/landing/navbar'
 
 interface StyledProps {
   background?: string
@@ -19,13 +20,13 @@ interface StyledProps {
 }
 
 const LoginPage = () => {
-  const [username, setUsername] = useState("")
-  const [password, setPassword] = useState("")
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [loggedIn, setLoggedIn] = useState(false)
-  const [errorMsg, setErrorMsg] = useState("")
+  const [errorMsg, setErrorMsg] = useState('')
 
-  const { setUserToken } = useContext(UserContext)
+  const { setUserToken, setUser } = useContext(UserContext)
 
   // Login flow
   const handleLogin = async e => {
@@ -40,26 +41,28 @@ const LoginPage = () => {
 
     try {
       const res = await axios.post(
-        "https://api.virtualcanvas.app/api/login",
+        'https://api.virtualcanvas.app/api/login',
         user,
         {
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
         }
       )
       if (res.status === 200) {
         setLoggedIn(true)
-        cookie.set("vc_token", res.data)
-        setUserToken(res.data)
+        cookie.set('vc_token', res.data.token)
+        cookie.set('vc_user', res.data.username)
+        setUserToken(res.data.token)
+        setUser(res.data.username)
 
-        if (typeof window !== "undefined") {
-          window.location.replace("/app")
+        if (typeof window !== 'undefined') {
+          window.location.replace(`/editor/${res.data.username}`)
         }
       }
     } catch (err) {
-      setErrorMsg("Invalid login! Please try again.")
-      setTimeout(() => setErrorMsg(""), 4000)
+      setErrorMsg('Invalid login! Please try again.')
+      setTimeout(() => setErrorMsg(''), 4000)
     } finally {
       setLoading(false)
     }
@@ -71,9 +74,12 @@ const LoginPage = () => {
         title="Login | Virtual Canvas"
         description="Turn your art into a virtual 3D canvas"
       />
-      <Wrapper background={BG}>
+
+      <Wrapper>
         <Card>
-          <Logo src={LogoHome} alt="logo" />
+          <Link to="/">
+            <Logo src={LogoHome} alt="logo" />
+          </Link>
           <Title>Sign in to your account</Title>
           <form onSubmit={handleLogin} autoComplete="false" auto>
             <FieldRow>
@@ -93,7 +99,7 @@ const LoginPage = () => {
                 onChange={e => setPassword(e.target.value)}
               />
             </FieldRow>
-            <div style={{ position: "relative" }}>
+            <div style={{ position: 'relative' }}>
               <Button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
@@ -102,7 +108,7 @@ const LoginPage = () => {
                 <ButtonContent>
                   {loading ? (
                     <>
-                      <Circle color="white" style={{ marginRight: 10 }} />{" "}
+                      <Circle color="white" style={{ marginRight: 10 }} />{' '}
                       Signing in...
                     </>
                   ) : loggedIn ? (
@@ -110,11 +116,11 @@ const LoginPage = () => {
                       <MdCheckCircle
                         color="white"
                         style={{ marginRight: 10 }}
-                      />{" "}
+                      />{' '}
                       Logged in!
                     </>
                   ) : (
-                    "Sign in"
+                    'Sign in'
                   )}
                 </ButtonContent>
               </Button>
@@ -127,7 +133,9 @@ const LoginPage = () => {
             </Link>
           </Text>
         </Card>
-        <FooterText>Made in Montreal by Nico Pellerin</FooterText>
+        <FooterText>
+          Copyright © 2019 Virtual Canvas. Made in Montreal by Nico Pellerin.
+        </FooterText>
       </Wrapper>
     </>
   )
@@ -137,14 +145,6 @@ export default LoginPage
 
 // Styles
 const Wrapper = styled.div`
-  background: linear-gradient(
-      45deg,
-      rgba(255, 255, 255, 0.9) 0%,
-      rgba(246, 246, 246, 0.92) 47%,
-      rgba(237, 237, 237, 0.95) 100%
-    ),
-    url(${(props: StyledProps) => props.background});
-  background-size: cover;
   height: 100%;
   display: flex;
   justify-content: center;
@@ -152,15 +152,13 @@ const Wrapper = styled.div`
 `
 
 const Card = styled.div`
-  background: ghostwhite;
-  padding: 8rem 4rem;
+  padding: 5rem 4rem;
   min-width: 500px;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
   position: relative;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
   border-radius: 23px;
   text-align: center;
 
@@ -172,7 +170,7 @@ const Card = styled.div`
 
 const Logo = styled.img`
   width: 375px;
-  margin-bottom: 2rem;
+  margin-bottom: 4rem;
 
   @media (max-width: 700px) {
     width: 275px;
@@ -197,11 +195,12 @@ const InputField = styled.input`
   min-width: 30rem;
   font-size: 1.4rem;
   font-family: inherit;
+  background: ghostwhite;
 `
 
 const Button = styled(motion.button)`
   background: ${(props: StyledProps) =>
-    props.loggedIn ? "#62BF04" : "#623cea"};
+    props.loggedIn ? '#62BF04' : '#623cea'};
   padding: 1.5rem 3.8rem;
   min-width: 205px;
   margin-top: 1.5rem;
@@ -210,7 +209,7 @@ const Button = styled(motion.button)`
   font-size: 1.6rem;
   border-radius: 5px;
   box-shadow: 0 5px
-    ${(props: StyledProps) => (props.loggedIn ? "green" : "#4923d1")};
+    ${(props: StyledProps) => (props.loggedIn ? 'green' : '#4923d1')};
   cursor: pointer;
 
   @media (max-width: 700px) {
@@ -231,7 +230,7 @@ const FooterText = styled.h6`
   text-align: center;
   font-size: 1.4rem;
   font-weight: 600;
-  font-family: "Nunito Sans", sans-serif;
+  font-family: 'Nunito Sans', sans-serif;
   letter-spacing: 0.2px;
   color: #555;
 

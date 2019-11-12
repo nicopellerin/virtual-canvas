@@ -1,29 +1,30 @@
-import React, { useState, useContext } from "react"
-import styled from "styled-components"
-import { motion } from "framer-motion"
-import { Link } from "gatsby"
-import axios from "axios"
-import SEO from "../components/seo"
-import cookie from "js-cookie"
-import { Circle } from "better-react-spinkit"
+import React, { useState, useContext } from 'react'
+import styled from 'styled-components'
+import { motion } from 'framer-motion'
+import { Link } from 'gatsby'
+import axios from 'axios'
+import cookie from 'js-cookie'
+import { Circle } from 'better-react-spinkit'
 
-import BG from "../images/vg.jpg"
-import LogoHome from "../images/logo-text.svg"
+import SEO from '../components/seo'
+import Navbar from '../components/landing/navbar'
 
-import { UserContext } from "../context/user-context"
+import LogoHome from '../images/logo-text.svg'
+
+import { UserContext } from '../context/user-context'
 
 interface StyledProps {
   background?: string
 }
 
 const SignupPage = () => {
-  const [username, setUsername] = useState("")
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
+  const [username, setUsername] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
-  const [errorMsg, setErrorMsg] = useState("")
+  const [errorMsg, setErrorMsg] = useState('')
 
-  const { setUserToken } = useContext(UserContext)
+  const { setUserToken, setUser } = useContext(UserContext)
 
   // Signup flow
   const handleSignup = async e => {
@@ -40,27 +41,29 @@ const SignupPage = () => {
 
     try {
       const res = await axios.post(
-        "https://api.virtualcanvas.app/api/signup",
+        'https://api.virtualcanvas.app/api/signup',
         user,
         {
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
         }
       )
-      cookie.set("vc_token", res.data)
-      setUserToken(res.data)
+      cookie.set('vc_token', res.data.token)
+      cookie.set('vc_user', res.data.username)
+      setUserToken(res.data.token)
+      setUser(res.data.username)
 
-      if (typeof window !== "undefined") {
-        window.location.replace("/app")
+      if (typeof window !== 'undefined') {
+        window.location.replace(`/editor/${res.data.username}`)
       }
     } catch (err) {
       if (err.response.status === 400) {
-        setErrorMsg("Please fill in all required fields")
+        setErrorMsg('Please fill in all required fields')
       } else {
-        setErrorMsg("Username already exists!")
+        setErrorMsg('Username already exists!')
       }
-      setTimeout(() => setErrorMsg(""), 4000)
+      setTimeout(() => setErrorMsg(''), 4000)
     } finally {
       setLoading(false)
     }
@@ -72,9 +75,12 @@ const SignupPage = () => {
         title="Signup | Virtual Canvas"
         description="Turn your art into a virtual 3D canvas"
       />
-      <Wrapper background={BG}>
+
+      <Wrapper>
         <Card>
-          <Logo src={LogoHome} alt="logo" />
+          <Link to="/">
+            <Logo src={LogoHome} alt="logo" />
+          </Link>
           <Title>Sign up for an account</Title>
           <form onSubmit={handleSignup} autoComplete="false" auto>
             <FieldRow>
@@ -103,16 +109,16 @@ const SignupPage = () => {
                 onChange={e => setPassword(e.target.value)}
               />
             </FieldRow>
-            <div style={{ position: "relative" }}>
+            <div style={{ position: 'relative' }}>
               <Button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                 <ButtonContent>
                   {loading ? (
                     <>
-                      <Circle color="white" style={{ marginRight: 10 }} />{" "}
+                      <Circle color="white" style={{ marginRight: 10 }} />{' '}
                       Signing up...
                     </>
                   ) : (
-                    "Sign up"
+                    'Sign up'
                   )}
                 </ButtonContent>
               </Button>
@@ -125,7 +131,9 @@ const SignupPage = () => {
             </Link>
           </Text>
         </Card>
-        <FooterText>Made in Montreal by Nico Pellerin</FooterText>
+        <FooterText>
+          Copyright © 2019 Virtual Canvas. Made in Montreal by Nico Pellerin.
+        </FooterText>
       </Wrapper>
     </>
   )
@@ -135,14 +143,6 @@ export default SignupPage
 
 // Styles
 const Wrapper = styled.div`
-  background: linear-gradient(
-      45deg,
-      rgba(255, 255, 255, 0.9) 0%,
-      rgba(246, 246, 246, 0.92) 47%,
-      rgba(237, 237, 237, 0.95) 100%
-    ),
-    url(${(props: StyledProps) => props.background});
-  background-size: cover;
   height: 100%;
   display: flex;
   justify-content: center;
@@ -150,7 +150,6 @@ const Wrapper = styled.div`
 `
 
 const Card = styled.div`
-  background: ghostwhite;
   padding: 8rem 4rem;
   min-width: 500px;
   display: flex;
@@ -158,7 +157,6 @@ const Card = styled.div`
   align-items: center;
   flex-direction: column;
   position: relative;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
   border-radius: 23px;
   text-align: center;
 
@@ -170,7 +168,7 @@ const Card = styled.div`
 
 const Logo = styled.img`
   width: 375px;
-  margin-bottom: 2rem;
+  margin-bottom: 3rem;
 
   @media (max-width: 700px) {
     width: 275px;
@@ -195,6 +193,7 @@ const InputField = styled.input`
   min-width: 30rem;
   font-size: 1.4rem;
   font-family: inherit;
+  background: ghostwhite;
 `
 
 const Button = styled(motion.button)`
@@ -227,7 +226,7 @@ const FooterText = styled.h6`
   text-align: center;
   font-size: 1.4rem;
   font-weight: 600;
-  font-family: "Nunito Sans", sans-serif;
+  font-family: 'Nunito Sans', sans-serif;
   letter-spacing: 0.2px;
   color: #555;
 

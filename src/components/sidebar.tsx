@@ -5,26 +5,26 @@ import React, {
   useEffect,
   Dispatch,
   SetStateAction,
-} from "react"
-import { motion } from "framer-motion"
+} from 'react'
+import { motion } from 'framer-motion'
 import {
   MdAddAPhoto,
   MdAdd,
   MdRemove,
   MdPhotoCamera,
   MdAddCircle,
-} from "react-icons/md"
-import styled from "styled-components"
-import { useSpring, animated } from "react-spring"
-import axios from "axios"
-import cookie from "js-cookie"
+} from 'react-icons/md'
+import styled from 'styled-components'
+import { useSpring, animated } from 'react-spring'
+import axios from 'axios'
+import cookie from 'js-cookie'
 
-import Checkbox from "./checkbox"
-import { Toast } from "./toast"
+import Checkbox from './checkbox'
+import { Toast } from './toast'
 
-import { ArtworkContext } from "../context/artwork-context"
+import { ArtworkContext } from '../context/artwork-context'
 
-import Logo from "../images/logo-text.svg"
+import Logo from '../images/logo-text.svg'
 
 interface Props {
   handlePhotoUpload: (e: Event) => void
@@ -73,6 +73,8 @@ export const Sidebar: React.FC<Props> = ({
     setShowBorder,
     artworkName,
     setArtworkName,
+    artworkPrice,
+    setArtworkPrice,
     backgroundColor,
     setBackgroundColor,
     rotateIncrement,
@@ -87,9 +89,10 @@ export const Sidebar: React.FC<Props> = ({
 
   const fileInputRef = useRef(null)
   const artworkFieldRef = useRef(null)
+  const priceFieldRef = useRef(null)
 
   const slideInOut = useSpring({
-    transform: toggle ? "translate3d(0, -50%, 0)" : "translate3d(88%, -50%, 0)",
+    transform: toggle ? 'translate3d(0, -50%, 0)' : 'translate3d(88%, -50%, 0)',
     config: { mass: 1, tension: 120, friction: 18 },
   })
 
@@ -98,7 +101,7 @@ export const Sidebar: React.FC<Props> = ({
   ): Promise<void> => {
     e.preventDefault()
 
-    const token = cookie.getJSON("vc_token")
+    const token = cookie.getJSON('vc_token')
 
     const photo = photoGallery.find(url => url.src === photoPreview)
     photo.name = artworkName
@@ -120,6 +123,8 @@ export const Sidebar: React.FC<Props> = ({
     }
   }
 
+  const handleArtworkPriceSubmit = () => {}
+
   return (
     <>
       <Wrapper toggle={toggle ? 1 : 0} style={slideInOut}>
@@ -136,9 +141,9 @@ export const Sidebar: React.FC<Props> = ({
             <img src={Logo} alt="logo" width={270} />
           </TempLogo>
           <Elements>
-            <form onSubmit={handleArtworkSubmit}>
+            <form onSubmit={handleArtworkSubmit} style={{ flex: 4 }}>
               <InputFieldRow>
-                <Label style={{ display: "block" }}>Artwork name</Label>
+                <Label style={{ display: 'block' }}>Artwork name</Label>
                 <InputField
                   value={artworkName}
                   ref={artworkFieldRef}
@@ -160,6 +165,7 @@ export const Sidebar: React.FC<Props> = ({
                 )}
               </InputFieldRow>
             </form>
+
             <CheckboxGrid>
               <div>
                 <RotateCheckbox>
@@ -234,14 +240,14 @@ export const Sidebar: React.FC<Props> = ({
           <DownloadButton
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            onClick={() => alert("Coming soon")}
+            onClick={() => alert('Coming soon')}
           >
             <MdPhotoCamera style={{ marginRight: 10 }} />
             Take screenshot
           </DownloadButton>
           <input
             type="file"
-            style={{ display: "none" }}
+            style={{ display: 'none' }}
             ref={fileInputRef}
             accept="image/x-png,image/jpeg"
             onChange={e => {
@@ -254,7 +260,7 @@ export const Sidebar: React.FC<Props> = ({
             onClick={() => fileInputRef.current && fileInputRef.current.click()}
           >
             <MdAddAPhoto style={{ marginRight: 10 }} />
-            {loader ? loader : "Add image to gallery"}
+            {loader ? loader : 'Add image to gallery'}
           </AddArtButton>
         </Container>
         <Bar />
@@ -283,15 +289,15 @@ const Wrapper = styled(animated.div)`
   box-shadow: -4px 0 15px rgba(0, 0, 0, 0.15);
   z-index: 2;
 
-  input[type="range"] {
+  input[type='range'] {
     -webkit-appearance: none;
     margin: 18px 0;
     width: 100%;
   }
-  input[type="range"]:focus {
+  input[type='range']:focus {
     outline: none;
   }
-  input[type="range"]::-webkit-slider-runnable-track {
+  input[type='range']::-webkit-slider-runnable-track {
     width: 100%;
     height: 8.4px;
     cursor: grab;
@@ -299,7 +305,7 @@ const Wrapper = styled(animated.div)`
     border-radius: 1.3px;
     border: 0.2px solid #010101;
   }
-  input[type="range"]::-webkit-slider-thumb {
+  input[type='range']::-webkit-slider-thumb {
     height: 25px;
     width: 25px;
     border-radius: 50%;
@@ -308,10 +314,10 @@ const Wrapper = styled(animated.div)`
     -webkit-appearance: none;
     margin-top: -9px;
   }
-  input[type="range"]:focus::-webkit-slider-runnable-track {
+  input[type='range']:focus::-webkit-slider-runnable-track {
     background: #f4f4f4;
   }
-  input[type="range"]::-moz-range-track {
+  input[type='range']::-moz-range-track {
     width: 100%;
     height: 8.4px;
     cursor: grab;
@@ -319,14 +325,14 @@ const Wrapper = styled(animated.div)`
     border-radius: 1.3px;
     border: 0.2px solid #010101;
   }
-  input[type="range"]::-moz-range-thumb {
+  input[type='range']::-moz-range-thumb {
     height: 36px;
     width: 16px;
     border-radius: 3px;
     background: #ffffff;
     cursor: pointer;
   }
-  input[type="range"]::-ms-track {
+  input[type='range']::-ms-track {
     width: 100%;
     height: 8.4px;
     cursor: pointer;
@@ -335,18 +341,18 @@ const Wrapper = styled(animated.div)`
     border-width: 16px 0;
     color: transparent;
   }
-  input[type="range"]::-ms-fill-lower {
+  input[type='range']::-ms-fill-lower {
     background: #623cea;
     border: 0.2px solid #010101;
     border-radius: 2.6px;
   }
-  input[type="range"]::-ms-fill-upper {
+  input[type='range']::-ms-fill-upper {
     background: #623cea;
     border: 0.2px solid #010101;
     border-radius: 2.6px;
     /* box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d; */
   }
-  input[type="range"]::-ms-thumb {
+  input[type='range']::-ms-thumb {
     /* box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d; */
     border: 1px solid #000000;
     height: 36px;
@@ -355,10 +361,10 @@ const Wrapper = styled(animated.div)`
     background: #ffffff;
     cursor: pointer;
   }
-  input[type="range"]:focus::-ms-fill-lower {
+  input[type='range']:focus::-ms-fill-lower {
     background: #623cea;
   }
-  input[type="range"]:focus::-ms-fill-upper {
+  input[type='range']:focus::-ms-fill-upper {
     background: #623cea;
   }
 `
@@ -371,7 +377,7 @@ const Container = styled.div`
 `
 
 const Bar = styled.div`
-  content: "";
+  content: '';
   height: 90%;
   width: 15px;
   background: #dddddd;
@@ -393,6 +399,12 @@ const Elements = styled.div`
 const CheckboxGrid = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
+`
+
+const TopRow = styled.div`
+  display: grid;
+  grid-template-columns: 4fr 1fr;
+  grid-gap: 60px;
 `
 
 const InputFieldRow = styled.div`
@@ -537,5 +549,5 @@ const ToggleButton = styled.button`
   background: none;
   border: none;
   outline: none;
-  pointer-events: ${props => (props.disabled ? "none" : "all")};
+  pointer-events: ${props => (props.disabled ? 'none' : 'all')};
 `

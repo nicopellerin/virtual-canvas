@@ -1,16 +1,16 @@
 module.exports = {
   siteMetadata: {
     title: `Virtual Canvas`,
-    description: `Turn your art into a virtual 3D canvas`,
+    description: `Bring your art to life`,
     author: `@nicopellerin_io`,
-    url: "https://virtualcanvas.app",
-    image: "/og4.png",
+    url: 'https://virtualcanvas.app',
+    image: '/og4.png',
   },
   plugins: [
     {
       resolve: `gatsby-plugin-google-analytics`,
       options: {
-        trackingId: "UA-149856310-1",
+        trackingId: 'UA-149856310-1',
       },
     },
     `gatsby-plugin-react-helmet`,

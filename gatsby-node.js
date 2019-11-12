@@ -8,8 +8,13 @@
 exports.onCreatePage = async ({ page, actions }) => {
   const { createPage } = actions
 
-  if (page.path.match(/^\/app/)) {
-    page.matchPath = "/app/*"
+  if (page.path.match(/^\/editor/)) {
+    page.matchPath = '/editor/*'
+    createPage(page)
+  }
+
+  if (page.path.match(/^\/profile/)) {
+    page.matchPath = '/profile/*'
     createPage(page)
   }
 }

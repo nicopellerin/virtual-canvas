@@ -1,23 +1,17 @@
-import React, { useState } from "react"
-import styled from "styled-components"
+import React from 'react'
+import styled from 'styled-components'
 
-import { Home } from "../components/home"
-import SEO from "../components/seo"
-
-import BG from "../images/vg.jpg"
+import Landing from '../components/landing'
+import SEO from '../components/seo'
 
 const IndexPage = () => {
-  const [uploaded, setUploaded] = useState<boolean>(false)
-
   return (
     <>
       <SEO
-        title="Virtual Canvas"
-        description="Turn your art into a virtual 3D canvas"
+        title="Virtual Canvas | Bring your art to life"
+        description="Bring your art to life"
       />
-      <Wrapper uploaded={uploaded ? true : false} background={BG}>
-        <Home uploaded={uploaded} setUploaded={setUploaded} />
-      </Wrapper>
+      <Landing />
     </>
   )
 }
@@ -28,7 +22,7 @@ export default IndexPage
 const Wrapper = styled.div`
   background: ${(props: { uploaded: boolean; background: string }) =>
     props.uploaded
-      ? "#000004"
+      ? '#000004'
       : `linear-gradient(45deg, rgba(255,255,255,0.9) 0%, rgba(246,246,246,0.92) 47%, rgba(237,237,237,0.95) 100%), url(${props.background})`};
   background-size: cover;
   height: 100%;
