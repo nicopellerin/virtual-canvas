@@ -1,7 +1,7 @@
-import React, { useRef, useMemo, Dispatch, SetStateAction } from "react"
-import * as THREE from "three"
-import { TextureLoader } from "three/src/loaders/TextureLoader"
-import { useLoader, useFrame } from "react-three-fiber"
+import React, { useRef, useMemo, Dispatch, SetStateAction } from 'react'
+import * as THREE from 'three'
+import { TextureLoader } from 'three/src/loaders/TextureLoader'
+import { useLoader, useFrame } from 'react-three-fiber'
 
 interface Props {
   url: string
@@ -22,11 +22,11 @@ export const Box: React.FC<Props> = ({
   const [texture] = useLoader(THREE.TextureLoader, [url])
 
   const canvasTexture = useMemo(
-    () => new TextureLoader().load("/canvas.jpg"),
+    () => new TextureLoader().load('/canvas.jpg'),
     []
   )
 
-  const bump = useMemo(() => new TextureLoader().load("/canvas.jpg"), [])
+  const bump = useMemo(() => new TextureLoader().load('/canvas.jpg'), [])
 
   // Dolly back and forth effect
   const ref = useRef(null)
@@ -41,7 +41,7 @@ export const Box: React.FC<Props> = ({
       <mesh castShadow rotation={[0, 0, 0]}>
         <boxBufferGeometry
           attach="geometry"
-          args={[3.5 * photoRatio, 3.5, 0.2]}
+          args={[3.8 * photoRatio, 3.8, 0.2]}
         />
         <meshBasicMaterial
           attach="material"
@@ -53,7 +53,7 @@ export const Box: React.FC<Props> = ({
         <planeBufferGeometry
           attach="geometry"
           args={
-            showBorder ? [3.42 * photoRatio, 3.42] : [3.5 * photoRatio, 3.5]
+            showBorder ? [3.72 * photoRatio, 3.72] : [3.8 * photoRatio, 3.8]
           }
         />
         <meshPhongMaterial

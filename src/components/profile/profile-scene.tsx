@@ -19,6 +19,7 @@ import { Logo } from '../logo'
 
 import { ArtworkContext } from '../../context/artwork-context'
 import ProfileBack from './profile-back'
+import ProfileUsername from './profile-username'
 
 interface Props {
   photoPreview: string
@@ -142,6 +143,7 @@ export const ProfileScene: React.FC<Props> = ({
         setPhotoRatio={setPhotoRatio}
         setPhotoPreview={setPhotoPreview}
       />
+      <ProfileUsername />
       <ProfileControls
         photoGallery={photoGallery}
         photoPreview={photoPreview}

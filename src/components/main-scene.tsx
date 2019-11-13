@@ -5,22 +5,22 @@ import React, {
   Suspense,
   Dispatch,
   SetStateAction,
-} from "react"
-import * as THREE from "three"
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
-import { Canvas, extend, useThree, useRender } from "react-three-fiber"
-import uuid from "uuid/v4"
+} from 'react'
+import * as THREE from 'three'
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+import { Canvas, extend, useThree, useRender } from 'react-three-fiber'
+import uuid from 'uuid/v4'
 
-import { Sidebar } from "./sidebar"
-import { ArtworkInfo } from "./artwork-info"
-import { Box } from "./box"
-import { Logo } from "./logo"
-import Gallery from "./gallery"
-import Tips from "./tips"
-import AddArtwork from "./add-artwork"
-import Menu from "./menu"
+import { Sidebar } from './sidebar'
+import { ArtworkInfo } from './artwork-info'
+import { Box } from './box'
+import { Logo } from './logo'
+import Gallery from './gallery'
+import Tips from './tips'
+import AddArtwork from './add-artwork'
+import Menu from './menu'
 
-import { ArtworkContext } from "../context/artwork-context"
+import { ArtworkContext } from '../context/artwork-context'
 
 interface Props {
   photoPreview: string
@@ -76,10 +76,10 @@ export const MainScene: React.FC<Props> = ({
       if (photoRatio && photoUploaded) {
         setPhotoGallery([
           ...photoGallery,
-          { id: uuid(), src: photoPreview, ratio: photoRatio, name: "" },
+          { id: uuid(), src: photoPreview, ratio: photoRatio, name: '' },
         ])
         setPhotoUploaded(false)
-        setArtworkName("")
+        setArtworkName('')
       }
     }, [photoRatio])
   }
@@ -120,13 +120,13 @@ export const MainScene: React.FC<Props> = ({
       <Canvas
         style={{
           background: backgroundColor
-            ? "linear-gradient(45deg, rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(237,237,237,1) 100%"
-            : "#000004",
+            ? 'linear-gradient(45deg, rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(237,237,237,1) 100%'
+            : '#000004',
         }}
         id="main-image"
         // vr
         camera={{
-          position: window.innerWidth > 800 ? [0, -4, -1] : [0, -4, 8],
+          position: [0, 0, 3.8],
         }}
         onCreated={({ gl }) => {
           gl.shadowMap.enabled = true
