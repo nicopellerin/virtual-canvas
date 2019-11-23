@@ -1,7 +1,6 @@
 import React, {
   useRef,
   useContext,
-  useEffect,
   Suspense,
   Dispatch,
   SetStateAction,
@@ -9,7 +8,6 @@ import React, {
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { Canvas, extend, useThree, useRender } from 'react-three-fiber'
-import uuid from 'uuid/v4'
 
 import { Sidebar } from './sidebar'
 import { ArtworkInfo } from './artwork-info'
@@ -50,15 +48,12 @@ export const MainScene: React.FC<Props> = ({
   setPhotoGallery,
   photoRatio,
   setPhotoRatio,
-  photoUploaded,
   setPhotoUploaded,
   handlePhotoUpload,
   setUploaded,
   loader,
 }) => {
   extend({ OrbitControls })
-
-  const user = false
 
   const {
     checkedBackground,
@@ -68,24 +63,10 @@ export const MainScene: React.FC<Props> = ({
     showBorder,
     backgroundColor,
     rotateIncrement,
-    setArtworkName,
   } = useContext(ArtworkContext)
 
-  if (!user) {
-    useEffect(() => {
-      if (photoRatio && photoUploaded) {
-        setPhotoGallery([
-          ...photoGallery,
-          { id: uuid(), src: photoPreview, ratio: photoRatio, name: '' },
-        ])
-        setPhotoUploaded(false)
-        setArtworkName('')
-      }
-    }, [photoRatio])
-  }
-
   // Control canvas
-  const Controls = ({ rotate }: { rotate: boolean }) => {
+  const Controls = () => {
     const orbitRef = useRef(null)
     const { camera, gl } = useThree()
 
@@ -97,7 +78,7 @@ export const MainScene: React.FC<Props> = ({
 
     return (
       <orbitControls
-        autoRotate={rotate}
+        // autoRotate={rotate}
         autoRotateSpeed={0.3}
         enableDamping
         dampingFactor={0.05}

@@ -1,9 +1,10 @@
-import React from "react"
-import styled from "styled-components"
+import React from 'react'
+import styled from 'styled-components'
+import { Link } from 'gatsby'
 
-import LogoCanvas from "../images/canvas.svg"
-import LogoCanvasDark from "../images/canvas-dark.svg"
-import LogoText from "../images/logo-text.svg"
+import LogoCanvas from '../images/canvas.svg'
+import LogoCanvasDark from '../images/canvas-dark.svg'
+import LogoText from '../images/logo-text.svg'
 
 interface Props {
   backgroundColor: boolean
@@ -12,13 +13,15 @@ interface Props {
 
 export const Logo: React.FC<Props> = ({ backgroundColor, full }) => {
   return (
-    <Wrapper>
-      {full ? (
-        <img src={backgroundColor ? LogoText : LogoText} width={275} />
-      ) : (
-        <img src={backgroundColor ? LogoCanvasDark : LogoCanvas} width={40} />
-      )}
-    </Wrapper>
+    <Link to="/">
+      <Wrapper>
+        {full ? (
+          <img src={backgroundColor ? LogoText : LogoText} width={275} />
+        ) : (
+          <img src={backgroundColor ? LogoCanvasDark : LogoCanvas} width={40} />
+        )}
+      </Wrapper>
+    </Link>
   )
 }
 

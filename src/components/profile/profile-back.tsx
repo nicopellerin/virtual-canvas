@@ -4,15 +4,17 @@ import { Link } from 'gatsby'
 import { MdChevronLeft } from 'react-icons/md'
 
 import { UserContext } from '../../context/user-context'
+import { ArtworkContext } from '../../context/artwork-context'
 
 const ProfileBack = () => {
   const { user } = useContext(UserContext)
+  const { backgroundColor } = useContext(ArtworkContext)
 
-  if (!user) return
+  if (!user) return null
 
   return (
-    <Wrapper>
-      <MdChevronLeft color="#f4f4f4" size={24} />
+    <Wrapper backgroundColor={backgroundColor ? true : false}>
+      <MdChevronLeft color={backgroundColor ? '#333' : '#f4f4f4'} size={24} />
       <Link to={`/editor/${user}`}>Back to editor</Link>
     </Wrapper>
   )
@@ -29,7 +31,7 @@ const Wrapper = styled.div`
   align-items: center;
 
   a {
-    color: #f4f4f4;
+    color: ${props => (props.backgroundColor ? '#333' : '#f4f4f4')};
     font-size: 1.4rem;
     font-weight: 600;
     text-decoration: none;

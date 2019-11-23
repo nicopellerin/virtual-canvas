@@ -44,6 +44,7 @@
     "react-three-fiber": "^3.0.1",
     "react-tooltip": "^3.11.1",
     "styled-components": "^4.4.0",
+    "swr": "^0.1.12",
     "three": "^0.109.0",
     "typeface-inter": "^3.10.0",
     "typeface-nunito-sans": "^0.0.72",

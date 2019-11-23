@@ -1,8 +1,8 @@
-import React, { useContext } from "react"
-import styled from "styled-components"
-import { motion } from "framer-motion"
+import React, { useContext } from 'react'
+import styled from 'styled-components'
+import { motion } from 'framer-motion'
 
-import { ArtworkContext } from "../../context/artwork-context"
+import { ArtworkContext } from '../../context/artwork-context'
 
 export const ProfileInfo: React.FC = () => {
   const { artworkName, backgroundColor } = useContext(ArtworkContext)
@@ -13,8 +13,8 @@ export const ProfileInfo: React.FC = () => {
         <Name backgroundColor={backgroundColor ? true : false}>
           {artworkName}
         </Name>
-        <Price>0,00$</Price>
-        <BuyNow>Buy now</BuyNow>
+        {/* <Price backgroundColor={backgroundColor ? true : false}>0,00$</Price>
+        <BuyNow>Buy now</BuyNow> */}
       </Content>
     </Wrapper>
   )
@@ -34,14 +34,17 @@ const Content = styled.div`
 `
 
 const Name = styled.h2`
-  color: ${props => (props.backgroundColor ? "#333" : "#f4f4f4")};
-  margin-right: 3rem;
+  color: ${(props: { backgroundColor: boolean }) =>
+    props.backgroundColor ? '#333' : '#f4f4f4'};
+  /* margin-right: 3rem; */
 `
 
 const Price = styled.span`
-  color: ${props => (props.backgroundColor ? "#333" : "#f4f4f4")};
+  color: ${(props: { backgroundColor: boolean }) =>
+    props.backgroundColor ? '#333' : '#f4f4f4'};
   font-size: 1.8rem;
   margin-right: 3rem;
+  user-select: none;
 `
 
 const BuyNow = styled(motion.button)`

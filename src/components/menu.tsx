@@ -6,9 +6,11 @@ import { navigate, Link } from 'gatsby'
 import ReactTooltip from 'react-tooltip'
 
 import { UserContext } from '../context/user-context'
+import { ArtworkContext } from '../context/artwork-context'
 
 const Menu = () => {
   const { setUserToken, setUser, user } = useContext(UserContext)
+  const { backgroundColor } = useContext(ArtworkContext)
 
   // Logout flow
   const handleLogout = () => {
@@ -24,9 +26,12 @@ const Menu = () => {
 
   return (
     <Wrapper>
-      <Link to={`/profile/${user}`}>
-        <ViewProfile>View public profile</ViewProfile>
-      </Link>
+      <ViewProfile
+        to={`/profile/${user}`}
+        backgroundColor={backgroundColor ? true : false}
+      >
+        View public profile
+      </ViewProfile>
       <Separator>|</Separator>
       <LogoutWrapper data-tip="Logout" onClick={handleLogout}>
         <MdExitToApp />
@@ -47,10 +52,12 @@ const Wrapper = styled.div`
   align-items: center;
 `
 
-const ViewProfile = styled.span`
-  color: #f4f4f4;
+const ViewProfile = styled(Link)`
+  color: ${(props: { backgroundColor: boolean }) =>
+    props.backgroundColor ? '#333' : '#f4f4f4'};
   font-size: 1.4rem;
   font-weight: 600;
+  text-decoration: none;
 
   &:hover {
     text-decoration: underline;

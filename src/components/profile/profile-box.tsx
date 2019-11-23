@@ -1,7 +1,7 @@
-import React, { useRef, useMemo, Dispatch, SetStateAction } from "react"
-import * as THREE from "three"
-import { TextureLoader } from "three/src/loaders/TextureLoader"
-import { useLoader, useFrame } from "react-three-fiber"
+import React, { useRef, useMemo, Dispatch, SetStateAction } from 'react'
+import * as THREE from 'three'
+import { TextureLoader } from 'three/src/loaders/TextureLoader'
+import { useLoader, useFrame } from 'react-three-fiber'
 
 interface Props {
   url: string
@@ -22,11 +22,11 @@ export const ProfileBox: React.FC<Props> = ({
   const [texture] = useLoader(THREE.TextureLoader, [url])
 
   const canvasTexture = useMemo(
-    () => new TextureLoader().load("/canvas.jpg"),
+    () => new TextureLoader().load('/canvas.jpg'),
     []
   )
 
-  const bump = useMemo(() => new TextureLoader().load("/canvas.jpg"), [])
+  const bump = useMemo(() => new TextureLoader().load('/canvas.jpg'), [])
 
   // Dolly back and forth effect
   const ref = useRef(null)
@@ -37,7 +37,7 @@ export const ProfileBox: React.FC<Props> = ({
   })
 
   return (
-    <group ref={ref} rotation={rotateIncrement ? [0, 0, 1.57] : [0, 0.5, 0]}>
+    <group ref={ref} rotation={rotateIncrement ? [0, 0, 1.57] : [0, 0, 0]}>
       <mesh castShadow rotation={[0, 0, 0]}>
         <boxBufferGeometry
           attach="geometry"

@@ -1,6 +1,7 @@
 import React, {
   useRef,
   useContext,
+  useEffect,
   Suspense,
   Dispatch,
   SetStateAction,
@@ -48,6 +49,7 @@ export const ProfileScene: React.FC<Props> = ({
   photoGallery,
   photoRatio,
   setPhotoRatio,
+  id,
 }) => {
   extend({ OrbitControls })
 
@@ -58,7 +60,14 @@ export const ProfileScene: React.FC<Props> = ({
     showBorder,
     backgroundColor,
     rotateIncrement,
+    setQueryId,
   } = useContext(ArtworkContext)
+
+  useEffect(() => {
+    if (id) {
+      setQueryId(id)
+    }
+  }, [])
 
   // Control canvas
   const Controls = () => {
@@ -82,7 +91,7 @@ export const ProfileScene: React.FC<Props> = ({
         maxDistance={7.8}
         minPolarAngle={THREE.Math.degToRad(70)}
         maxPolarAngle={THREE.Math.degToRad(90)}
-        minAzimuthAngle={THREE.Math.degToRad(-20)}
+        minAzimuthAngle={THREE.Math.degToRad(-60)}
         maxAzimuthAngle={THREE.Math.degToRad(60)}
         args={[camera, gl.domElement]}
         ref={orbitRef}
@@ -102,7 +111,7 @@ export const ProfileScene: React.FC<Props> = ({
         id="main-image"
         // vr
         camera={{
-          position: window.innerWidth > 800 ? [0, -4, -1] : [0, -4, 8],
+          position: [0, 0, 3.8],
         }}
         onCreated={({ gl }) => {
           gl.shadowMap.enabled = true

@@ -13,6 +13,8 @@ import {
   MdRemove,
   MdPhotoCamera,
   MdAddCircle,
+  MdAccountCircle,
+  MdVerifiedUser,
 } from 'react-icons/md'
 import styled from 'styled-components'
 import { useSpring, animated } from 'react-spring'
@@ -49,6 +51,10 @@ interface Photo {
   src: string
   ratio: number
   name: string
+  rotate: boolean
+  border: boolean
+  texture: boolean
+  background: boolean
 }
 
 export const Sidebar: React.FC<Props> = ({
@@ -58,13 +64,12 @@ export const Sidebar: React.FC<Props> = ({
   loader,
 }) => {
   const [toggle, setToggle] = useState<boolean>(false)
+  const [toggleProfile, setToggleProfile] = useState<boolean>(false)
   const [showSuccessMsg, setShowSuccessMsg] = useState<boolean>(false)
   const [submitted, setSubmitted] = useState<boolean>(false)
   const [fieldFocused, setFieldFocused] = useState<boolean>(false)
 
   const {
-    rotateCanvas,
-    setRotateCanvas,
     lightIntensity,
     setLightIntensity,
     showTexture,
@@ -73,8 +78,6 @@ export const Sidebar: React.FC<Props> = ({
     setShowBorder,
     artworkName,
     setArtworkName,
-    artworkPrice,
-    setArtworkPrice,
     backgroundColor,
     setBackgroundColor,
     rotateIncrement,
@@ -89,7 +92,6 @@ export const Sidebar: React.FC<Props> = ({
 
   const fileInputRef = useRef(null)
   const artworkFieldRef = useRef(null)
-  const priceFieldRef = useRef(null)
 
   const slideInOut = useSpring({
     transform: toggle ? 'translate3d(0, -50%, 0)' : 'translate3d(88%, -50%, 0)',
@@ -123,13 +125,12 @@ export const Sidebar: React.FC<Props> = ({
     }
   }
 
-  const handleArtworkPriceSubmit = () => {}
-
   return (
     <>
       <Wrapper toggle={toggle ? 1 : 0} style={slideInOut}>
         <ToggleButton
           onClick={() => {
+            setToggleProfile(false)
             setToggle(prev => !prev)
           }}
           disabled={photoGallery.length === 0}
@@ -148,7 +149,7 @@ export const Sidebar: React.FC<Props> = ({
                   value={artworkName}
                   ref={artworkFieldRef}
                   onFocus={() => setFieldFocused(true)}
-                  onBlur={() => setFieldFocused(false)}
+                  onBlur={() => setTimeout(() => setFieldFocused(false), 200)}
                   onChange={e => {
                     setSubmitted(false)
                     setArtworkName(e.target.value)
@@ -168,15 +169,6 @@ export const Sidebar: React.FC<Props> = ({
 
             <CheckboxGrid>
               <div>
-                <RotateCheckbox>
-                  <label>
-                    <Checkbox
-                      checked={rotateCanvas}
-                      onChange={() => setRotateCanvas(prevState => !prevState)}
-                    />
-                    <RotateCheckboxLabel>Auto-rotate</RotateCheckboxLabel>
-                  </label>
-                </RotateCheckbox>
                 <BorderCheckbox>
                   <label>
                     <Checkbox
@@ -263,7 +255,58 @@ export const Sidebar: React.FC<Props> = ({
             {loader ? loader : 'Add image to gallery'}
           </AddArtButton>
         </Container>
-        <Bar />
+        <Bar style={slideInOut} toggleProfile={toggleProfile ? true : false}>
+          <UserIcon onClick={() => setToggleProfile(prevState => !prevState)} />
+          <h2>Social links</h2>
+          <InputFieldRowSocial>
+            <LabelSocial style={{ display: 'block' }}>Instagram</LabelSocial>
+            <InputFieldSocial
+              placeholder="https://"
+              // value={artworkName}
+              // ref={artworkFieldRef}
+              // onFocus={() => setFieldFocused(true)}
+              // onBlur={() => setTimeout(() => setFieldFocused(false), 200)}
+              onChange={e => {}}
+            />
+            {artworkName.length > 0 && !submitted && fieldFocused && (
+              <Add>
+                <MdAddCircle size={24} color="green" onClick={() => {}} />
+              </Add>
+            )}
+          </InputFieldRowSocial>
+          <InputFieldRowSocial>
+            <LabelSocial style={{ display: 'block' }}>Facebook</LabelSocial>
+            <InputFieldSocial
+              placeholder="https://"
+              // value={artworkName}
+              // ref={artworkFieldRef}
+              // onFocus={() => setFieldFocused(true)}
+              // onBlur={() => setTimeout(() => setFieldFocused(false), 200)}
+              onChange={e => {}}
+            />
+            {artworkName.length > 0 && !submitted && fieldFocused && (
+              <Add>
+                <MdAddCircle size={24} color="green" onClick={() => {}} />
+              </Add>
+            )}
+          </InputFieldRowSocial>
+          <InputFieldRowSocial>
+            <LabelSocial style={{ display: 'block' }}>Website</LabelSocial>
+            <InputFieldSocial
+              placeholder="https://"
+              // value={artworkName}
+              // ref={artworkFieldRef}
+              // onFocus={() => setFieldFocused(true)}
+              // onBlur={() => setTimeout(() => setFieldFocused(false), 200)}
+              onChange={e => {}}
+            />
+            {artworkName.length > 0 && !submitted && fieldFocused && (
+              <Add>
+                <MdAddCircle size={24} color="green" onClick={() => {}} />
+              </Add>
+            )}
+          </InputFieldRowSocial>
+        </Bar>
       </Wrapper>
       {showSuccessMsg && (
         <Toast
@@ -279,7 +322,6 @@ export const Sidebar: React.FC<Props> = ({
 // Styles
 const Wrapper = styled(animated.div)`
   background: white;
-  padding: 6rem 5rem;
   border-top-left-radius: 20px;
   border-bottom-left-radius: 20px;
   position: absolute;
@@ -373,22 +415,40 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   position: relative;
-  z-index: 2;
+  z-index: 20;
+  background: #fff;
+  padding: 6rem 5rem;
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
 `
 
-const Bar = styled.div`
+const Bar = styled(animated.div)`
   content: '';
   height: 90%;
-  width: 15px;
-  background: #dddddd;
+  width: 300px;
+  padding: 3rem 3rem 2rem 4rem;
+  background: #f4f4f4;
   position: absolute;
   border-top-left-radius: 23px;
   border-bottom-left-radius: 23px;
   top: 50%;
-  left: -15px;
-  z-index: 2000;
+  left: ${(props: { toggleProfile: boolean }) =>
+    props.toggleProfile ? '-300px' : '-30px'};
+  z-index: 0;
   transform: translateY(-50%);
-  box-shadow: -4px 0 15px rgba(0, 0, 0, 0.1);
+  box-shadow: -4px 0 15px rgba(0, 0, 0, 0.15);
+  ${(props: { toggleProfile: boolean }) =>
+    props.toggleProfile && 'transition: all 300ms ease-in-out;'}
+`
+
+const UserIcon = styled(MdAccountCircle)`
+  position: absolute;
+  top: 50%;
+  left: 7px;
+  font-size: 1.8rem;
+  transform: translateY(-50%);
+  color: #623cea;
+  cursor: pointer;
 `
 
 const Elements = styled.div`
@@ -399,12 +459,6 @@ const Elements = styled.div`
 const CheckboxGrid = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
-`
-
-const TopRow = styled.div`
-  display: grid;
-  grid-template-columns: 4fr 1fr;
-  grid-gap: 60px;
 `
 
 const InputFieldRow = styled.div`
@@ -428,30 +482,35 @@ const InputField = styled.input`
   font-size: 1.4rem;
   color: #333;
   font-family: inherit;
+  outline: none;
+`
+
+const InputFieldSocial = styled(InputField)`
+  background: #fff;
+
+  &::placeholder {
+    font-size: 1.2rem;
+    color: #999;
+  }
+`
+
+const InputFieldRowSocial = styled(InputFieldRow)`
+  margin-bottom: 1rem;
+`
+
+const LabelSocial = styled(Label)`
+  font-size: 1.2rem;
 `
 
 const Add = styled.div`
   position: absolute;
-  right: -32px;
+  right: 10px;
   top: 28px;
   cursor: pointer;
+  z-index: 1000;
 `
 
-const RotateCheckbox = styled.div`
-  margin-top: 0;
-  margin-bottom: 5;
-`
-
-const RotateCheckboxLabel = styled.span`
-  font-size: 1.4rem;
-  margin-left: 10px;
-  font-weight: 500;
-  color: #333;
-`
-
-const BorderCheckbox = styled.div`
-  margin-top: 10px;
-`
+const BorderCheckbox = styled.div``
 
 const BorderCheckboxLabel = styled.span`
   font-size: 1.4rem;
@@ -541,6 +600,7 @@ const TempLogo = styled.h1`
 `
 const ToggleButton = styled.button`
   position: absolute;
+  z-index: 30;
   left: 0.3rem;
   top: 50%;
   transform: translateY(-50%);

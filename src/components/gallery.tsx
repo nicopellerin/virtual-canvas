@@ -4,20 +4,24 @@ import React, {
   useEffect,
   Dispatch,
   SetStateAction,
-} from "react"
-import { useSpring, animated } from "react-spring"
-import styled from "styled-components"
-import { MdClose } from "react-icons/md"
-import axios from "axios"
-import cookie from "js-cookie"
+} from 'react'
+import { useSpring, animated } from 'react-spring'
+import styled from 'styled-components'
+import { MdClose } from 'react-icons/md'
+import axios from 'axios'
+import cookie from 'js-cookie'
 
-import { ArtworkContext } from "../context/artwork-context"
+import { ArtworkContext } from '../context/artwork-context'
 
 interface Photo {
   id: string
   src: string
   ratio: number
   name: string
+  rotate: boolean
+  border: boolean
+  texture: boolean
+  background: boolean
 }
 
 interface Props {
@@ -40,7 +44,14 @@ const Gallery: React.FC<Props> = ({
 }) => {
   const [toggle, setToggle] = useState<boolean>(true)
 
-  const { setArtworkName, backgroundColor } = useContext(ArtworkContext)
+  const {
+    setArtworkName,
+    setBackgroundColor,
+    backgroundColor,
+    setShowBorder,
+    setShowTexture,
+    setRotateIncrement,
+  } = useContext(ArtworkContext)
 
   useEffect(() => {
     if (photoGallery && photoGallery.length === 0) {
@@ -51,13 +62,13 @@ const Gallery: React.FC<Props> = ({
   const removeArtwork = async (e, id: string): Promise<void> => {
     e.stopPropagation()
 
-    const token = cookie.getJSON("vc_token")
+    const token = cookie.getJSON('vc_token')
 
     const index = photoGallery.findIndex(photo => photo.id === id)
 
     await axios.delete(`https://api.virtualcanvas.app/api/artwork/${id}`, {
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
         Token: token,
       },
     })
@@ -73,8 +84,8 @@ const Gallery: React.FC<Props> = ({
 
   const slideInOut = useSpring({
     transform: toggle
-      ? "translate3d(0%, -50%, 0)"
-      : "translate3d(-86%, -50%, 0)",
+      ? 'translate3d(0%, -50%, 0)'
+      : 'translate3d(-86%, -50%, 0)',
     config: { mass: 1, tension: 120, friction: 18 },
   })
 
@@ -102,6 +113,10 @@ const Gallery: React.FC<Props> = ({
                     setPhotoPreview(photo.src)
                     setPhotoRatio(photo.ratio)
                     setArtworkName(photo.name)
+                    setBackgroundColor(photo.background)
+                    setShowBorder(photo.border)
+                    setShowTexture(photo.texture)
+                    setRotateIncrement(photo.rotate)
                   }}
                 />
                 <CloseIcon
@@ -112,13 +127,21 @@ const Gallery: React.FC<Props> = ({
                       setPhotoPreview(prevItem.src)
                       setArtworkName(prevItem.name)
                       setPhotoRatio(prevItem.ratio)
+                      setBackgroundColor(prevItem.background)
+                      setShowBorder(prevItem.border)
+                      setShowTexture(prevItem.texture)
+                      setRotateIncrement(prevItem.rotate)
                     } else if (nextItem) {
                       setPhotoPreview(nextItem.src)
                       setArtworkName(nextItem.name)
                       setPhotoRatio(nextItem.ratio)
+                      setBackgroundColor(nextItem.background)
+                      setShowBorder(nextItem.border)
+                      setShowTexture(nextItem.texture)
+                      setRotateIncrement(nextItem.rotate)
                     } else {
                       setPhotoPreview(null)
-                      setArtworkName("")
+                      setArtworkName('')
                     }
                     removeArtwork(e, photo.id)
                   }}
@@ -141,7 +164,7 @@ const Wrapper = styled(animated.div)`
   z-index: 1000;
   top: 50%;
   left: 0;
-  pointer-events: ${(props: StyledProps) => (props.disabled ? "none" : "all")};
+  pointer-events: ${(props: StyledProps) => (props.disabled ? 'none' : 'all')};
 `
 
 const Container = styled.div`
@@ -175,6 +198,7 @@ const ThumbnailWrapper = styled.div`
 
 const Thumbnail = styled.img`
   border-radius: 50%;
+  object-fit: cover;
   cursor: pointer;
 `
 
@@ -196,7 +220,7 @@ const CloseIcon = styled(MdClose)`
 const Text = styled.span`
   display: block;
   transform: rotate(90deg);
-  color: ${(props: StyledProps) => (props.backgroundColor ? "#333" : "#999")};
+  color: ${(props: StyledProps) => (props.backgroundColor ? '#333' : '#999')};
   position: absolute;
   left: 60px;
   padding-left: 20px;

@@ -1,4 +1,13 @@
-import React, { useState, useMemo, createContext, ReactNode } from 'react'
+import React, {
+  useState,
+  useMemo,
+  useEffect,
+  createContext,
+  ReactNode,
+} from 'react'
+import axios from 'axios'
+import cookie from 'js-cookie'
+import useSWR from 'swr'
 
 export const ArtworkContext = createContext(null)
 
@@ -11,14 +20,18 @@ interface Photo {
   src: string
   ratio: number
   name: string
+  rotate: boolean
+  border: boolean
+  texture: boolean
+  background: boolean
 }
 
 export const ArtworkProvider = ({ children }: Props) => {
   const [checkedBackground, setCheckedBackground] = useState<boolean>(false)
-  const [rotateCanvas, setRotateCanvas] = useState<boolean>(true)
+  const [rotateCanvas, setRotateCanvas] = useState<boolean>(false)
   const [lightIntensity, setLightIntensity] = useState<number>(0)
-  const [showTexture, setShowTexture] = useState<boolean>(true)
-  const [showBorder, setShowBorder] = useState<boolean>(true)
+  const [showTexture, setShowTexture] = useState<boolean>(false)
+  const [showBorder, setShowBorder] = useState<boolean>(false)
   const [artworkName, setArtworkName] = useState<string>('')
   const [artworkPrice, setArtworkPrice] = useState<number>(0)
   const [backgroundColor, setBackgroundColor] = useState<boolean>(false)
@@ -31,6 +44,69 @@ export const ArtworkProvider = ({ children }: Props) => {
   const [loaded, setLoaded] = useState<boolean>(false)
   const [errMsg, setErrMsg] = useState<string>('')
   const [uploaded, setUploaded] = useState(true)
+  const [queryId, setQueryId] = useState('')
+
+  // Fetch all data ------------------------------------
+  const username = window.location.href.split('/')[4]
+  const fetcher = url => fetch(url).then(r => r.json())
+  const { data } = useSWR(
+    `https://api.virtualcanvas.app/api/account/${username}`,
+    fetcher
+  )
+
+  const getAllArtwork = async () => {
+    if (data && data.images && data.images.length > 0) {
+      if (queryId) {
+        const photo = data.images.find(url => url.id === queryId)
+        setPhotoGallery(data.images)
+        setPhotoPreview(photo.src)
+        setPhotoRatio(photo.ratio)
+        setArtworkName(photo.name)
+        setBackgroundColor(photo.background)
+        setRotateIncrement(photo.rotate)
+        setShowBorder(photo.border)
+        setShowTexture(photo.texture)
+      } else {
+        setPhotoGallery(data.images)
+        setPhotoPreview(data.images[0].src)
+        setPhotoRatio(data.images[0].ratio)
+        setArtworkName(data.images[0].name)
+        setBackgroundColor(data.images[0].background)
+        setRotateIncrement(data.images[0].rotate)
+        setShowBorder(data.images[0].border)
+        setShowTexture(data.images[0].texture)
+      }
+    }
+  }
+
+  useEffect(() => {
+    getAllArtwork()
+  }, [data])
+
+  // Sidebar actions -----------------------------------------------
+  useEffect(() => {
+    const token = cookie.getJSON('vc_token')
+    const photo = photoGallery.find(url => url.src === photoPreview)
+
+    if (photo) {
+      photo.background = backgroundColor
+      photo.texture = showTexture
+      photo.border = showBorder
+      photo.rotate = rotateIncrement
+
+      const update = async () =>
+        await axios.patch(
+          `https://api.virtualcanvas.app/api/artwork/${photo.id}`,
+          photo,
+          {
+            headers: {
+              Token: token,
+            },
+          }
+        )
+      update()
+    }
+  }, [backgroundColor, showTexture, showBorder, rotateIncrement])
 
   const value = useMemo(() => {
     return {
@@ -68,6 +144,9 @@ export const ArtworkProvider = ({ children }: Props) => {
       setErrMsg,
       uploaded,
       setUploaded,
+      username,
+      queryId,
+      setQueryId,
     }
   }, [
     checkedBackground,
@@ -88,6 +167,8 @@ export const ArtworkProvider = ({ children }: Props) => {
     loaded,
     errMsg,
     uploaded,
+    username,
+    queryId,
   ])
 
   return (

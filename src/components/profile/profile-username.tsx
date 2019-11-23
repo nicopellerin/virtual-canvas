@@ -1,14 +1,16 @@
 import React, { useContext } from 'react'
 import styled from 'styled-components'
 
-import { UserContext } from '../../context/user-context'
+import { ArtworkContext } from '../../context/artwork-context'
 
 const ProfileUsername = () => {
-  const { user } = useContext(UserContext)
+  const { backgroundColor, username } = useContext(ArtworkContext)
 
   return (
     <Wrapper>
-      <Username>{user}</Username>
+      <Username backgroundColor={backgroundColor ? true : false}>
+        {username}
+      </Username>
     </Wrapper>
   )
 }
@@ -26,5 +28,6 @@ const Wrapper = styled.div`
 const Username = styled.span`
   font-size: 2rem;
   font-weight: 600;
-  color: #f4f4f4;
+  color: ${(props: { backgroundColor: boolean }) =>
+    props.backgroundColor ? '#333' : '#f4f4f4'};
 `

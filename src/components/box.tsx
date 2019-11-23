@@ -41,7 +41,7 @@ export const Box: React.FC<Props> = ({
       <mesh castShadow rotation={[0, 0, 0]}>
         <boxBufferGeometry
           attach="geometry"
-          args={[3.8 * photoRatio, 3.8, 0.2]}
+          args={[3.5 * photoRatio, 3.5, 0.2]}
         />
         <meshBasicMaterial
           attach="material"
@@ -53,7 +53,7 @@ export const Box: React.FC<Props> = ({
         <planeBufferGeometry
           attach="geometry"
           args={
-            showBorder ? [3.72 * photoRatio, 3.72] : [3.8 * photoRatio, 3.8]
+            showBorder ? [3.42 * photoRatio, 3.42] : [3.5 * photoRatio, 3.5]
           }
         />
         <meshPhongMaterial

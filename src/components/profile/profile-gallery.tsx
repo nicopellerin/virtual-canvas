@@ -4,17 +4,22 @@ import React, {
   useEffect,
   Dispatch,
   SetStateAction,
-} from "react"
-import { useSpring, animated } from "react-spring"
-import styled from "styled-components"
+} from 'react'
+import { useSpring, animated } from 'react-spring'
+import styled from 'styled-components'
 
-import { ArtworkContext } from "../../context/artwork-context"
+import { ArtworkContext } from '../../context/artwork-context'
+import { navigateTo } from 'gatsby'
 
 interface Photo {
   id: string
   src: string
   ratio: number
   name: string
+  rotate: boolean
+  border: boolean
+  texture: boolean
+  background: boolean
 }
 
 interface Props {
@@ -34,8 +39,17 @@ const ProfileGallery: React.FC<Props> = ({
   setPhotoRatio,
 }) => {
   const [toggle, setToggle] = useState<boolean>(true)
+  const [photoId, setPhotoId] = useState('')
 
-  const { setArtworkName, backgroundColor } = useContext(ArtworkContext)
+  const {
+    setArtworkName,
+    setBackgroundColor,
+    backgroundColor,
+    setShowBorder,
+    setShowTexture,
+    setRotateIncrement,
+    username,
+  } = useContext(ArtworkContext)
 
   useEffect(() => {
     if (photoGallery && photoGallery.length === 0) {
@@ -45,8 +59,8 @@ const ProfileGallery: React.FC<Props> = ({
 
   const slideInOut = useSpring({
     transform: toggle
-      ? "translate3d(0%, -50%, 0)"
-      : "translate3d(-86%, -50%, 0)",
+      ? 'translate3d(0%, -50%, 0)'
+      : 'translate3d(-86%, -50%, 0)',
     config: { mass: 1, tension: 120, friction: 18 },
   })
 
@@ -69,9 +83,15 @@ const ProfileGallery: React.FC<Props> = ({
                   height={60}
                   onClick={e => {
                     e.stopPropagation()
+                    navigateTo(`/profile/${username}/${photo.id}`)
+                    setPhotoId(photo.id)
                     setPhotoPreview(photo.src)
                     setPhotoRatio(photo.ratio)
                     setArtworkName(photo.name)
+                    setBackgroundColor(photo.background)
+                    setShowBorder(photo.border)
+                    setShowTexture(photo.texture)
+                    setRotateIncrement(photo.rotate)
                   }}
                 />
               </ThumbnailWrapper>
@@ -92,7 +112,7 @@ const Wrapper = styled(animated.div)`
   z-index: 1000;
   top: 50%;
   left: 0;
-  pointer-events: ${(props: StyledProps) => (props.disabled ? "none" : "all")};
+  pointer-events: ${(props: StyledProps) => (props.disabled ? 'none' : 'all')};
 `
 
 const Container = styled.div`
@@ -126,13 +146,14 @@ const ThumbnailWrapper = styled.div`
 
 const Thumbnail = styled.img`
   border-radius: 50%;
+  object-fit: cover;
   cursor: pointer;
 `
 
 const Text = styled.span`
   display: block;
   transform: rotate(90deg);
-  color: ${(props: StyledProps) => (props.backgroundColor ? "#333" : "#999")};
+  color: ${(props: StyledProps) => (props.backgroundColor ? '#333' : '#999')};
   position: absolute;
   left: 60px;
   padding-left: 20px;

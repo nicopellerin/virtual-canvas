@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useEffect, useContext } from 'react'
 import { Router } from '@reach/router'
 import axios from 'axios'
 import uuid from 'uuid/v4'
@@ -7,7 +7,6 @@ import cookie from 'js-cookie'
 import { MainScene } from '../../components/main-scene'
 import PrivateRoute from '../../components/private-route'
 import SEO from '../../components/seo'
-import { ProfileScene } from '../../components/profile/profile-scene'
 
 import { ArtworkContext } from '../../context/artwork-context'
 import { UserContext } from '../../context/user-context'
@@ -70,7 +69,6 @@ const IndexAppPage: React.FC = () => {
 
         setPhotoPreview(res.data.secure_url)
         setPhotoRatio(res.data.width / res.data.height)
-
         setPhotoUploaded(true)
         setUploaded(true)
 
@@ -79,6 +77,10 @@ const IndexAppPage: React.FC = () => {
           name: '',
           ratio: res.data.width / res.data.height,
           src: res.data.secure_url,
+          border: false,
+          rotate: false,
+          texture: false,
+          background: false,
         }
 
         const info = await axios.post(
@@ -110,36 +112,6 @@ const IndexAppPage: React.FC = () => {
       setUploaded(true)
     }
   }
-
-  // Fetch all images from database
-  const getAllArtwork = async () => {
-    const token = cookie.getJSON('vc_token')
-
-    const res = await axios.get(
-      `https://api.virtualcanvas.app/api/account/${user}`,
-      {
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-          Token: token,
-        },
-      }
-    )
-
-    // If images, add all images to photoGallery state
-    if (res && res.data && res.data.images && res.data.images.length > 0) {
-      setUploaded(true)
-      setPhotoGallery(res.data.images)
-      setPhotoPreview(res.data.images[0].src)
-      setPhotoRatio(res.data.images[0].ratio)
-      setArtworkName(res.data.images[0].name)
-    }
-  }
-
-  // Run function to fetch all images on load
-  useEffect(() => {
-    getAllArtwork()
-  }, [])
 
   return (
     <>
