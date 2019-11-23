@@ -47,7 +47,10 @@ export const ArtworkProvider = ({ children }: Props) => {
   const [queryId, setQueryId] = useState('')
 
   // Fetch all data ------------------------------------
-  const username = window.location.href.split('/')[4]
+  let username
+  if (typeof window !== 'undefined') {
+    username = window.location.href.split('/')[4]
+  }
   const fetcher = url => fetch(url).then(r => r.json())
   const { data } = useSWR(
     `https://api.virtualcanvas.app/api/account/${username}`,
