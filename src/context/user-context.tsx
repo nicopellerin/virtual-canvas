@@ -28,11 +28,14 @@ export const UserProvider = ({ children }: Props) => {
 
   const getUserProfile = async () => {
     try {
-      const { data } = await axios.get(`http://localhost:8080/api/profile`, {
-        headers: {
-          Token: token,
-        },
-      })
+      const { data } = await axios.get(
+        `https://api.virtualcanvas.app/api/profile`,
+        {
+          headers: {
+            Token: token,
+          },
+        }
+      )
 
       setSocialLinks(prevState => ({
         ...prevState,

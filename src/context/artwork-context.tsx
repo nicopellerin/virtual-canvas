@@ -58,7 +58,7 @@ export const ArtworkProvider = ({ children }: Props) => {
   }
   const fetcher = url => fetch(url).then(r => r.json())
   const { data } = useSWR(
-    `http://localhost:8080/api/account/${username}`,
+    `https://api.virtualcanvas.app/api/account/${username}`,
     fetcher
   )
 
@@ -114,7 +114,7 @@ export const ArtworkProvider = ({ children }: Props) => {
 
       const update = async () =>
         await axios.patch(
-          `http://localhost:8080/api/artwork/${photo.id}`,
+          `https://api.virtualcanvas.app/api/artwork/${photo.id}`,
           photo,
           {
             headers: {

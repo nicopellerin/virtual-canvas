@@ -113,7 +113,8 @@ const LeftArrow = styled(MdChevronLeft)`
   left: 15rem;
   transform: translateY(-50%);
   cursor: pointer;
-  color: ${props => (props.backgroundColor ? '#333' : '#f4f4f4')};
+  color: ${(props: { backgroundColor: boolean }) =>
+    props.backgroundColor ? '#333' : '#f4f4f4'};
 `
 
 const RightArrow = styled(MdChevronRight)`
@@ -122,5 +123,6 @@ const RightArrow = styled(MdChevronRight)`
   right: 15rem;
   transform: translateY(-50%);
   cursor: pointer;
-  color: ${props => (props.backgroundColor ? '#333' : '#f4f4f4')};
+  color: ${(props: { background: boolean }) =>
+    props.backgroundColor ? '#333' : '#f4f4f4'};
 `

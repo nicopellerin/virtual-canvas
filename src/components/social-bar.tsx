@@ -1,8 +1,10 @@
-import React, { useContext, Dispatch, SetStateAction } from 'react'
+import React, { useState, useContext, Dispatch, SetStateAction } from 'react'
 import styled from 'styled-components'
 import { animated, useSpring } from 'react-spring'
 import { MdAccountCircle } from 'react-icons/md'
 import { motion } from 'framer-motion'
+
+import { Toast } from './toast'
 
 import { UserContext } from '../context/user-context'
 import { ArtworkContext } from '../context/artwork-context'
@@ -13,6 +15,8 @@ interface Props {
 }
 
 const SocialBar: React.FC<Props> = ({ toggleProfile, setToggleProfile }) => {
+  const [showSuccessMsg, setShowSuccessMsg] = useState<string>('')
+
   const { socialLinks, setSocialLinks, updateUserProfile } = useContext(
     UserContext
   )
@@ -21,7 +25,9 @@ const SocialBar: React.FC<Props> = ({ toggleProfile, setToggleProfile }) => {
   const handleSubmit = async e => {
     e.preventDefault()
     const res = await updateUserProfile()
-    console.log('UPDATE user', res)
+    if (res.msg === 'Profile updated') {
+      setShowSuccessMsg('Social links updated')
+    }
   }
 
   const slideInOutProfile = useSpring({
@@ -32,62 +38,73 @@ const SocialBar: React.FC<Props> = ({ toggleProfile, setToggleProfile }) => {
   })
 
   return (
-    <Wrapper style={slideInOutProfile}>
-      <UserIcon onClick={() => setToggleProfile(prevState => !prevState)} />
-      <Container onSubmit={handleSubmit}>
-        <div>
-          <SocialContainer>
-            <h2>Social links</h2>
-            <InputFieldRowSocial>
-              <LabelSocial style={{ display: 'block' }}>Instagram</LabelSocial>
-              <InputFieldSocial
-                value={socialLinks.instagram}
-                onChange={e =>
-                  setSocialLinks(prevState => ({
-                    ...prevState,
-                    instagram: e.target.value,
-                  }))
-                }
-              />
-            </InputFieldRowSocial>
-            <InputFieldRowSocial>
-              <LabelSocial style={{ display: 'block' }}>Facebook</LabelSocial>
-              <InputFieldSocial
-                value={socialLinks.facebook}
-                onChange={e =>
-                  setSocialLinks(prevState => ({
-                    ...prevState,
-                    facebook: e.target.value,
-                  }))
-                }
-              />
-            </InputFieldRowSocial>
-            <InputFieldRowSocial>
-              <LabelSocial style={{ display: 'block' }}>Website</LabelSocial>
-              <InputFieldSocial
-                value={socialLinks.website}
-                onChange={e =>
-                  setSocialLinks(prevState => ({
-                    ...prevState,
-                    website: e.target.value,
-                  }))
-                }
-              />
-            </InputFieldRowSocial>
-          </SocialContainer>
+    <>
+      <Wrapper style={slideInOutProfile}>
+        <UserIcon onClick={() => setToggleProfile(prevState => !prevState)} />
+        <Container onSubmit={handleSubmit}>
           <div>
-            <h2>Profile info</h2>
-            <InputFieldRowSocial>
-              <LabelSocial style={{ display: 'block' }}>Username</LabelSocial>
-              <InputFieldSocial onChange={() => {}} value={username} />
-            </InputFieldRowSocial>
+            <SocialContainer>
+              <h2>Social links</h2>
+              <InputFieldRowSocial>
+                <LabelSocial style={{ display: 'block' }}>
+                  Instagram
+                </LabelSocial>
+                <InputFieldSocial
+                  value={socialLinks.instagram}
+                  onChange={e =>
+                    setSocialLinks(prevState => ({
+                      ...prevState,
+                      instagram: e.target.value,
+                    }))
+                  }
+                />
+              </InputFieldRowSocial>
+              <InputFieldRowSocial>
+                <LabelSocial style={{ display: 'block' }}>Facebook</LabelSocial>
+                <InputFieldSocial
+                  value={socialLinks.facebook}
+                  onChange={e =>
+                    setSocialLinks(prevState => ({
+                      ...prevState,
+                      facebook: e.target.value,
+                    }))
+                  }
+                />
+              </InputFieldRowSocial>
+              <InputFieldRowSocial>
+                <LabelSocial style={{ display: 'block' }}>Website</LabelSocial>
+                <InputFieldSocial
+                  value={socialLinks.website}
+                  onChange={e =>
+                    setSocialLinks(prevState => ({
+                      ...prevState,
+                      website: e.target.value,
+                    }))
+                  }
+                />
+              </InputFieldRowSocial>
+            </SocialContainer>
+            <div>
+              <h2>Profile info</h2>
+              <InputFieldRowSocial>
+                <LabelSocial style={{ display: 'block' }}>Username</LabelSocial>
+                <InputFieldSocial onChange={() => {}} value={username} />
+              </InputFieldRowSocial>
+            </div>
           </div>
-        </div>
-        <SaveButton whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-          Save
-        </SaveButton>
-      </Container>
-    </Wrapper>
+          <SaveButton whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+            Save
+          </SaveButton>
+        </Container>
+      </Wrapper>
+      {showSuccessMsg && (
+        <Toast
+          message={showSuccessMsg}
+          resetState={() => setShowSuccessMsg(false)}
+          delay={3000}
+        />
+      )}
+    </>
   )
 }
 
