@@ -1,5 +1,6 @@
 import React, {
   useState,
+  useContext,
   useMemo,
   useEffect,
   createContext,
@@ -8,6 +9,8 @@ import React, {
 import axios from 'axios'
 import cookie from 'js-cookie'
 import useSWR from 'swr'
+
+import { UserContext } from './user-context'
 
 export const ArtworkContext = createContext(null)
 
@@ -46,6 +49,8 @@ export const ArtworkProvider = ({ children }: Props) => {
   const [uploaded, setUploaded] = useState(true)
   const [queryId, setQueryId] = useState('')
 
+  const { setSocialLinks } = useContext(UserContext)
+
   // Fetch all data ------------------------------------
   let username
   if (typeof window !== 'undefined') {
@@ -53,7 +58,7 @@ export const ArtworkProvider = ({ children }: Props) => {
   }
   const fetcher = url => fetch(url).then(r => r.json())
   const { data } = useSWR(
-    `https://api.virtualcanvas.app/api/account/${username}`,
+    `http://localhost:8080/api/account/${username}`,
     fetcher
   )
 
@@ -69,6 +74,11 @@ export const ArtworkProvider = ({ children }: Props) => {
         setRotateIncrement(photo.rotate)
         setShowBorder(photo.border)
         setShowTexture(photo.texture)
+        setSocialLinks({
+          instagram: data.social_links.instagram,
+          facebook: data.social_links.facebook,
+          website: data.social_links.website,
+        })
       } else {
         setPhotoGallery(data.images)
         setPhotoPreview(data.images[0].src)
@@ -78,6 +88,11 @@ export const ArtworkProvider = ({ children }: Props) => {
         setRotateIncrement(data.images[0].rotate)
         setShowBorder(data.images[0].border)
         setShowTexture(data.images[0].texture)
+        setSocialLinks({
+          instagram: data.social_links.instagram,
+          facebook: data.social_links.facebook,
+          website: data.social_links.website,
+        })
       }
     }
   }
@@ -99,7 +114,7 @@ export const ArtworkProvider = ({ children }: Props) => {
 
       const update = async () =>
         await axios.patch(
-          `https://api.virtualcanvas.app/api/artwork/${photo.id}`,
+          `http://localhost:8080/api/artwork/${photo.id}`,
           photo,
           {
             headers: {
@@ -150,6 +165,7 @@ export const ArtworkProvider = ({ children }: Props) => {
       username,
       queryId,
       setQueryId,
+      data,
     }
   }, [
     checkedBackground,
@@ -172,6 +188,7 @@ export const ArtworkProvider = ({ children }: Props) => {
     uploaded,
     username,
     queryId,
+    data,
   ])
 
   return (

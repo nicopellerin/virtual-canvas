@@ -2,7 +2,7 @@ import React, { useContext, Dispatch, SetStateAction } from 'react'
 import { MdChevronLeft, MdChevronRight } from 'react-icons/md'
 import styled from 'styled-components'
 import ReactTooltip from 'react-tooltip'
-import { navigateTo } from 'gatsby'
+import { navigate } from 'gatsby'
 
 import { ArtworkContext } from '../../context/artwork-context'
 
@@ -50,7 +50,7 @@ const ProfileControls: React.FC<Props> = ({
 
   const handlePrevItem = () => {
     if (currentItem - 1 >= 0) {
-      navigateTo(`/profile/${username}/${prevItem.id}`)
+      navigate(`/profile/${username}/${prevItem.id}`)
       setPhotoPreview(prevItem.src)
       setPhotoRatio(prevItem.ratio)
       setArtworkName(prevItem.name)
@@ -63,7 +63,7 @@ const ProfileControls: React.FC<Props> = ({
 
   const handleNextItem = () => {
     if (currentItem + 1 <= galleryLength - 1) {
-      navigateTo(`/profile/${username}/${nextItem.id}`)
+      navigate(`/profile/${username}/${nextItem.id}`)
       setPhotoPreview(nextItem.src)
       setPhotoRatio(nextItem.ratio)
       setArtworkName(nextItem.name)

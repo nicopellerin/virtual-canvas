@@ -1,7 +1,7 @@
-import React, { useRef, useState, useEffect } from "react"
-import styled from "styled-components"
-import { MdCloudUpload } from "react-icons/md"
-import { motion } from "framer-motion"
+import React, { useRef, useState, useEffect } from 'react'
+import styled from 'styled-components'
+import { MdCloudUpload } from 'react-icons/md'
+import { motion } from 'framer-motion'
 
 interface Props {
   handlePhotoUpload: (e: React.FormEvent<HTMLInputElement>) => void
@@ -19,9 +19,13 @@ const AddArtwork: React.FC<Props> = ({
   const fileInputRef = useRef(null)
 
   useEffect(() => {
-    setTimeout(() => {
+    const timeout = setTimeout(() => {
       setShow(true)
     }, 500)
+
+    return () => {
+      clearTimeout(timeout)
+    }
   }, [])
 
   return (
@@ -35,7 +39,7 @@ const AddArtwork: React.FC<Props> = ({
           <Title>No artwork detected</Title>
           <input
             type="file"
-            style={{ display: "none" }}
+            style={{ display: 'none' }}
             ref={fileInputRef}
             accept="image/x-png,image/jpeg"
             onChange={e => {
@@ -49,7 +53,7 @@ const AddArtwork: React.FC<Props> = ({
             onClick={() => fileInputRef.current && fileInputRef.current.click()}
           >
             <CloudUploadIcon />
-            {loader ? loader : "Upload image"}
+            {loader ? loader : 'Upload image'}
           </UploadButton>
         </Wrapper>
       )}

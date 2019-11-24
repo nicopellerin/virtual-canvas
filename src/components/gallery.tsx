@@ -101,10 +101,9 @@ const Gallery: React.FC<Props> = ({
             const prevItem = photoGallery[index - 1]
             const nextItem = photoGallery[index + 1]
             return (
-              <ThumbnailWrapper>
+              <ThumbnailWrapper key={photo.id}>
                 <Thumbnail
                   src={photo.src}
-                  key={photo.id}
                   alt="Preview thumbnail"
                   width={60}
                   height={60}

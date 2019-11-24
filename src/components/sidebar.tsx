@@ -13,8 +13,6 @@ import {
   MdRemove,
   MdPhotoCamera,
   MdAddCircle,
-  MdAccountCircle,
-  MdVerifiedUser,
 } from 'react-icons/md'
 import styled from 'styled-components'
 import { useSpring, animated } from 'react-spring'
@@ -27,6 +25,7 @@ import { Toast } from './toast'
 import { ArtworkContext } from '../context/artwork-context'
 
 import Logo from '../images/logo-text.svg'
+import SocialBar from './social-bar'
 
 interface Props {
   handlePhotoUpload: (e: Event) => void
@@ -65,7 +64,7 @@ export const Sidebar: React.FC<Props> = ({
 }) => {
   const [toggle, setToggle] = useState<boolean>(false)
   const [toggleProfile, setToggleProfile] = useState<boolean>(false)
-  const [showSuccessMsg, setShowSuccessMsg] = useState<boolean>(false)
+  const [showSuccessMsg, setShowSuccessMsg] = useState<string>('')
   const [submitted, setSubmitted] = useState<boolean>(false)
   const [fieldFocused, setFieldFocused] = useState<boolean>(false)
 
@@ -119,9 +118,49 @@ export const Sidebar: React.FC<Props> = ({
     )
 
     if (artworkName) {
-      setShowSuccessMsg(true)
+      setShowSuccessMsg('Saved name to artwork')
       setSubmitted(true)
       artworkFieldRef.current.blur()
+    }
+  }
+
+  const handleShowBorder = () => {
+    setShowBorder(prevState => !prevState)
+
+    if (showBorder !== true) {
+      setShowSuccessMsg('Added border to artwork')
+    } else {
+      setShowSuccessMsg('Removed border from artwork')
+    }
+  }
+
+  const handleShowTexture = () => {
+    setShowTexture(prevState => !prevState)
+
+    if (showTexture !== true) {
+      setShowSuccessMsg('Added texture to artwork')
+    } else {
+      setShowSuccessMsg('Removed texture from artwork')
+    }
+  }
+
+  const handleBackgroundColor = () => {
+    setBackgroundColor(prevState => !prevState)
+
+    if (backgroundColor !== true) {
+      setShowSuccessMsg('Added light background to artwork')
+    } else {
+      setShowSuccessMsg('Removed light background from artwork')
+    }
+  }
+
+  const handleRotate = () => {
+    setRotateIncrement(prevState => !prevState)
+
+    if (rotateIncrement !== true) {
+      setShowSuccessMsg('Added 90˚ CW rotation to artwork')
+    } else {
+      setShowSuccessMsg('Removed 90˚ CW rotation from artwork')
     }
   }
 
@@ -173,7 +212,7 @@ export const Sidebar: React.FC<Props> = ({
                   <label>
                     <Checkbox
                       checked={showBorder}
-                      onChange={() => setShowBorder(prevState => !prevState)}
+                      onChange={handleShowBorder}
                     />
                     <BorderCheckboxLabel>Border</BorderCheckboxLabel>
                   </label>
@@ -182,7 +221,7 @@ export const Sidebar: React.FC<Props> = ({
                   <label>
                     <Checkbox
                       checked={showTexture}
-                      onChange={() => setShowTexture(prevState => !prevState)}
+                      onChange={handleShowTexture}
                     />
                     <TextureCheckboxLabel>Texture</TextureCheckboxLabel>
                   </label>
@@ -193,9 +232,7 @@ export const Sidebar: React.FC<Props> = ({
                   <label>
                     <Checkbox
                       checked={backgroundColor}
-                      onChange={() =>
-                        setBackgroundColor(prevState => !prevState)
-                      }
+                      onChange={handleBackgroundColor}
                     />
                     <BackgroudCheckboxLabel>
                       Light background
@@ -206,9 +243,7 @@ export const Sidebar: React.FC<Props> = ({
                   <label>
                     <Checkbox
                       checked={rotateIncrement}
-                      onChange={() =>
-                        setRotateIncrement(prevState => !prevState)
-                      }
+                      onChange={handleRotate}
                     />
                     <BackgroudCheckboxLabel>
                       Rotate 90˚ CW
@@ -255,62 +290,14 @@ export const Sidebar: React.FC<Props> = ({
             {loader ? loader : 'Add image to gallery'}
           </AddArtButton>
         </Container>
-        <Bar style={slideInOut} toggleProfile={toggleProfile ? true : false}>
-          <UserIcon onClick={() => setToggleProfile(prevState => !prevState)} />
-          <h2>Social links</h2>
-          <InputFieldRowSocial>
-            <LabelSocial style={{ display: 'block' }}>Instagram</LabelSocial>
-            <InputFieldSocial
-              placeholder="https://"
-              // value={artworkName}
-              // ref={artworkFieldRef}
-              // onFocus={() => setFieldFocused(true)}
-              // onBlur={() => setTimeout(() => setFieldFocused(false), 200)}
-              onChange={e => {}}
-            />
-            {artworkName.length > 0 && !submitted && fieldFocused && (
-              <Add>
-                <MdAddCircle size={24} color="green" onClick={() => {}} />
-              </Add>
-            )}
-          </InputFieldRowSocial>
-          <InputFieldRowSocial>
-            <LabelSocial style={{ display: 'block' }}>Facebook</LabelSocial>
-            <InputFieldSocial
-              placeholder="https://"
-              // value={artworkName}
-              // ref={artworkFieldRef}
-              // onFocus={() => setFieldFocused(true)}
-              // onBlur={() => setTimeout(() => setFieldFocused(false), 200)}
-              onChange={e => {}}
-            />
-            {artworkName.length > 0 && !submitted && fieldFocused && (
-              <Add>
-                <MdAddCircle size={24} color="green" onClick={() => {}} />
-              </Add>
-            )}
-          </InputFieldRowSocial>
-          <InputFieldRowSocial>
-            <LabelSocial style={{ display: 'block' }}>Website</LabelSocial>
-            <InputFieldSocial
-              placeholder="https://"
-              // value={artworkName}
-              // ref={artworkFieldRef}
-              // onFocus={() => setFieldFocused(true)}
-              // onBlur={() => setTimeout(() => setFieldFocused(false), 200)}
-              onChange={e => {}}
-            />
-            {artworkName.length > 0 && !submitted && fieldFocused && (
-              <Add>
-                <MdAddCircle size={24} color="green" onClick={() => {}} />
-              </Add>
-            )}
-          </InputFieldRowSocial>
-        </Bar>
+        <SocialBar
+          toggleProfile={toggleProfile}
+          setToggleProfile={setToggleProfile}
+        />
       </Wrapper>
       {showSuccessMsg && (
         <Toast
-          message="Saved name to artwork"
+          message={showSuccessMsg}
           resetState={() => setShowSuccessMsg(false)}
           delay={3000}
         />
@@ -422,35 +409,6 @@ const Container = styled.div`
   border-bottom-left-radius: 20px;
 `
 
-const Bar = styled(animated.div)`
-  content: '';
-  height: 90%;
-  width: 300px;
-  padding: 3rem 3rem 2rem 4rem;
-  background: #f4f4f4;
-  position: absolute;
-  border-top-left-radius: 23px;
-  border-bottom-left-radius: 23px;
-  top: 50%;
-  left: ${(props: { toggleProfile: boolean }) =>
-    props.toggleProfile ? '-300px' : '-30px'};
-  z-index: 0;
-  transform: translateY(-50%);
-  box-shadow: -4px 0 15px rgba(0, 0, 0, 0.15);
-  ${(props: { toggleProfile: boolean }) =>
-    props.toggleProfile && 'transition: all 300ms ease-in-out;'}
-`
-
-const UserIcon = styled(MdAccountCircle)`
-  position: absolute;
-  top: 50%;
-  left: 7px;
-  font-size: 1.8rem;
-  transform: translateY(-50%);
-  color: #623cea;
-  cursor: pointer;
-`
-
 const Elements = styled.div`
   display: flex;
   flex-direction: column;
@@ -461,19 +419,19 @@ const CheckboxGrid = styled.div`
   grid-template-columns: 1fr 1fr;
 `
 
-const InputFieldRow = styled.div`
+export const InputFieldRow = styled.div`
   margin-bottom: 2.8rem;
   position: relative;
 `
 
-const Label = styled.label`
+export const Label = styled.label`
   font-size: 1.4rem;
   font-weight: 500;
   margin-bottom: 5px;
   color: #333;
 `
 
-const InputField = styled.input`
+export const InputField = styled.input`
   width: 100%;
   padding: 10px;
   border-radius: 5px;
@@ -483,23 +441,6 @@ const InputField = styled.input`
   color: #333;
   font-family: inherit;
   outline: none;
-`
-
-const InputFieldSocial = styled(InputField)`
-  background: #fff;
-
-  &::placeholder {
-    font-size: 1.2rem;
-    color: #999;
-  }
-`
-
-const InputFieldRowSocial = styled(InputFieldRow)`
-  margin-bottom: 1rem;
-`
-
-const LabelSocial = styled(Label)`
-  font-size: 1.2rem;
 `
 
 const Add = styled.div`

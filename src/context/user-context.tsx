@@ -1,5 +1,12 @@
-import React, { useState, useMemo, createContext, ReactNode } from 'react'
+import React, {
+  useState,
+  useEffect,
+  useMemo,
+  createContext,
+  ReactNode,
+} from 'react'
 import cookie from 'js-cookie'
+import axios from 'axios'
 
 export const UserContext = createContext(null)
 
@@ -13,6 +20,56 @@ export const UserProvider = ({ children }: Props) => {
 
   const [user, setUser] = useState(username)
   const [userToken, setUserToken] = useState(token)
+  const [socialLinks, setSocialLinks] = useState({
+    instagram: '',
+    facebook: '',
+    website: '',
+  })
+
+  const getUserProfile = async () => {
+    try {
+      const { data } = await axios.get(`http://localhost:8080/api/profile`, {
+        headers: {
+          Token: token,
+        },
+      })
+
+      setSocialLinks(prevState => ({
+        ...prevState,
+        instagram: data.social_links.instagram,
+        facebook: data.social_links.facebook,
+        website: data.social_links.website,
+      }))
+
+      return data
+    } catch (err) {
+      console.error(err)
+      return { msg: err }
+    }
+  }
+
+  useEffect(() => {
+    if (token) {
+      getUserProfile()
+    }
+  }, [])
+
+  const updateUserProfile = async () => {
+    try {
+      await axios.patch(
+        `http://localhost:8080/api/profile/${username}`,
+        socialLinks,
+        {
+          headers: {
+            Token: token,
+          },
+        }
+      )
+      return { msg: 'Profile updated' }
+    } catch (err) {
+      console.error(err)
+    }
+  }
 
   const value = useMemo(() => {
     return {
@@ -20,8 +77,11 @@ export const UserProvider = ({ children }: Props) => {
       setUser,
       userToken,
       setUserToken,
+      socialLinks,
+      setSocialLinks,
+      updateUserProfile,
     }
-  }, [user, userToken])
+  }, [user, userToken, socialLinks])
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>
 }
