@@ -9,7 +9,7 @@ import { useSpring, animated } from 'react-spring'
 import styled from 'styled-components'
 
 import { ArtworkContext } from '../../context/artwork-context'
-import { navigateTo } from 'gatsby'
+import { navigate } from 'gatsby'
 
 interface Photo {
   id: string
@@ -83,7 +83,7 @@ const ProfileGallery: React.FC<Props> = ({
                   height={60}
                   onClick={e => {
                     e.stopPropagation()
-                    navigateTo(`/profile/${username}/${photo.id}`)
+                    navigate(`/profile/${username}/${photo.id}`)
                     setPhotoId(photo.id)
                     setPhotoPreview(photo.src)
                     setPhotoRatio(photo.ratio)
