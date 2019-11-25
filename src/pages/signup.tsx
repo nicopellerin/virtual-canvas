@@ -217,6 +217,10 @@ const Button = styled(motion.button)`
 const Text = styled.span`
   margin-top: 5rem;
   font-size: 1.2rem;
+
+  a {
+    color: #333;
+  }
 `
 
 const FooterText = styled.h6`

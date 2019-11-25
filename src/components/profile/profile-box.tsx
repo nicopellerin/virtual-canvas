@@ -39,10 +39,7 @@ export const ProfileBox: React.FC<Props> = ({
   return (
     <group ref={ref} rotation={rotateIncrement ? [0, 0, 1.57] : [0, 0, 0]}>
       <mesh castShadow rotation={[0, 0, 0]}>
-        <boxBufferGeometry
-          attach="geometry"
-          args={[3.5 * photoRatio, 3.5, 0.2]}
-        />
+        <boxBufferGeometry attach="geometry" args={[3 * photoRatio, 3, 0.2]} />
         <meshBasicMaterial
           attach="material"
           map={canvasTexture}
@@ -52,9 +49,7 @@ export const ProfileBox: React.FC<Props> = ({
       <mesh receiveShadow rotation={[0, 0, 0]} position={[0, 0, 0.112]}>
         <planeBufferGeometry
           attach="geometry"
-          args={
-            showBorder ? [3.42 * photoRatio, 3.42] : [3.5 * photoRatio, 3.5]
-          }
+          args={showBorder ? [2.92 * photoRatio, 2.92] : [3 * photoRatio, 3]}
         />
         <meshPhongMaterial
           attach="material"

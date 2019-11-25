@@ -7,7 +7,13 @@ import React, {
 } from 'react'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
-import { Canvas, extend, useThree, useRender } from 'react-three-fiber'
+import {
+  Canvas,
+  extend,
+  useThree,
+  useRender,
+  useFrame,
+} from 'react-three-fiber'
 
 import { Sidebar } from './sidebar'
 import { ArtworkInfo } from './artwork-info'
@@ -109,7 +115,9 @@ export const MainScene: React.FC<Props> = ({
         camera={{
           position: [0, 0, 3.8],
         }}
-        onCreated={({ gl }) => {
+        onCreated={({ gl, viewport }) => {
+          console.log(viewport)
+          console.log(gl.domElement.toDataURL())
           gl.shadowMap.enabled = true
           gl.shadowMap.type = THREE.PCFSoftShadowMap
           // document.body.appendChild(WEBVR.createButton(gl))
