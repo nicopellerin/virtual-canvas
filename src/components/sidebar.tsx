@@ -83,6 +83,7 @@ export const Sidebar: React.FC<Props> = ({
     rotateIncrement,
     setRotateIncrement,
     setLight,
+    light,
   } = useContext(ArtworkContext)
 
   useEffect(() => {
@@ -95,7 +96,7 @@ export const Sidebar: React.FC<Props> = ({
     () => {
       setLight(lightIntensity)
     },
-    1000,
+    300,
     [lightIntensity]
   )
 
@@ -150,12 +151,9 @@ export const Sidebar: React.FC<Props> = ({
     setRotateIncrement(prevState => !prevState)
   }
 
-  const handleLightIntensity = React.useCallback(
-    e => {
-      setLightIntensity(e.target.value)
-    },
-    [lightIntensity]
-  )
+  const handleLightIntensity = e => {
+    setLightIntensity(e.target.value)
+  }
 
   return (
     <>
