@@ -94,7 +94,6 @@ export const Sidebar: React.FC<Props> = ({
   useDebouncedEffect(
     () => {
       setLight(lightIntensity)
-      setShowSuccessMsg('Updated artwork spotlight intensity')
     },
     1000,
     [lightIntensity]
@@ -137,51 +136,30 @@ export const Sidebar: React.FC<Props> = ({
 
   const handleShowBorder = () => {
     setShowBorder(prevState => !prevState)
-
-    if (showBorder !== true) {
-      setShowSuccessMsg('Added border to artwork')
-    } else {
-      setShowSuccessMsg('Removed border from artwork')
-    }
   }
 
   const handleShowTexture = () => {
     setShowTexture(prevState => !prevState)
-
-    if (showTexture !== true) {
-      setShowSuccessMsg('Added texture to artwork')
-    } else {
-      setShowSuccessMsg('Removed texture from artwork')
-    }
   }
 
   const handleBackgroundColor = () => {
     setBackgroundColor(prevState => !prevState)
-
-    if (backgroundColor !== true) {
-      setShowSuccessMsg('Added light background to artwork')
-    } else {
-      setShowSuccessMsg('Removed light background from artwork')
-    }
   }
 
   const handleRotate = () => {
     setRotateIncrement(prevState => !prevState)
-
-    if (rotateIncrement !== true) {
-      setShowSuccessMsg('Added 90˚ CW rotation to artwork')
-    } else {
-      setShowSuccessMsg('Removed 90˚ CW rotation from artwork')
-    }
   }
 
-  const handleLightIntensity = e => {
-    setLightIntensity(e.target.value)
-  }
+  const handleLightIntensity = React.useCallback(
+    e => {
+      setLightIntensity(e.target.value)
+    },
+    [lightIntensity]
+  )
 
   return (
     <>
-      <Wrapper toggle={toggle ? 1 : 0} style={slideInOut}>
+      <Wrapper style={slideInOut}>
         <ToggleButton
           onClick={() => {
             setToggleProfile(false)
