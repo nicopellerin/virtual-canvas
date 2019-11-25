@@ -48,6 +48,7 @@
     "three": "^0.109.0",
     "typeface-inter": "^3.10.0",
     "typeface-nunito-sans": "^0.0.72",
+    "use-debounced-effect": "^0.0.3",
     "uuid": "^3.3.3"
   },
   "devDependencies": {

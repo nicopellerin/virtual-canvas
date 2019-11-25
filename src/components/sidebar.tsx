@@ -18,6 +18,7 @@ import styled from 'styled-components'
 import { useSpring, animated } from 'react-spring'
 import axios from 'axios'
 import cookie from 'js-cookie'
+import useDebouncedEffect from 'use-debounced-effect'
 
 import Checkbox from './checkbox'
 import { Toast } from './toast'
@@ -81,6 +82,7 @@ export const Sidebar: React.FC<Props> = ({
     setBackgroundColor,
     rotateIncrement,
     setRotateIncrement,
+    setLight,
   } = useContext(ArtworkContext)
 
   useEffect(() => {
@@ -88,6 +90,15 @@ export const Sidebar: React.FC<Props> = ({
       setToggle(false)
     }
   })
+
+  useDebouncedEffect(
+    () => {
+      setLight(lightIntensity)
+      setShowSuccessMsg('Updated artwork spotlight intensity')
+    },
+    1000,
+    [lightIntensity]
+  )
 
   const fileInputRef = useRef(null)
   const artworkFieldRef = useRef(null)
@@ -162,6 +173,10 @@ export const Sidebar: React.FC<Props> = ({
     } else {
       setShowSuccessMsg('Removed 90˚ CW rotation from artwork')
     }
+  }
+
+  const handleLightIntensity = e => {
+    setLightIntensity(e.target.value)
   }
 
   return (
@@ -260,7 +275,7 @@ export const Sidebar: React.FC<Props> = ({
               type="range"
               min="0"
               max="20"
-              onChange={e => setLightIntensity(e.target.value)}
+              onChange={handleLightIntensity}
               value={lightIntensity}
             />
           </ZoomRange>

@@ -20,6 +20,7 @@ interface Photo {
   border: boolean
   texture: boolean
   background: boolean
+  lighting: string
 }
 
 interface Props {
@@ -48,6 +49,7 @@ const ProfileGallery: React.FC<Props> = ({
     setShowBorder,
     setShowTexture,
     setRotateIncrement,
+    setLightIntensity,
     username,
   } = useContext(ArtworkContext)
 
@@ -92,6 +94,7 @@ const ProfileGallery: React.FC<Props> = ({
                     setShowBorder(photo.border)
                     setShowTexture(photo.texture)
                     setRotateIncrement(photo.rotate)
+                    setLightIntensity(photo.lighting)
                   }}
                 />
               </ThumbnailWrapper>

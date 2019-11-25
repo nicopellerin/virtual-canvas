@@ -13732,6 +13732,11 @@ url@^0.11.0:
     punycode "1.3.2"
     querystring "0.2.0"
 
+use-debounced-effect@^0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/use-debounced-effect/-/use-debounced-effect-0.0.3.tgz#ec349c3b837a5b5dcf193d8757ae773fb19998e7"
+  integrity sha512-9cAkZCFv/FYkF+cIGM0/oSMxbxWyz26wrx6wI6Bpq7kiV0JfF1qMOQHy1m802ZE4D0vCn9G7E4NNT3lttqQLCg==
+
 use@^3.1.0:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/use/-/use-3.1.1.tgz#d50c8cac79a19fbc20f2911f56eb973f4e10070f"

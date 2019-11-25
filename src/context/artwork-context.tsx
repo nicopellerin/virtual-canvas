@@ -27,12 +27,14 @@ interface Photo {
   border: boolean
   texture: boolean
   background: boolean
+  lighting: string
 }
 
 export const ArtworkProvider = ({ children }: Props) => {
   const [checkedBackground, setCheckedBackground] = useState<boolean>(false)
   const [rotateCanvas, setRotateCanvas] = useState<boolean>(false)
-  const [lightIntensity, setLightIntensity] = useState<number>(0)
+  const [lightIntensity, setLightIntensity] = useState<string>('0')
+  const [light, setLight] = useState<string>('0')
   const [showTexture, setShowTexture] = useState<boolean>(false)
   const [showBorder, setShowBorder] = useState<boolean>(false)
   const [artworkName, setArtworkName] = useState<string>('')
@@ -74,6 +76,7 @@ export const ArtworkProvider = ({ children }: Props) => {
         setRotateIncrement(photo.rotate)
         setShowBorder(photo.border)
         setShowTexture(photo.texture)
+        setLightIntensity(photo.lighting)
         setSocialLinks({
           instagram: data.social_links.instagram,
           facebook: data.social_links.facebook,
@@ -88,6 +91,7 @@ export const ArtworkProvider = ({ children }: Props) => {
         setRotateIncrement(data.images[0].rotate)
         setShowBorder(data.images[0].border)
         setShowTexture(data.images[0].texture)
+        setLightIntensity(data.images[0].lighting)
         setSocialLinks({
           instagram: data.social_links.instagram,
           facebook: data.social_links.facebook,
@@ -111,6 +115,7 @@ export const ArtworkProvider = ({ children }: Props) => {
       photo.texture = showTexture
       photo.border = showBorder
       photo.rotate = rotateIncrement
+      photo.lighting = light
 
       const update = async () =>
         await axios.patch(
@@ -124,7 +129,7 @@ export const ArtworkProvider = ({ children }: Props) => {
         )
       update()
     }
-  }, [backgroundColor, showTexture, showBorder, rotateIncrement])
+  }, [backgroundColor, showTexture, showBorder, rotateIncrement, light])
 
   const value = useMemo(() => {
     return {
@@ -134,6 +139,8 @@ export const ArtworkProvider = ({ children }: Props) => {
       setRotateCanvas,
       lightIntensity,
       setLightIntensity,
+      light,
+      setLight,
       showTexture,
       setShowTexture,
       showBorder,
@@ -171,6 +178,7 @@ export const ArtworkProvider = ({ children }: Props) => {
     checkedBackground,
     rotateCanvas,
     lightIntensity,
+    light,
     showTexture,
     showBorder,
     artworkName,

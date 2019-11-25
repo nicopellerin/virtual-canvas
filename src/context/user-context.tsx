@@ -60,7 +60,7 @@ export const UserProvider = ({ children }: Props) => {
   const updateUserProfile = async () => {
     try {
       await axios.patch(
-        `http://localhost:8080/api/profile/${username}`,
+        `https://api.virtualcanvas.app/api/profile/${username}`,
         socialLinks,
         {
           headers: {

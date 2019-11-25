@@ -22,6 +22,7 @@ interface Photo {
   border: boolean
   texture: boolean
   background: boolean
+  lighting: string
 }
 
 interface Props {
@@ -51,6 +52,7 @@ const Gallery: React.FC<Props> = ({
     setShowBorder,
     setShowTexture,
     setRotateIncrement,
+    setLightIntensity,
   } = useContext(ArtworkContext)
 
   useEffect(() => {
@@ -116,6 +118,7 @@ const Gallery: React.FC<Props> = ({
                     setShowBorder(photo.border)
                     setShowTexture(photo.texture)
                     setRotateIncrement(photo.rotate)
+                    setLightIntensity(photo.lighting)
                   }}
                 />
                 <CloseIcon
@@ -130,6 +133,7 @@ const Gallery: React.FC<Props> = ({
                       setShowBorder(prevItem.border)
                       setShowTexture(prevItem.texture)
                       setRotateIncrement(prevItem.rotate)
+                      setLightIntensity(prevItem.lighting)
                     } else if (nextItem) {
                       setPhotoPreview(nextItem.src)
                       setArtworkName(nextItem.name)
@@ -138,6 +142,7 @@ const Gallery: React.FC<Props> = ({
                       setShowBorder(nextItem.border)
                       setShowTexture(nextItem.texture)
                       setRotateIncrement(nextItem.rotate)
+                      setLightIntensity(nextItem.lighting)
                     } else {
                       setPhotoPreview(null)
                       setArtworkName('')
