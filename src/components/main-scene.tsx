@@ -69,8 +69,8 @@ export const MainScene: React.FC<Props> = ({
     artworkName,
   } = useContext(ArtworkContext)
 
-  const [screenShot, setScreenShot] = useState<string>('')
-  const [snap, setSnap] = useState<boolean>(false)
+  const [screenShot, setScreenShot] = useState()
+  const [snap, setSnap] = useState(false)
 
   const getPhoto = React.useCallback(
     gl => {
@@ -81,7 +81,7 @@ export const MainScene: React.FC<Props> = ({
   )
 
   const saveToFile = async () => {
-    await save(screenShot, `${artworkName || 'virtual-canvas'}.jpeg`)
+    await save(screenShot, `${artworkName || 'virtual-canvas'}.jpg`)
   }
 
   const firstLoad = useRef(true)
