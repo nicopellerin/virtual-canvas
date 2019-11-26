@@ -44,6 +44,7 @@ interface Props {
   setPhotoGallery: Dispatch<SetStateAction<Photo>>
   photoPreview: string
   loader: string
+  setSnap: Dispatch<SetStateAction<boolean>>
 }
 
 interface Photo {
