@@ -34,7 +34,7 @@ export const Box: React.FC<Props> = ({
   const { gl } = useThree()
 
   useEffect(() => {
-    const time = setTimeout(() => (snap === true ? getPhoto(gl) : ''), 500)
+    const time = setTimeout(() => (snap === true ? getPhoto(gl) : ''), 1000)
     return () => {
       clearTimeout(time)
     }
