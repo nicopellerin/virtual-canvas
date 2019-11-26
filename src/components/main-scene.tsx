@@ -11,6 +11,7 @@ import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { Canvas, extend, useThree, useRender } from 'react-three-fiber'
 import { save } from 'save-file'
+// import { saveAs } from 'file-saver'
 
 import { Sidebar } from './sidebar'
 import { ArtworkInfo } from './artwork-info'
@@ -81,17 +82,17 @@ export const MainScene: React.FC<Props> = ({
   )
 
   const saveToFile = async () => {
-    await save(screenShot, `${artworkName || 'virtual-canvas'}.jpeg`)
+    await save(screenShot, `${artworkName || 'virtual-canvas'}.jpg`)
   }
 
   const firstLoad = useRef(true)
   useEffect(() => {
-    if (firstLoad.current) {
+    if (firstLoad.current || snap === false) {
       firstLoad.current = false
       return
     }
     saveToFile()
-  }, [screenShot])
+  }, [snap])
 
   // Control canvas
   const Controls = () => {
