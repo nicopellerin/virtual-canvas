@@ -62,6 +62,7 @@ export const Sidebar: React.FC<Props> = ({
   photoPreview,
   photoGallery,
   loader,
+  setSnap,
 }) => {
   const [toggle, setToggle] = useState<boolean>(false)
   const [toggleProfile, setToggleProfile] = useState<boolean>(false)
@@ -258,7 +259,9 @@ export const Sidebar: React.FC<Props> = ({
           <DownloadButton
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            onClick={() => alert('Coming soon')}
+            onClick={() => {
+              setSnap(true)
+            }}
           >
             <MdPhotoCamera style={{ marginRight: 10 }} />
             Take screenshot

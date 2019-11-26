@@ -1,19 +1,16 @@
 import React, {
   useRef,
   useContext,
+  useEffect,
+  useState,
   Suspense,
   Dispatch,
   SetStateAction,
 } from 'react'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
-import {
-  Canvas,
-  extend,
-  useThree,
-  useRender,
-  useFrame,
-} from 'react-three-fiber'
+import { Canvas, extend, useThree, useRender } from 'react-three-fiber'
+import { save } from 'save-file'
 
 import { Sidebar } from './sidebar'
 import { ArtworkInfo } from './artwork-info'
@@ -69,12 +66,39 @@ export const MainScene: React.FC<Props> = ({
     showBorder,
     backgroundColor,
     rotateIncrement,
+    artworkName,
   } = useContext(ArtworkContext)
+
+  const [screenShot, setScreenShot] = useState()
+  const [snap, setSnap] = useState(false)
+
+  const getPhoto = React.useCallback(
+    gl => {
+      setScreenShot(gl.domElement.toDataURL('image/jpeg'))
+      setSnap(false)
+    },
+    [screenShot]
+  )
+
+  const saveToFile = async () => {
+    await save(screenShot, `${artworkName || 'virtual-canvas'}.jpeg`)
+  }
+
+  const firstLoad = useRef(true)
+  useEffect(() => {
+    if (firstLoad.current) {
+      firstLoad.current = false
+      return
+    }
+    saveToFile()
+  }, [screenShot])
 
   // Control canvas
   const Controls = () => {
     const orbitRef = useRef(null)
     const { camera, gl } = useThree()
+
+    gl.setClearColor(Number(backgroundColor ? '0xffffff' : '0x000004'), 1)
 
     useRender(() => {
       if (orbitRef.current) {
@@ -111,16 +135,14 @@ export const MainScene: React.FC<Props> = ({
             : '#000004',
         }}
         id="main-image"
-        // vr
+        gl={{ preserveDrawingBuffer: true, antialias: true, alpha: true }}
         camera={{
           position: [0, 0, 3.8],
         }}
-        onCreated={({ gl, viewport }) => {
-          console.log(viewport)
-          console.log(gl.domElement.toDataURL())
+        onCreated={({ gl }) => {
+          // console.log(gl.domElement.toDataURL())
           gl.shadowMap.enabled = true
           gl.shadowMap.type = THREE.PCFSoftShadowMap
-          // document.body.appendChild(WEBVR.createButton(gl))
         }}
       >
         <ambientLight intensity={0.8} />
@@ -132,6 +154,8 @@ export const MainScene: React.FC<Props> = ({
             showTexture={showTexture}
             showBorder={showBorder}
             rotateIncrement={rotateIncrement}
+            getPhoto={getPhoto}
+            snap={snap}
           />
           <Controls rotate={rotateCanvas} />
         </Suspense>
@@ -159,6 +183,7 @@ export const MainScene: React.FC<Props> = ({
         setPhotoGallery={setPhotoGallery}
         photoPreview={photoPreview}
         loader={loader}
+        setSnap={setSnap}
       />
       <Gallery
         photoGallery={photoGallery}

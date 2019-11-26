@@ -1,7 +1,13 @@
-import React, { useRef, useMemo, Dispatch, SetStateAction } from 'react'
+import React, {
+  useRef,
+  useEffect,
+  useMemo,
+  Dispatch,
+  SetStateAction,
+} from 'react'
 import * as THREE from 'three'
 import { TextureLoader } from 'three/src/loaders/TextureLoader'
-import { useLoader, useFrame } from 'react-three-fiber'
+import { useLoader, useFrame, useThree } from 'react-three-fiber'
 
 interface Props {
   url: string
@@ -9,6 +15,8 @@ interface Props {
   showTexture: Dispatch<SetStateAction<boolean>>
   showBorder: Dispatch<SetStateAction<boolean>>
   rotateIncrement: boolean
+  getPhoto: (gl) => void
+  snap: boolean
 }
 
 export const Box: React.FC<Props> = ({
@@ -17,9 +25,20 @@ export const Box: React.FC<Props> = ({
   showTexture,
   showBorder,
   rotateIncrement,
+  getPhoto,
+  snap,
 }) => {
   // Load image on box
   const [texture] = useLoader(THREE.TextureLoader, [url])
+
+  const { gl } = useThree()
+
+  useEffect(() => {
+    const time = setTimeout(() => (snap === true ? getPhoto(gl) : ''), 5000)
+    return () => {
+      clearTimeout(time)
+    }
+  }, [snap])
 
   const canvasTexture = useMemo(
     () => new TextureLoader().load('/canvas.jpg'),
