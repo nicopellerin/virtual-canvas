@@ -21,6 +21,7 @@ import { Logo } from '../logo'
 import { ArtworkContext } from '../../context/artwork-context'
 import ProfileBack from './profile-back'
 import ProfileUsername from './profile-username'
+import Fallback from '../fallback'
 
 interface Props {
   photoPreview: string
@@ -120,7 +121,7 @@ export const ProfileScene: React.FC<Props> = ({
       >
         <ambientLight intensity={0.8} />
         <hemisphereLight intensity={0.2} />
-        <Suspense fallback={null}>
+        <Suspense fallback={<Fallback />}>
           <ProfileBox
             url={photoPreview}
             photoRatio={photoRatio}

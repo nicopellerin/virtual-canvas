@@ -21,6 +21,7 @@ import Gallery from './gallery'
 import Tips from './tips'
 import AddArtwork from './add-artwork'
 import Menu from './menu'
+import Fallback from './fallback'
 
 import { ArtworkContext } from '../context/artwork-context'
 
@@ -127,14 +128,6 @@ export const MainScene: React.FC<Props> = ({
     )
   }
 
-  const Fallback = () => {
-    return (
-      <Dom>
-        <Loader>Loading...</Loader>
-      </Dom>
-    )
-  }
-
   return (
     <div>
       <Canvas
@@ -211,27 +204,3 @@ export const MainScene: React.FC<Props> = ({
     </div>
   )
 }
-
-// Styles
-const delay = keyframes`
-from {
-  opacity: 0;
-}
-  to {
-    opacity: 1;
-  }
-`
-
-const Loader = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  width: 100vw;
-  height: 100vh;
-  font-size: 3rem;
-  font-weight: 800;
-  opacity: 0;
-  animation: ${delay} 10ms 1000ms forwards ease-in-out;
-  transition: opacity 300ms ease-in-out;
-`
