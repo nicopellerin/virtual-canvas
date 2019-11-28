@@ -8,7 +8,11 @@ export const GlobalStyles = createGlobalStyle`
   canvas {
     width: 100vw!important;
     min-height: 100vh;
+    /* height: 100vh; */
     cursor: grab;
+    /* position: absolute;
+    top: 0;
+    left: 0; */
   }
 
 
@@ -38,7 +42,6 @@ export const GlobalStyles = createGlobalStyle`
     padding: 0;
     font-family: 'Inter', sans-serif;
     overflow: hidden;
-
   }
 
   div[role="group"][tabindex] {

@@ -8,8 +8,9 @@ import React, {
   SetStateAction,
 } from 'react'
 import * as THREE from 'three'
+import styled, { keyframes } from 'styled-components'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
-import { Canvas, extend, useThree, useRender } from 'react-three-fiber'
+import { Canvas, extend, useThree, useRender, Dom } from 'react-three-fiber'
 import { save } from 'save-file'
 
 import { Sidebar } from './sidebar'
@@ -126,6 +127,14 @@ export const MainScene: React.FC<Props> = ({
     )
   }
 
+  const Fallback = () => {
+    return (
+      <Dom>
+        <Loader>Loading...</Loader>
+      </Dom>
+    )
+  }
+
   return (
     <div>
       <Canvas
@@ -134,20 +143,19 @@ export const MainScene: React.FC<Props> = ({
             ? 'linear-gradient(45deg, rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(237,237,237,1) 100%'
             : '#000004',
         }}
-        id="main-image"
+        // id="main-image"
         gl={{ preserveDrawingBuffer: true, antialias: true, alpha: true }}
         camera={{
           position: [0, 0, 3.8],
         }}
         onCreated={({ gl }) => {
-          // console.log(gl.domElement.toDataURL())
           gl.shadowMap.enabled = true
           gl.shadowMap.type = THREE.PCFSoftShadowMap
         }}
       >
         <ambientLight intensity={0.8} />
         <hemisphereLight intensity={0.2} />
-        <Suspense fallback={null}>
+        <Suspense fallback={<Fallback />}>
           <Box
             url={photoPreview}
             photoRatio={photoRatio}
@@ -203,3 +211,27 @@ export const MainScene: React.FC<Props> = ({
     </div>
   )
 }
+
+// Styles
+const delay = keyframes`
+from {
+  opacity: 0;
+}
+  to {
+    opacity: 1;
+  }
+`
+
+const Loader = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  width: 100vw;
+  height: 100vh;
+  font-size: 3rem;
+  font-weight: 800;
+  opacity: 0;
+  animation: ${delay} 10ms 1000ms forwards ease-in-out;
+  transition: opacity 300ms ease-in-out;
+`
