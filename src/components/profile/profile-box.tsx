@@ -1,7 +1,7 @@
 import React, { useRef, useMemo, Dispatch, SetStateAction } from 'react'
 import * as THREE from 'three'
 import { TextureLoader } from 'three/src/loaders/TextureLoader'
-import { useLoader, useFrame } from 'react-three-fiber'
+import { useLoader, useFrame, useThree } from 'react-three-fiber'
 
 interface Props {
   url: string
@@ -18,6 +18,8 @@ export const ProfileBox: React.FC<Props> = ({
   showBorder,
   rotateIncrement,
 }) => {
+  const { camera } = useThree()
+
   // Load image on box
   const [texture] = useLoader(THREE.TextureLoader, [url])
 
@@ -33,6 +35,8 @@ export const ProfileBox: React.FC<Props> = ({
   useFrame(({ clock }) => {
     if (ref.current) {
       ref.current.position.z = Math.sin(clock.getElapsedTime()) * 0.1
+      camera.zoom = lerp(camera.zoom, 1.1, 0.05)
+      camera.position.y = lerp(camera.position.y, 0, 0.05)
     }
   })
 
