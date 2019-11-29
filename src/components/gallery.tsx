@@ -10,6 +10,7 @@ import styled from 'styled-components'
 import { MdClose } from 'react-icons/md'
 import axios from 'axios'
 import cookie from 'js-cookie'
+import ScrollArea from 'react-scrollbar'
 
 import { ArtworkContext } from '../context/artwork-context'
 
@@ -98,7 +99,20 @@ const Gallery: React.FC<Props> = ({
       disabled={photoGallery.length === 0}
     >
       <Container>
-        <Grid photoGalleryLength={photoGallery.length}>
+        <ScrollArea
+          style={{
+            height: 400,
+            width: 100,
+            background: 'rgba(255, 255, 255, 0.05)',
+            borderTopRightRadius: '23px',
+            borderBottomRightRadius: '23px',
+            boxShadow: '4px 0 15px rgba(0, 0, 0, 0.1)',
+          }}
+          speed={0.8}
+          smoothScrolling
+          verticalScrollbarStyle={{ background: '#000' }}
+          verticalContainerStyle={{ background: '#eee' }}
+        >
           {photoGallery.map((photo, index) => {
             const prevItem = photoGallery[index - 1]
             const nextItem = photoGallery[index + 1]
@@ -109,6 +123,7 @@ const Gallery: React.FC<Props> = ({
                   alt="Preview thumbnail"
                   width={60}
                   height={60}
+                  lastImage={photoGallery.length - 1 === index}
                   onClick={e => {
                     e.stopPropagation()
                     setPhotoPreview(photo.src)
@@ -153,7 +168,7 @@ const Gallery: React.FC<Props> = ({
               </ThumbnailWrapper>
             )
           })}
-        </Grid>
+        </ScrollArea>
       </Container>
       <Text backgroundColor={backgroundColor ? true : false}>Gallery</Text>
     </Wrapper>
@@ -176,26 +191,6 @@ const Container = styled.div`
   height: 400px;
 `
 
-const Grid = styled.div`
-  background: rgba(255, 255, 255, 0.05);
-  width: 85px;
-  height: 400px;
-  overflow-y: auto;
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: repeat(
-    ${(props: { photoGalleryLength: number }) => props.photoGalleryLength},
-    75px
-  );
-  justify-items: center;
-  padding-top: 20px;
-  margin-bottom: 20px;
-  grid-gap: 5px;
-  border-top-right-radius: 23px;
-  border-bottom-right-radius: 23px;
-  box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
-`
-
 const ThumbnailWrapper = styled.div`
   position: relative;
 `
@@ -204,12 +199,15 @@ const Thumbnail = styled.img`
   border-radius: 50%;
   object-fit: cover;
   cursor: pointer;
+  margin: 1.5rem 0 0rem 1.5rem;
+  ${(props: { lastImage: boolean }) =>
+    props.lastImage && 'margin-bottom: 2rem'};
 `
 
 const CloseIcon = styled(MdClose)`
   position: absolute;
-  top: 0;
-  right: 0;
+  top: 1.2rem;
+  right: 2.2rem;
   background: #111;
   border-radius: 50%;
   cursor: pointer;
@@ -226,7 +224,7 @@ const Text = styled.span`
   transform: rotate(90deg);
   color: ${(props: StyledProps) => (props.backgroundColor ? '#333' : '#999')};
   position: absolute;
-  left: 60px;
+  left: 77px;
   padding-left: 20px;
   top: calc(50% - 2rem);
   font-size: 1.4rem;

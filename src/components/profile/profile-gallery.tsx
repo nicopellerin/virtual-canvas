@@ -7,9 +7,10 @@ import React, {
 } from 'react'
 import { useSpring, animated } from 'react-spring'
 import styled from 'styled-components'
+import ScrollArea from 'react-scrollbar'
+import { navigate } from 'gatsby'
 
 import { ArtworkContext } from '../../context/artwork-context'
-import { navigate } from 'gatsby'
 
 interface Photo {
   id: string
@@ -73,8 +74,21 @@ const ProfileGallery: React.FC<Props> = ({
       disabled={photoGallery.length === 0}
     >
       <Container>
-        <Grid photoGalleryLength={photoGallery.length}>
-          {photoGallery.map(photo => {
+        <ScrollArea
+          style={{
+            height: 400,
+            width: 100,
+            background: 'rgba(255, 255, 255, 0.05)',
+            borderTopRightRadius: '23px',
+            borderBottomRightRadius: '23px',
+            boxShadow: '4px 0 15px rgba(0, 0, 0, 0.1)',
+          }}
+          speed={0.8}
+          smoothScrolling
+          verticalScrollbarStyle={{ background: '#000' }}
+          verticalContainerStyle={{ background: '#eee' }}
+        >
+          {photoGallery.map((photo, index) => {
             return (
               <ThumbnailWrapper>
                 <Thumbnail
@@ -83,6 +97,7 @@ const ProfileGallery: React.FC<Props> = ({
                   alt="Preview thumbnail"
                   width={60}
                   height={60}
+                  lastImage={photoGallery.length - 1 === index}
                   onClick={e => {
                     e.stopPropagation()
                     navigate(`/profile/${username}/${photo.id}`)
@@ -100,7 +115,7 @@ const ProfileGallery: React.FC<Props> = ({
               </ThumbnailWrapper>
             )
           })}
-        </Grid>
+        </ScrollArea>
       </Container>
       <Text backgroundColor={backgroundColor ? true : false}>Gallery</Text>
     </Wrapper>
@@ -151,6 +166,9 @@ const Thumbnail = styled.img`
   border-radius: 50%;
   object-fit: cover;
   cursor: pointer;
+  margin: 1.5rem 0 0rem 1.5rem;
+  ${(props: { lastImage: boolean }) =>
+    props.lastImage && 'margin-bottom: 2rem'};
 `
 
 const Text = styled.span`
@@ -158,7 +176,7 @@ const Text = styled.span`
   transform: rotate(90deg);
   color: ${(props: StyledProps) => (props.backgroundColor ? '#333' : '#999')};
   position: absolute;
-  left: 60px;
+  left: 77px;
   padding-left: 20px;
   top: calc(50% - 2rem);
   font-size: 1.4rem;
