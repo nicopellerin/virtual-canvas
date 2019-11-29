@@ -114,8 +114,8 @@ const Gallery: React.FC<Props> = ({
                 borderBottomRightRadius: '23px',
                 boxShadow: '4px 0 15px rgba(0, 0, 0, 0.1)',
               }}
-              speed={0.8}
-              smoothScrolling
+              // speed={0.8}
+              // smoothScrolling
               verticalScrollbarStyle={{ background: '#000' }}
               verticalContainerStyle={{ background: '#eee' }}
             >
