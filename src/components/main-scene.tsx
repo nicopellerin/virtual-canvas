@@ -8,9 +8,8 @@ import React, {
   SetStateAction,
 } from 'react'
 import * as THREE from 'three'
-import styled, { keyframes } from 'styled-components'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
-import { Canvas, extend, useThree, useRender, Dom } from 'react-three-fiber'
+import { Canvas, extend, useThree, useRender } from 'react-three-fiber'
 import { save } from 'save-file'
 
 import { Sidebar } from './sidebar'
@@ -73,6 +72,7 @@ export const MainScene: React.FC<Props> = ({
 
   const [screenShot, setScreenShot] = useState()
   const [snap, setSnap] = useState(false)
+  const [switchAnim, setSwitchAnim] = useState(1)
 
   const getPhoto = React.useCallback(
     gl => {
@@ -128,6 +128,10 @@ export const MainScene: React.FC<Props> = ({
     )
   }
 
+  const switchFunc = () => {
+    setSwitchAnim(1.1)
+  }
+
   return (
     <div>
       <Canvas
@@ -157,6 +161,7 @@ export const MainScene: React.FC<Props> = ({
             rotateIncrement={rotateIncrement}
             getPhoto={getPhoto}
             snap={snap}
+            switchAnim={switchAnim}
           />
           <Controls rotate={rotateCanvas} />
         </Suspense>
@@ -191,6 +196,7 @@ export const MainScene: React.FC<Props> = ({
         setPhotoGallery={setPhotoGallery}
         setPhotoRatio={setPhotoRatio}
         setPhotoPreview={setPhotoPreview}
+        switchFunc={switchFunc}
       />
       <Menu />
       <ArtworkInfo />

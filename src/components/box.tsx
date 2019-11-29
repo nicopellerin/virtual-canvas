@@ -7,7 +7,8 @@ import React, {
 } from 'react'
 import * as THREE from 'three'
 import { TextureLoader } from 'three/src/loaders/TextureLoader'
-import { useLoader, useFrame, useThree } from 'react-three-fiber'
+import { useLoader, useFrame, useThree, Dom } from 'react-three-fiber'
+import lerp from 'lerp'
 
 interface Props {
   url: string
@@ -27,11 +28,12 @@ export const Box: React.FC<Props> = ({
   rotateIncrement,
   getPhoto,
   snap,
+  switchAnim,
 }) => {
   // Load image on box
   const [texture] = useLoader(THREE.TextureLoader, [url])
 
-  const { gl } = useThree()
+  const { gl, camera } = useThree()
 
   useEffect(() => {
     const time = setTimeout(() => (snap === true ? getPhoto(gl) : ''), 1000)
@@ -49,9 +51,13 @@ export const Box: React.FC<Props> = ({
 
   // Dolly back and forth effect
   const ref = useRef(null)
+
   useFrame(({ clock }) => {
     if (ref.current) {
       ref.current.position.z = Math.sin(clock.getElapsedTime()) * 0.1
+      camera.zoom = lerp(camera.zoom, 1.1, 0.05)
+      camera.position.y = lerp(camera.position.y, 0, 0.05)
+      if (Math.abs(camera.zoom - 100) > 0.001) camera.updateProjectionMatrix()
     }
   })
 

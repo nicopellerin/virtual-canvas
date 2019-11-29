@@ -10,9 +10,7 @@ export const GlobalStyles = createGlobalStyle`
     min-height: 100vh;
     /* height: 100vh; */
     cursor: grab;
-    /* position: absolute;
-    top: 0;
-    left: 0; */
+    /* position: absolute; */
   }
 
 
@@ -51,11 +49,5 @@ export const GlobalStyles = createGlobalStyle`
   p, span {
     color: #333;
   }
-/* 
-  #demo-image {
-    width: 1000px !important;
-    position: absolute;
-    top: 0;
-    right: 0;
-  } */
+
 `

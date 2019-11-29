@@ -45,6 +45,7 @@ const Gallery: React.FC<Props> = ({
   setPhotoGallery,
   setPhotoPreview,
   setPhotoRatio,
+  switchFunc,
 }) => {
   const [toggle, setToggle] = useState<boolean>(true)
 
@@ -140,6 +141,7 @@ const Gallery: React.FC<Props> = ({
                         setShowTexture(photo.texture)
                         setRotateIncrement(photo.rotate)
                         setLightIntensity(photo.lighting)
+                        switchFunc()
                       }}
                     />
                     <CloseIcon
