@@ -2,6 +2,7 @@ import React, { useRef, useMemo, Dispatch, SetStateAction } from 'react'
 import * as THREE from 'three'
 import { TextureLoader } from 'three/src/loaders/TextureLoader'
 import { useLoader, useFrame, useThree } from 'react-three-fiber'
+import lerp from 'lerp'
 
 interface Props {
   url: string
@@ -20,7 +21,7 @@ export const ProfileBox: React.FC<Props> = ({
 }) => {
   const { camera } = useThree()
 
-  // Load image on box
+  // Load image on box -----------
   const [texture] = useLoader(THREE.TextureLoader, [url])
 
   const canvasTexture = useMemo(
