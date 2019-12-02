@@ -25,20 +25,70 @@ const Main = () => {
     setPhotoPreview(img.src)
   }
 
-  const springAnimation = { type: 'spring', stiffness: 10, damping: 150 }
+  // const springAnimation = { type: 'spring', stiffness: 10, damping: 150 }
+
+  const containerVariants = {
+    before: {},
+    after: { transition: { staggerChildren: 0.2 } },
+  }
+  const letterVariants = {
+    before: {
+      opacity: 0,
+      y: 30,
+      x: 50,
+      transition: {
+        type: 'string',
+        damping: 116,
+        stiffness: 200,
+      },
+    },
+    after: {
+      opacity: 1,
+      y: 0,
+      x: 10,
+      transition: {
+        type: 'spring',
+        damping: 116,
+        stiffness: 200,
+      },
+    },
+  }
 
   return (
     <Wrapper>
       <Container>
         <Content
-          animate={{
-            x: [-100, 10, 0],
-            opacity: [0, 1],
-            transition: springAnimation,
-          }}
+          variants={containerVariants}
+          initial={'before'}
+          animate={'after'}
         >
-          <Title>Bring your art to life.</Title>
-          <Subtitle>Turn your 2D art into 3D. Try it out below.</Subtitle>
+          <TitleWrapper>
+            <Title
+              height={26}
+              background={''}
+              style={{ position: 'relative' }}
+              variants={letterVariants}
+            >
+              Bring your
+            </Title>
+            <Title
+              height={26}
+              background={''}
+              style={{ position: 'relative' }}
+              variants={letterVariants}
+            >
+              art to life.
+            </Title>
+          </TitleWrapper>
+          <Subtitle
+            width="auto"
+            height={26}
+            background={''}
+            style={{ position: 'relative' }}
+            variants={letterVariants}
+          >
+            Turn your 2D art into 3D. Try it out below.
+          </Subtitle>
           <input
             type="file"
             style={{ display: 'none' }}
@@ -52,6 +102,10 @@ const Main = () => {
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={() => fileInputRef.current && fileInputRef.current.click()}
+            height={26}
+            background={''}
+            style={{ position: 'relative' }}
+            variants={letterVariants}
           >
             <CloudUploadIcon />
             Upload image
@@ -67,7 +121,7 @@ export default Main
 
 // Styles
 const Wrapper = styled.div`
-  max-width: 140rem;
+  max-width: 160rem;
   margin: 0 auto;
 `
 
@@ -83,17 +137,21 @@ const Container = styled.div`
 const Content = styled(motion.div)`
   position: relative;
   z-index: 10;
-  opacity: 0;
-  transform: translateX(-100px);
+  /* opacity: 0; */
 `
 
-const Title = styled.h1`
+const TitleWrapper = styled(motion.div)`
+  display: flex;
+  flex-direction: column;
+  /* max-width: 40rem; */
+`
+
+const Title = styled(motion.h1)`
   font-size: 7.3rem;
-  max-width: 40rem;
-  margin-bottom: 0;
+  margin: 0;
 `
 
-const Subtitle = styled.h2`
+const Subtitle = styled(motion.h2)`
   font-size: 2rem;
   font-weight: 400;
   margin-bottom: 3rem;

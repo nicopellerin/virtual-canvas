@@ -8,15 +8,14 @@ export const GlobalStyles = createGlobalStyle`
   canvas {
     width: 100vw!important;
     min-height: 100vh;
-    /* height: 100vh; */
     cursor: grab;
-    /* position: absolute; */
   }
 
 
 #demo-home {
   canvas {
     width: 900px !important;
+    pointer-events: none;
 
     @media (min-width: 1600px) {
       width: 1300px !important;
@@ -49,5 +48,6 @@ export const GlobalStyles = createGlobalStyle`
   p, span {
     color: #333;
   }
+
 
 `

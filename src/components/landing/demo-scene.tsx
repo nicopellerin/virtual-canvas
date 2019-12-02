@@ -29,7 +29,6 @@ const DemoScene = ({ photoPreview, photoRatio }) => {
 
     return (
       <orbitControls
-        // autoRotate
         autoRotateSpeed={0.3}
         enableDamping
         dampingFactor={0.05}
@@ -55,11 +54,9 @@ const DemoScene = ({ photoPreview, photoRatio }) => {
         onCreated={({ gl }) => {
           gl.shadowMap.enabled = true
           gl.shadowMap.type = THREE.PCFSoftShadowMap
-          // document.body.appendChild(WEBVR.createButton(gl))
         }}
       >
         <ambientLight intensity={0.8} />
-        {/* <hemisphereLight intensity={0.2} /> */}
         <Suspense fallback={null}>
           <DemoBox url={photoPreview} photoRatio={photoRatio} />
           <Controls />
