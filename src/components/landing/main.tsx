@@ -29,7 +29,7 @@ const Main = () => {
 
   const containerVariants = {
     before: {},
-    after: { transition: { staggerChildren: 0.2 } },
+    after: { transition: { staggerChildren: 0.05 } },
   }
   const letterVariants = {
     before: {
