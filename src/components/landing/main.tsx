@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import styled from 'styled-components'
 
 import BG from '../../images/toile.jpg'
+import Back from '../../images/back.png'
 
 import DemoScene from './demo-scene'
 
@@ -29,26 +30,26 @@ const Main = () => {
 
   const containerVariants = {
     before: {},
-    after: { transition: { staggerChildren: 0.05 } },
+    after: { transition: { staggerChildren: 0.1 } },
   }
   const letterVariants = {
     before: {
       opacity: 0,
-      y: 30,
-      x: 50,
+      y: 50,
+      // x: 50,
       transition: {
         type: 'string',
-        damping: 116,
+        damping: 16,
         stiffness: 200,
       },
     },
     after: {
       opacity: 1,
       y: 0,
-      x: 10,
+      // x: 10,
       transition: {
         type: 'spring',
-        damping: 116,
+        damping: 16,
         stiffness: 200,
       },
     },
@@ -87,7 +88,7 @@ const Main = () => {
             style={{ position: 'relative' }}
             variants={letterVariants}
           >
-            Turn your 2D art into 3D. Try it out below.
+            Turn your 2D art into 3D. Signup to try now.
           </Subtitle>
           <input
             type="file"
@@ -98,7 +99,7 @@ const Main = () => {
               handlePhotoUpload(e)
             }}
           />
-          <UploadButton
+          {/* <UploadButton
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={() => fileInputRef.current && fileInputRef.current.click()}
@@ -109,11 +110,15 @@ const Main = () => {
           >
             <CloudUploadIcon />
             Upload image
-          </UploadButton>
+          </UploadButton> */}
         </Content>
-        <Suspense fallback={null}>
-          <DemoScene photoPreview={photoPreview} photoRatio={photoRatio} />
-        </Suspense>
+        <motion.img
+          src={Back}
+          alt="Background"
+          style={{ borderRadius: 5, boxShadow: '0 0 15px rgba(0,0,0,0.3)' }}
+          width={600}
+          animate={{ opacity: [0, 1], y: [20, 0], transition: { delay: 0.3 } }}
+        />
       </Container>
     </Wrapper>
   )
@@ -130,10 +135,14 @@ const Wrapper = styled.div`
 const Container = styled.div`
   display: grid;
   grid-template-columns: 1fr 1.1fr;
-  grid-column-gap: 15rem;
+  /* grid-column-gap: 15rem; */
   align-items: center;
   justify-content: space-between;
   height: 100%;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
 `
 
 const Content = styled(motion.div)`
