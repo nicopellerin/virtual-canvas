@@ -39,7 +39,7 @@ const Main = () => {
       // x: 50,
       transition: {
         type: 'string',
-        damping: 16,
+        damping: 26,
         stiffness: 200,
       },
     },
@@ -49,7 +49,7 @@ const Main = () => {
       // x: 10,
       transition: {
         type: 'spring',
-        damping: 16,
+        damping: 46,
         stiffness: 200,
       },
     },
@@ -116,12 +116,17 @@ const Main = () => {
           src={Back}
           alt="Background"
           style={{
-            borderRadius: 5,
-            boxShadow: '0 0 15px rgba(0,0,0,0.3)',
+            // borderRadius: 5,
+            // boxShadow: '0 0 15px rgba(0,0,0,0.3)',
             opacity: 0,
           }}
-          width={600}
-          animate={{ opacity: [0, 1], y: [20, 0], transition: { delay: 0.3 } }}
+          width={700}
+          animate={{
+            opacity: [0, 1],
+            y: [20, 0],
+            scale: [0.9, 1.05, 1],
+            transition: { delay: 0.2 },
+          }}
         />
       </Container>
     </Wrapper>
@@ -138,8 +143,8 @@ const Wrapper = styled.div`
 
 const Container = styled.div`
   display: grid;
-  grid-template-columns: 1fr 1.1fr;
-  /* grid-column-gap: 15rem; */
+  grid-template-columns: 1fr 1.5fr;
+  grid-column-gap: 2rem;
   align-items: center;
   justify-content: space-between;
   height: 100%;
