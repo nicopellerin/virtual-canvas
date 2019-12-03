@@ -35,7 +35,7 @@ export const ProfileBox: React.FC<Props> = ({
   const ref = useRef(null)
   useFrame(({ clock }) => {
     if (ref.current) {
-      ref.current.position.z = Math.sin(clock.getElapsedTime()) * 0.1
+      ref.current.position.z = Math.sin(clock.getElapsedTime()) * 0.05
       camera.zoom = lerp(camera.zoom, 1.1, 0.05)
       camera.position.y = lerp(camera.position.y, 0, 0.05)
     }

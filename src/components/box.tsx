@@ -54,7 +54,7 @@ export const Box: React.FC<Props> = ({
 
   useFrame(({ clock }) => {
     if (ref.current) {
-      ref.current.position.z = Math.sin(clock.getElapsedTime()) * 0.1
+      ref.current.position.z = Math.sin(clock.getElapsedTime()) * 0.05
       camera.zoom = lerp(camera.zoom, 1.1, 0.05)
       camera.position.y = lerp(camera.position.y, 0, 0.05)
       if (Math.abs(camera.zoom - 100) > 0.001) camera.updateProjectionMatrix()

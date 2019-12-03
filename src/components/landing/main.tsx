@@ -120,7 +120,7 @@ const Main = () => {
             // boxShadow: '0 0 15px rgba(0,0,0,0.3)',
             opacity: 0,
           }}
-          width={700}
+          width={650}
           animate={{
             opacity: [0, 1],
             y: [20, 0],
@@ -149,7 +149,7 @@ const Wrapper = styled.div`
 const Container = styled.div`
   display: grid;
   grid-template-columns: 1fr 1.5fr;
-  grid-column-gap: 2rem;
+  grid-column-gap: 4rem;
   align-items: center;
   justify-content: space-between;
   height: 100%;
