@@ -40,7 +40,7 @@ const Main = () => {
       transition: {
         type: 'string',
         damping: 26,
-        stiffness: 200,
+        stiffness: 50,
       },
     },
     after: {
@@ -49,8 +49,8 @@ const Main = () => {
       // x: 10,
       transition: {
         type: 'spring',
-        damping: 46,
-        stiffness: 200,
+        damping: 26,
+        stiffness: 50,
       },
     },
   }
@@ -124,8 +124,13 @@ const Main = () => {
           animate={{
             opacity: [0, 1],
             y: [20, 0],
-            scale: [0.9, 1.05, 1],
-            transition: { delay: 0.2 },
+            scale: [0.9, 1.02, 1],
+            transition: {
+              type: 'string',
+              damping: 26,
+              stiffness: 30,
+              delay: 0.2,
+            },
           }}
         />
       </Container>
