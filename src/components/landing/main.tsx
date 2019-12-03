@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, Suspense } from 'react'
 import { MdCloudUpload } from 'react-icons/md'
 import { motion } from 'framer-motion'
 import styled from 'styled-components'
@@ -111,7 +111,9 @@ const Main = () => {
             Upload image
           </UploadButton>
         </Content>
-        <DemoScene photoPreview={photoPreview} photoRatio={photoRatio} />
+        <Suspense fallback={null}>
+          <DemoScene photoPreview={photoPreview} photoRatio={photoRatio} />
+        </Suspense>
       </Container>
     </Wrapper>
   )
