@@ -1,13 +1,21 @@
-import React, { useState, useContext, Dispatch, SetStateAction } from 'react'
+import React, {
+  useState,
+  useEffect,
+  useContext,
+  Dispatch,
+  SetStateAction,
+} from 'react'
 import styled from 'styled-components'
 import { animated, useSpring } from 'react-spring'
 import { MdAccountCircle } from 'react-icons/md'
 import { motion } from 'framer-motion'
+import { observer } from 'mobx-react-lite'
 
 import { Toast } from './toast'
 
-import { UserContext } from '../context/user-context'
 import { ArtworkContext } from '../context/artwork-context'
+
+import { useStores } from '../stores/useStores'
 
 interface Props {
   toggleProfile: boolean
@@ -17,17 +25,22 @@ interface Props {
 const SocialBar: React.FC<Props> = ({ toggleProfile, setToggleProfile }) => {
   const [showSuccessMsg, setShowSuccessMsg] = useState<string>('')
 
-  const { socialLinks, setSocialLinks, updateUserProfile } = useContext(
-    UserContext
-  )
-  const { username } = useContext(ArtworkContext)
+  const { userStore } = useStores()
+
+  useEffect(() => {
+    userStore.getUserProfile()
+  }, [])
 
   const handleSubmit = async e => {
     e.preventDefault()
-    const res = await updateUserProfile()
+    const res = await userStore.updateUserProfile()
     if (res.msg === 'Profile updated') {
       setShowSuccessMsg('Social links updated')
     }
+  }
+
+  const handleChange = e => {
+    userStore.socialLinks[e.target.name] = e.target.value
   }
 
   const slideInOutProfile = useSpring({
@@ -50,37 +63,25 @@ const SocialBar: React.FC<Props> = ({ toggleProfile, setToggleProfile }) => {
                   Instagram
                 </LabelSocial>
                 <InputFieldSocial
-                  value={socialLinks.instagram}
-                  onChange={e =>
-                    setSocialLinks(prevState => ({
-                      ...prevState,
-                      instagram: e.target.value,
-                    }))
-                  }
+                  name="instagram"
+                  value={userStore.socialLinks.instagram}
+                  onChange={handleChange}
                 />
               </InputFieldRowSocial>
               <InputFieldRowSocial>
                 <LabelSocial style={{ display: 'block' }}>Facebook</LabelSocial>
                 <InputFieldSocial
-                  value={socialLinks.facebook}
-                  onChange={e =>
-                    setSocialLinks(prevState => ({
-                      ...prevState,
-                      facebook: e.target.value,
-                    }))
-                  }
+                  name="facebook"
+                  value={userStore.socialLinks.facebook}
+                  onChange={handleChange}
                 />
               </InputFieldRowSocial>
               <InputFieldRowSocial>
                 <LabelSocial style={{ display: 'block' }}>Website</LabelSocial>
                 <InputFieldSocial
-                  value={socialLinks.website}
-                  onChange={e =>
-                    setSocialLinks(prevState => ({
-                      ...prevState,
-                      website: e.target.value,
-                    }))
-                  }
+                  name="website"
+                  value={userStore.socialLinks.website}
+                  onChange={handleChange}
                 />
               </InputFieldRowSocial>
             </SocialContainer>
@@ -88,7 +89,10 @@ const SocialBar: React.FC<Props> = ({ toggleProfile, setToggleProfile }) => {
               <h2>Profile info</h2>
               <InputFieldRowSocial>
                 <LabelSocial style={{ display: 'block' }}>Username</LabelSocial>
-                <InputFieldSocial onChange={() => {}} value={username} />
+                <InputFieldSocial
+                  onChange={() => {}}
+                  value={userStore.username}
+                />
               </InputFieldRowSocial>
             </div>
           </div>
@@ -108,7 +112,7 @@ const SocialBar: React.FC<Props> = ({ toggleProfile, setToggleProfile }) => {
   )
 }
 
-export default SocialBar
+export default observer(SocialBar)
 
 // Styles
 const Wrapper = styled(animated.div)`
