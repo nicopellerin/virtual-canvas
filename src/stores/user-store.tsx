@@ -30,7 +30,6 @@ export class UserStore {
 
       return data
     } catch (err) {
-      console.error(err)
       return { msg: err }
     }
   }

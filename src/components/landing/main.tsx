@@ -149,7 +149,7 @@ const Wrapper = styled.div`
 const Container = styled.div`
   display: grid;
   grid-template-columns: 1fr 1.5fr;
-  grid-column-gap: 4rem;
+  grid-column-gap: 10rem;
   align-items: center;
   justify-content: space-between;
   height: 100%;

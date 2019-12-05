@@ -10,6 +10,7 @@ import SEO from '../../components/seo'
 
 import { ArtworkContext } from '../../context/artwork-context'
 import { UserContext } from '../../context/user-context'
+import { useStores } from '../../stores/useStores'
 
 const IndexAppPage: React.FC = () => {
   const {
@@ -28,7 +29,12 @@ const IndexAppPage: React.FC = () => {
     setErrMsg,
     setUploaded,
   } = useContext(ArtworkContext)
-  const { user } = useContext(UserContext)
+
+  const { artworkStore, userStore } = useStores()
+
+  useEffect(() => {
+    artworkStore.getAllArtwork()
+  }, [])
 
   const handlePhotoUpload = async (e: React.FormEvent<HTMLFontElement>) => {
     const { files } = e.target as HTMLInputElement
@@ -122,7 +128,7 @@ const IndexAppPage: React.FC = () => {
       <Router>
         <PrivateRoute
           path="/editor/:username"
-          username={user}
+          username={userStore.username}
           component={MainScene}
           setPhotoGallery={setPhotoGallery}
           photoPreview={photoPreview}

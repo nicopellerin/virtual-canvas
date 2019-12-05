@@ -19,6 +19,9 @@ import { useSpring, animated } from 'react-spring'
 import axios from 'axios'
 import cookie from 'js-cookie'
 import useDebouncedEffect from 'use-debounced-effect'
+import { observer } from 'mobx-react-lite'
+
+import { useStores } from '../stores/useStores'
 
 import Checkbox from './checkbox'
 import { Toast } from './toast'
@@ -58,248 +61,265 @@ interface Photo {
   background: boolean
 }
 
-export const Sidebar: React.FC<Props> = ({
-  handlePhotoUpload,
-  photoPreview,
-  photoGallery,
-  loader,
-  setSnap,
-}) => {
-  const [toggle, setToggle] = useState<boolean>(false)
-  const [toggleProfile, setToggleProfile] = useState<boolean>(false)
-  const [showSuccessMsg, setShowSuccessMsg] = useState<string>('')
-  const [submitted, setSubmitted] = useState<boolean>(false)
-  const [fieldFocused, setFieldFocused] = useState<boolean>(false)
+export const Sidebar: React.FC<Props> = observer(
+  ({ handlePhotoUpload, photoPreview, photoGallery, loader, setSnap }) => {
+    const [toggle, setToggle] = useState<boolean>(false)
+    const [toggleProfile, setToggleProfile] = useState<boolean>(false)
+    const [showSuccessMsg, setShowSuccessMsg] = useState<string>('')
+    const [submitted, setSubmitted] = useState<boolean>(false)
+    const [fieldFocused, setFieldFocused] = useState<boolean>(false)
 
-  const {
-    lightIntensity,
-    setLightIntensity,
-    showTexture,
-    setShowTexture,
-    showBorder,
-    setShowBorder,
-    artworkName,
-    setArtworkName,
-    backgroundColor,
-    setBackgroundColor,
-    rotateIncrement,
-    setRotateIncrement,
-    setLight,
-    light,
-  } = useContext(ArtworkContext)
+    const { artworkStore } = useStores()
 
-  useEffect(() => {
-    if (photoGallery && photoGallery.length === 0) {
-      setToggle(false)
-    }
-  })
+    const {
+      lightIntensity,
+      setLightIntensity,
+      showTexture,
+      setShowTexture,
+      showBorder,
+      setShowBorder,
+      artworkName,
+      setArtworkName,
+      backgroundColor,
+      setBackgroundColor,
+      rotateIncrement,
+      setRotateIncrement,
+      setLight,
+      light,
+    } = useContext(ArtworkContext)
 
-  useDebouncedEffect(
-    () => {
-      setLight(lightIntensity)
-    },
-    300,
-    [lightIntensity]
-  )
-
-  const fileInputRef = useRef(null)
-  const artworkFieldRef = useRef(null)
-
-  const slideInOut = useSpring({
-    transform: toggle ? 'translate3d(0, -50%, 0)' : 'translate3d(88%, -50%, 0)',
-    config: { mass: 1, tension: 120, friction: 18 },
-  })
-
-  const handleArtworkSubmit = async (
-    e: React.FormEvent<HTMLFormElement>
-  ): Promise<void> => {
-    e.preventDefault()
-
-    const token = cookie.getJSON('vc_token')
-
-    const photo = photoGallery.find(url => url.src === photoPreview)
-    photo.name = artworkName
-
-    await axios.patch(
-      `https://api.virtualcanvas.app/api/artwork/${photo.id}`,
-      photo,
-      {
-        headers: {
-          Token: token,
-        },
+    useEffect(() => {
+      if (photoGallery && photoGallery.length === 0) {
+        setToggle(false)
       }
+    })
+
+    useDebouncedEffect(
+      () => {
+        setLight(lightIntensity)
+      },
+      300,
+      [lightIntensity]
     )
 
-    if (artworkName) {
-      setShowSuccessMsg('Saved name to artwork')
-      setSubmitted(true)
-      artworkFieldRef.current.blur()
+    const fileInputRef = useRef(null)
+    const artworkFieldRef = useRef(null)
+
+    const slideInOut = useSpring({
+      transform: toggle
+        ? 'translate3d(0, -50%, 0)'
+        : 'translate3d(88%, -50%, 0)',
+      config: { mass: 1, tension: 120, friction: 18 },
+    })
+
+    const handleArtworkSubmit = async (
+      e: React.FormEvent<HTMLFormElement>
+    ): Promise<void> => {
+      e.preventDefault()
+
+      const token = cookie.getJSON('vc_token')
+
+      const photo = photoGallery.find(url => url.src === photoPreview)
+      photo.name = artworkName
+
+      await axios.patch(
+        `https://api.virtualcanvas.app/api/artwork/${photo.id}`,
+        photo,
+        {
+          headers: {
+            Token: token,
+          },
+        }
+      )
+
+      if (artworkName) {
+        setShowSuccessMsg('Saved name to artwork')
+        setSubmitted(true)
+        artworkFieldRef.current.blur()
+      }
     }
-  }
 
-  const handleShowBorder = () => {
-    setShowBorder(prevState => !prevState)
-  }
+    const handleShowBorder = () => {
+      setShowBorder(prevState => !prevState)
+    }
 
-  const handleShowTexture = () => {
-    setShowTexture(prevState => !prevState)
-  }
+    const handleShowTexture = () => {
+      setShowTexture(prevState => !prevState)
+    }
 
-  const handleBackgroundColor = () => {
-    setBackgroundColor(prevState => !prevState)
-  }
+    const handleBackgroundColor = () => {
+      setBackgroundColor(prevState => !prevState)
+    }
 
-  const handleRotate = () => {
-    setRotateIncrement(prevState => !prevState)
-  }
+    const handleRotate = () => {
+      setRotateIncrement(prevState => !prevState)
+    }
 
-  const handleLightIntensity = e => {
-    setLightIntensity(e.target.value)
-  }
+    const handleLightIntensity = e => {
+      setLightIntensity(e.target.value)
+    }
 
-  return (
-    <>
-      <Wrapper style={slideInOut}>
-        <ToggleButton
-          onClick={() => {
-            setToggleProfile(false)
-            setToggle(prev => !prev)
-          }}
-          disabled={photoGallery.length === 0}
-        >
-          {toggle ? <MdRemove size={26} /> : <MdAdd size={26} />}
-        </ToggleButton>
-        <Container>
-          <TempLogo>
-            <img src={Logo} alt="logo" width={270} />
-          </TempLogo>
-          <Elements>
-            <form onSubmit={handleArtworkSubmit} style={{ flex: 4 }}>
-              <InputFieldRow>
-                <Label style={{ display: 'block' }}>Artwork name</Label>
-                <InputField
-                  value={artworkName}
-                  ref={artworkFieldRef}
-                  onFocus={() => setFieldFocused(true)}
-                  onBlur={() => setTimeout(() => setFieldFocused(false), 200)}
-                  onChange={e => {
-                    setSubmitted(false)
-                    setArtworkName(e.target.value)
-                  }}
-                />
-                {artworkName.length > 0 && !submitted && fieldFocused && (
-                  <Add>
-                    <MdAddCircle
-                      size={24}
-                      color="green"
-                      onClick={handleArtworkSubmit}
-                    />
-                  </Add>
-                )}
-              </InputFieldRow>
-            </form>
+    const handleChange = e => {
+      artworkStore.imageInfo[e.target.name] = e.target.value
+    }
 
-            <CheckboxGrid>
-              <div>
-                <BorderCheckbox>
-                  <label>
-                    <Checkbox
-                      checked={showBorder}
-                      onChange={handleShowBorder}
-                    />
-                    <BorderCheckboxLabel>Border</BorderCheckboxLabel>
-                  </label>
-                </BorderCheckbox>
-                <TextureCheckbox>
-                  <label>
-                    <Checkbox
-                      checked={showTexture}
-                      onChange={handleShowTexture}
-                    />
-                    <TextureCheckboxLabel>Texture</TextureCheckboxLabel>
-                  </label>
-                </TextureCheckbox>
-              </div>
-              <div>
-                <BackgroudCheckbox>
-                  <label>
-                    <Checkbox
-                      checked={backgroundColor}
-                      onChange={handleBackgroundColor}
-                    />
-                    <BackgroudCheckboxLabel>
-                      Light background
-                    </BackgroudCheckboxLabel>
-                  </label>
-                </BackgroudCheckbox>
-                <BackgroudCheckbox>
-                  <label>
-                    <Checkbox
-                      checked={rotateIncrement}
-                      onChange={handleRotate}
-                    />
-                    <BackgroudCheckboxLabel>
-                      Rotate 90˚ CW
-                    </BackgroudCheckboxLabel>
-                  </label>
-                </BackgroudCheckbox>
-              </div>
-            </CheckboxGrid>
-          </Elements>
-          <ZoomRange>
-            <ZoomTitle>Spotlight intensity</ZoomTitle>
-            <ZoomText>{lightIntensity}%</ZoomText>
-            <input
-              type="range"
-              min="0"
-              max="20"
-              onChange={handleLightIntensity}
-              value={lightIntensity}
-            />
-          </ZoomRange>
-          <DownloadButton
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
+    return (
+      <>
+        <Wrapper style={slideInOut}>
+          <ToggleButton
             onClick={() => {
-              setSnap(true)
+              setToggleProfile(false)
+              setToggle(prev => !prev)
             }}
+            disabled={photoGallery.length === 0}
           >
-            <MdPhotoCamera style={{ marginRight: 10 }} />
-            Take screenshot
-          </DownloadButton>
-          <input
-            type="file"
-            style={{ display: 'none' }}
-            ref={fileInputRef}
-            accept="image/x-png,image/jpeg"
-            onChange={e => {
-              handlePhotoUpload(e)
-            }}
+            {toggle ? <MdRemove size={26} /> : <MdAdd size={26} />}
+          </ToggleButton>
+          <Container>
+            <TempLogo>
+              <img src={Logo} alt="logo" width={270} />
+            </TempLogo>
+            <Elements>
+              <form
+                onSubmit={e =>
+                  artworkStore.handleArtworkNameChange(
+                    e,
+                    setShowSuccessMsg,
+                    setSubmitted,
+                    artworkFieldRef
+                  )
+                }
+                style={{ flex: 4 }}
+              >
+                <InputFieldRow>
+                  <Label style={{ display: 'block' }}>Artwork name</Label>
+                  <InputField
+                    value={artworkStore.imageInfo.artworkName}
+                    ref={artworkFieldRef}
+                    name="artworkName"
+                    onFocus={() => setFieldFocused(true)}
+                    onBlur={() => setTimeout(() => setFieldFocused(false), 200)}
+                    onChange={e => {
+                      setSubmitted(false)
+                      handleChange(e)
+                    }}
+                  />
+                  {artworkName.length > 0 && !submitted && fieldFocused && (
+                    <Add>
+                      <MdAddCircle
+                        size={24}
+                        color="green"
+                        onClick={handleArtworkSubmit}
+                      />
+                    </Add>
+                  )}
+                </InputFieldRow>
+              </form>
+
+              <CheckboxGrid>
+                <div>
+                  <BorderCheckbox>
+                    <label>
+                      <Checkbox
+                        checked={showBorder}
+                        onChange={handleShowBorder}
+                      />
+                      <BorderCheckboxLabel>Border</BorderCheckboxLabel>
+                    </label>
+                  </BorderCheckbox>
+                  <TextureCheckbox>
+                    <label>
+                      <Checkbox
+                        checked={showTexture}
+                        onChange={handleShowTexture}
+                      />
+                      <TextureCheckboxLabel>Texture</TextureCheckboxLabel>
+                    </label>
+                  </TextureCheckbox>
+                </div>
+                <div>
+                  <BackgroudCheckbox>
+                    <label>
+                      <Checkbox
+                        checked={backgroundColor}
+                        onChange={handleBackgroundColor}
+                      />
+                      <BackgroudCheckboxLabel>
+                        Light background
+                      </BackgroudCheckboxLabel>
+                    </label>
+                  </BackgroudCheckbox>
+                  <BackgroudCheckbox>
+                    <label>
+                      <Checkbox
+                        checked={rotateIncrement}
+                        onChange={handleRotate}
+                      />
+                      <BackgroudCheckboxLabel>
+                        Rotate 90˚ CW
+                      </BackgroudCheckboxLabel>
+                    </label>
+                  </BackgroudCheckbox>
+                </div>
+              </CheckboxGrid>
+            </Elements>
+            <ZoomRange>
+              <ZoomTitle>Spotlight intensity</ZoomTitle>
+              <ZoomText>{lightIntensity}%</ZoomText>
+              <input
+                type="range"
+                min="0"
+                max="20"
+                onChange={handleLightIntensity}
+                value={lightIntensity}
+              />
+            </ZoomRange>
+            <DownloadButton
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => {
+                setSnap(true)
+              }}
+            >
+              <MdPhotoCamera style={{ marginRight: 10 }} />
+              Take screenshot
+            </DownloadButton>
+            <input
+              type="file"
+              style={{ display: 'none' }}
+              ref={fileInputRef}
+              accept="image/x-png,image/jpeg"
+              onChange={e => {
+                handlePhotoUpload(e)
+              }}
+            />
+            <AddArtButton
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() =>
+                fileInputRef.current && fileInputRef.current.click()
+              }
+            >
+              <MdAddAPhoto style={{ marginRight: 10 }} />
+              {loader ? loader : 'Add image to gallery'}
+            </AddArtButton>
+          </Container>
+          <SocialBar
+            toggleProfile={toggleProfile}
+            setToggleProfile={setToggleProfile}
           />
-          <AddArtButton
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            onClick={() => fileInputRef.current && fileInputRef.current.click()}
-          >
-            <MdAddAPhoto style={{ marginRight: 10 }} />
-            {loader ? loader : 'Add image to gallery'}
-          </AddArtButton>
-        </Container>
-        <SocialBar
-          toggleProfile={toggleProfile}
-          setToggleProfile={setToggleProfile}
-        />
-      </Wrapper>
-      {showSuccessMsg && (
-        <Toast
-          message={showSuccessMsg}
-          resetState={() => setShowSuccessMsg(false)}
-          delay={3000}
-        />
-      )}
-    </>
-  )
-}
+        </Wrapper>
+        {showSuccessMsg && (
+          <Toast
+            message={showSuccessMsg}
+            resetState={() => setShowSuccessMsg(false)}
+            delay={3000}
+          />
+        )}
+      </>
+    )
+  }
+)
 
 // Styles
 const Wrapper = styled(animated.div)`

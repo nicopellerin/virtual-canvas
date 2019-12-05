@@ -1,7 +1,8 @@
 import { createContext } from 'react'
 
-import { UserStore } from '../stores'
+import { UserStore, ArtworkStore } from '../stores'
 
 export const storesContext = createContext({
   userStore: new UserStore(),
+  artworkStore: new ArtworkStore(),
 })

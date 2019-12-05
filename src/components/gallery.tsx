@@ -1,6 +1,5 @@
 import React, {
   useState,
-  useContext,
   useEffect,
   Dispatch,
   SetStateAction,
@@ -12,27 +11,13 @@ import { MdClose } from 'react-icons/md'
 import axios from 'axios'
 import cookie from 'js-cookie'
 
-import { ArtworkContext } from '../context/artwork-context'
+import { useStores } from '../stores/useStores'
+import { observer } from 'mobx-react-lite'
 
 const ScrollAreaLazy = React.lazy(() => import('react-scrollbar'))
 
-interface Photo {
-  id: string
-  src: string
-  ratio: number
-  name: string
-  rotate: boolean
-  border: boolean
-  texture: boolean
-  background: boolean
-  lighting: string
-}
-
 interface Props {
-  photoGallery: Photo[]
-  setPhotoGallery: Dispatch<SetStateAction<Photo[]>>
-  setPhotoPreview: Dispatch<SetStateAction<string>>
-  setPhotoRatio: Dispatch<SetStateAction<number>>
+  switchFunc: () => void
 }
 
 interface StyledProps {
@@ -40,37 +25,28 @@ interface StyledProps {
   backgroundColor?: boolean
 }
 
-const Gallery: React.FC<Props> = ({
-  photoGallery,
-  setPhotoGallery,
-  setPhotoPreview,
-  setPhotoRatio,
-  switchFunc,
-}) => {
+const Gallery: React.FC<Props> = ({ switchFunc }) => {
   const [toggle, setToggle] = useState<boolean>(true)
 
-  const {
-    setArtworkName,
-    setBackgroundColor,
-    backgroundColor,
-    setShowBorder,
-    setShowTexture,
-    setRotateIncrement,
-    setLightIntensity,
-  } = useContext(ArtworkContext)
+  const { artworkStore } = useStores()
 
   useEffect(() => {
-    if (photoGallery && photoGallery.length === 0) {
+    if (
+      artworkStore.imageInfo.photoGallery &&
+      artworkStore.imageInfo.photoGallery.length === 0
+    ) {
       setToggle(false)
     }
-  }, [photoGallery])
+  }, [artworkStore.imageInfo.photoGallery])
 
   const removeArtwork = async (e, id: string): Promise<void> => {
     e.stopPropagation()
 
     const token = cookie.getJSON('vc_token')
 
-    const index = photoGallery.findIndex(photo => photo.id === id)
+    const index = artworkStore.imageInfo.photoGallery.findIndex(
+      photo => photo.id === id
+    )
 
     await axios.delete(`https://api.virtualcanvas.app/api/artwork/${id}`, {
       headers: {
@@ -80,11 +56,7 @@ const Gallery: React.FC<Props> = ({
     })
 
     if (index >= 0) {
-      setPhotoGallery(prevState => {
-        const copy = [...prevState]
-        copy.splice(index, 1)
-        return copy
-      })
+      artworkStore.imageInfo.photoGallery.splice(index, 1)
     }
   }
 
@@ -101,7 +73,7 @@ const Gallery: React.FC<Props> = ({
     <Wrapper
       style={slideInOut}
       onClick={() => setToggle(prevState => !prevState)}
-      disabled={photoGallery.length === 0}
+      disabled={artworkStore.imageInfo.photoGallery.length === 0}
     >
       <Container>
         {!isSSR && (
@@ -120,9 +92,9 @@ const Gallery: React.FC<Props> = ({
               verticalScrollbarStyle={{ background: '#000' }}
               verticalContainerStyle={{ background: '#eee' }}
             >
-              {photoGallery.map((photo, index) => {
-                const prevItem = photoGallery[index - 1]
-                const nextItem = photoGallery[index + 1]
+              {artworkStore.imageInfo.photoGallery.map((photo, index) => {
+                const prevItem = artworkStore.imageInfo.photoGallery[index - 1]
+                const nextItem = artworkStore.imageInfo.photoGallery[index + 1]
                 return (
                   <ThumbnailWrapper key={photo.id}>
                     <Thumbnail
@@ -130,17 +102,20 @@ const Gallery: React.FC<Props> = ({
                       alt="Preview thumbnail"
                       width={60}
                       height={60}
-                      lastImage={photoGallery.length - 1 === index}
+                      lastImage={
+                        artworkStore.imageInfo.photoGallery.length - 1 === index
+                      }
                       onClick={e => {
                         e.stopPropagation()
-                        setPhotoPreview(photo.src)
-                        setPhotoRatio(photo.ratio)
-                        setArtworkName(photo.name)
-                        setBackgroundColor(photo.background)
-                        setShowBorder(photo.border)
-                        setShowTexture(photo.texture)
-                        setRotateIncrement(photo.rotate)
-                        setLightIntensity(photo.lighting)
+                        artworkStore.imageInfo.photoPreview = photo.src
+                        artworkStore.imageInfo.photoRatio = photo.ratio
+                        artworkStore.imageInfo.artworkName = photo.name
+                        artworkStore.imageInfo.backgroundColor =
+                          photo.background
+                        artworkStore.imageInfo.showBorder = photo.border
+                        artworkStore.imageInfo.showTexture = photo.texture
+                        artworkStore.imageInfo.rotateIncrement = photo.rotate
+                        artworkStore.imageInfo.lightIntensity = photo.lighting
                         switchFunc()
                       }}
                     />
@@ -149,26 +124,32 @@ const Gallery: React.FC<Props> = ({
                       color="white"
                       onClick={e => {
                         if (prevItem) {
-                          setPhotoPreview(prevItem.src)
-                          setArtworkName(prevItem.name)
-                          setPhotoRatio(prevItem.ratio)
-                          setBackgroundColor(prevItem.background)
-                          setShowBorder(prevItem.border)
-                          setShowTexture(prevItem.texture)
-                          setRotateIncrement(prevItem.rotate)
-                          setLightIntensity(prevItem.lighting)
+                          artworkStore.imageInfo.photoPreview = prevItem.src
+                          artworkStore.imageInfo.photoRatio = prevItem.ratio
+                          artworkStore.imageInfo.artworkName = prevItem.name
+                          artworkStore.imageInfo.backgroundColor =
+                            prevItem.background
+                          artworkStore.imageInfo.showBorder = prevItem.border
+                          artworkStore.imageInfo.showTexture = prevItem.texture
+                          artworkStore.imageInfo.rotateIncrement =
+                            prevItem.rotate
+                          artworkStore.imageInfo.lightIntensity =
+                            prevItem.lighting
                         } else if (nextItem) {
-                          setPhotoPreview(nextItem.src)
-                          setArtworkName(nextItem.name)
-                          setPhotoRatio(nextItem.ratio)
-                          setBackgroundColor(nextItem.background)
-                          setShowBorder(nextItem.border)
-                          setShowTexture(nextItem.texture)
-                          setRotateIncrement(nextItem.rotate)
-                          setLightIntensity(nextItem.lighting)
+                          artworkStore.imageInfo.photoPreview = nextItem.src
+                          artworkStore.imageInfo.photoRatio = nextItem.ratio
+                          artworkStore.imageInfo.artworkName = nextItem.name
+                          artworkStore.imageInfo.backgroundColor =
+                            nextItem.background
+                          artworkStore.imageInfo.showBorder = nextItem.border
+                          artworkStore.imageInfo.showTexture = nextItem.texture
+                          artworkStore.imageInfo.rotateIncrement =
+                            nextItem.rotate
+                          artworkStore.imageInfo.lightIntensity =
+                            nextItem.lighting
                         } else {
-                          setPhotoPreview(null)
-                          setArtworkName('')
+                          artworkStore.imageInfo.photoPreview = ''
+                          artworkStore.imageInfo.artworkName = ''
                         }
                         removeArtwork(e, photo.id)
                       }}
@@ -180,12 +161,16 @@ const Gallery: React.FC<Props> = ({
           </Suspense>
         )}
       </Container>
-      <Text backgroundColor={backgroundColor ? true : false}>Gallery</Text>
+      <Text
+        backgroundColor={artworkStore.imageInfo.backgroundColor ? true : false}
+      >
+        Gallery
+      </Text>
     </Wrapper>
   )
 }
 
-export default Gallery
+export default observer(Gallery)
 
 // Styles
 const Wrapper = styled(animated.div)`
