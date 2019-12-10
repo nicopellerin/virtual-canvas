@@ -3,13 +3,13 @@ import { Router } from '@reach/router'
 import axios from 'axios'
 import uuid from 'uuid/v4'
 import cookie from 'js-cookie'
+import { observer } from 'mobx-react-lite'
 
 import { MainScene } from '../../components/main-scene'
 import PrivateRoute from '../../components/private-route'
 import SEO from '../../components/seo'
 
 import { ArtworkContext } from '../../context/artwork-context'
-import { UserContext } from '../../context/user-context'
 import { useStores } from '../../stores/useStores'
 
 const IndexAppPage: React.FC = () => {
@@ -34,7 +34,7 @@ const IndexAppPage: React.FC = () => {
 
   useEffect(() => {
     artworkStore.getAllArtwork()
-  }, [])
+  }, [artworkStore])
 
   const handlePhotoUpload = async (e: React.FormEvent<HTMLFontElement>) => {
     const { files } = e.target as HTMLInputElement
@@ -73,8 +73,8 @@ const IndexAppPage: React.FC = () => {
           }
         )
 
-        setPhotoPreview(res.data.secure_url)
-        setPhotoRatio(res.data.width / res.data.height)
+        artworkStore.imageInfo.photoPreview = res.data.secure_url
+        artworkStore.imageInfo.photoRatio = res.data.width / res.data.height
         setPhotoUploaded(true)
         setUploaded(true)
 
@@ -100,9 +100,13 @@ const IndexAppPage: React.FC = () => {
           }
         )
 
-        setPhotoGallery([...photoGallery, JSON.parse(info.config.data)])
+        artworkStore.updateGalleryState([
+          ...artworkStore.imageInfo.photoGallery,
+          JSON.parse(info.config.data),
+        ])
         setPhotoUploaded(false)
-        setArtworkName('')
+        artworkStore.imageInfo.artworkName = ''
+        // artworkStore.getAllArtwork()
       } catch (err) {
         console.error(err)
       }
@@ -147,4 +151,4 @@ const IndexAppPage: React.FC = () => {
   )
 }
 
-export default IndexAppPage
+export default observer(IndexAppPage)

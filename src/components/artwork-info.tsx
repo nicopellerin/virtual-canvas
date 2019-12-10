@@ -1,15 +1,17 @@
-import React, { useContext } from "react"
-import styled from "styled-components"
+import React from 'react'
+import styled from 'styled-components'
 
-import { ArtworkContext } from "../context/artwork-context"
+import { useStores } from '../stores/useStores'
 
 export const ArtworkInfo: React.FC = () => {
-  const { artworkName, backgroundColor } = useContext(ArtworkContext)
+  const { artworkStore } = useStores()
 
   return (
     <Wrapper>
-      <Name backgroundColor={backgroundColor ? true : false}>
-        {artworkName}
+      <Name
+        backgroundColor={artworkStore.imageInfo.backgroundColor ? true : false}
+      >
+        {artworkStore.imageInfo.artworkName}
       </Name>
     </Wrapper>
   )
@@ -23,5 +25,6 @@ const Wrapper = styled.div`
 `
 
 const Name = styled.h2`
-  color: ${props => (props.backgroundColor ? "#333" : "#f4f4f4")};
+  color: ${(props: { backgroundColor: boolean }) =>
+    props.backgroundColor ? '#333' : '#f4f4f4'};
 `

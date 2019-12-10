@@ -62,7 +62,7 @@ interface Photo {
 }
 
 export const Sidebar: React.FC<Props> = observer(
-  ({ handlePhotoUpload, photoPreview, photoGallery, loader, setSnap }) => {
+  ({ handlePhotoUpload, loader, setSnap }) => {
     const [toggle, setToggle] = useState<boolean>(false)
     const [toggleProfile, setToggleProfile] = useState<boolean>(false)
     const [showSuccessMsg, setShowSuccessMsg] = useState<string>('')
@@ -71,34 +71,23 @@ export const Sidebar: React.FC<Props> = observer(
 
     const { artworkStore } = useStores()
 
-    const {
-      lightIntensity,
-      setLightIntensity,
-      showTexture,
-      setShowTexture,
-      showBorder,
-      setShowBorder,
-      artworkName,
-      setArtworkName,
-      backgroundColor,
-      setBackgroundColor,
-      rotateIncrement,
-      setRotateIncrement,
-      setLight,
-      light,
-    } = useContext(ArtworkContext)
+    const { lightIntensity, setLightIntensity } = useContext(ArtworkContext)
 
     useEffect(() => {
-      if (photoGallery && photoGallery.length === 0) {
+      if (
+        artworkStore.imageInfo.photoGallery &&
+        artworkStore.imageInfo.photoGallery.length === 0
+      ) {
         setToggle(false)
       }
     })
 
     useDebouncedEffect(
       () => {
-        setLight(lightIntensity)
+        console.log('call')
+        artworkStore.updateLight(lightIntensity)
       },
-      300,
+      500,
       [lightIntensity]
     )
 
@@ -111,49 +100,6 @@ export const Sidebar: React.FC<Props> = observer(
         : 'translate3d(88%, -50%, 0)',
       config: { mass: 1, tension: 120, friction: 18 },
     })
-
-    const handleArtworkSubmit = async (
-      e: React.FormEvent<HTMLFormElement>
-    ): Promise<void> => {
-      e.preventDefault()
-
-      const token = cookie.getJSON('vc_token')
-
-      const photo = photoGallery.find(url => url.src === photoPreview)
-      photo.name = artworkName
-
-      await axios.patch(
-        `https://api.virtualcanvas.app/api/artwork/${photo.id}`,
-        photo,
-        {
-          headers: {
-            Token: token,
-          },
-        }
-      )
-
-      if (artworkName) {
-        setShowSuccessMsg('Saved name to artwork')
-        setSubmitted(true)
-        artworkFieldRef.current.blur()
-      }
-    }
-
-    const handleShowBorder = () => {
-      setShowBorder(prevState => !prevState)
-    }
-
-    const handleShowTexture = () => {
-      setShowTexture(prevState => !prevState)
-    }
-
-    const handleBackgroundColor = () => {
-      setBackgroundColor(prevState => !prevState)
-    }
-
-    const handleRotate = () => {
-      setRotateIncrement(prevState => !prevState)
-    }
 
     const handleLightIntensity = e => {
       setLightIntensity(e.target.value)
@@ -171,7 +117,7 @@ export const Sidebar: React.FC<Props> = observer(
               setToggleProfile(false)
               setToggle(prev => !prev)
             }}
-            disabled={photoGallery.length === 0}
+            disabled={artworkStore.imageInfo.photoGallery.length === 0}
           >
             {toggle ? <MdRemove size={26} /> : <MdAdd size={26} />}
           </ToggleButton>
@@ -204,15 +150,24 @@ export const Sidebar: React.FC<Props> = observer(
                       handleChange(e)
                     }}
                   />
-                  {artworkName.length > 0 && !submitted && fieldFocused && (
-                    <Add>
-                      <MdAddCircle
-                        size={24}
-                        color="green"
-                        onClick={handleArtworkSubmit}
-                      />
-                    </Add>
-                  )}
+                  {artworkStore.imageInfo.artworkName.length > 0 &&
+                    !submitted &&
+                    fieldFocused && (
+                      <Add>
+                        <MdAddCircle
+                          size={24}
+                          color="green"
+                          onClick={e =>
+                            artworkStore.updateName(
+                              e,
+                              setShowSuccessMsg,
+                              setSubmitted,
+                              artworkFieldRef
+                            )
+                          }
+                        />
+                      </Add>
+                    )}
                 </InputFieldRow>
               </form>
 
@@ -221,8 +176,9 @@ export const Sidebar: React.FC<Props> = observer(
                   <BorderCheckbox>
                     <label>
                       <Checkbox
-                        checked={showBorder}
-                        onChange={handleShowBorder}
+                        name="showBorder"
+                        checked={artworkStore.artworkData.showBorder}
+                        onChange={e => artworkStore.updateCanvas(e)}
                       />
                       <BorderCheckboxLabel>Border</BorderCheckboxLabel>
                     </label>
@@ -230,8 +186,9 @@ export const Sidebar: React.FC<Props> = observer(
                   <TextureCheckbox>
                     <label>
                       <Checkbox
-                        checked={showTexture}
-                        onChange={handleShowTexture}
+                        name="showTexture"
+                        checked={artworkStore.artworkData.showTexture}
+                        onChange={e => artworkStore.updateCanvas(e)}
                       />
                       <TextureCheckboxLabel>Texture</TextureCheckboxLabel>
                     </label>
@@ -241,8 +198,9 @@ export const Sidebar: React.FC<Props> = observer(
                   <BackgroudCheckbox>
                     <label>
                       <Checkbox
-                        checked={backgroundColor}
-                        onChange={handleBackgroundColor}
+                        name="backgroundColor"
+                        checked={artworkStore.artworkData.backgroundColor}
+                        onChange={e => artworkStore.updateCanvas(e)}
                       />
                       <BackgroudCheckboxLabel>
                         Light background
@@ -252,8 +210,9 @@ export const Sidebar: React.FC<Props> = observer(
                   <BackgroudCheckbox>
                     <label>
                       <Checkbox
-                        checked={rotateIncrement}
-                        onChange={handleRotate}
+                        name="rotateIncrement"
+                        checked={artworkStore.artworkData.rotateIncrement}
+                        onChange={e => artworkStore.updateCanvas(e)}
                       />
                       <BackgroudCheckboxLabel>
                         Rotate 90˚ CW

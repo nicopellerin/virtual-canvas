@@ -1,18 +1,6 @@
-import { observable, action, runInAction, toJS } from 'mobx'
+import { observable, action, runInAction, toJS, computed } from 'mobx'
 import axios from 'axios'
 import cookie from 'js-cookie'
-
-interface Photo {
-  id: string
-  src: string
-  ratio: number
-  name: string
-  rotate: boolean
-  border: boolean
-  texture: boolean
-  background: boolean
-  lighting: string
-}
 
 let usernameRef
 if (typeof window !== 'undefined') {
@@ -51,10 +39,76 @@ export class ArtworkStore {
     uploaded: true,
   }
 
+  @computed
   get artworkData() {
     const clone = toJS(this.imageInfo)
     console.log(clone)
     return clone
+  }
+
+  @action
+  updateLight(value) {
+    this.imageInfo.lightIntensity = value
+  }
+
+  @action
+  async updateCanvas(e) {
+    this.imageInfo[e.target.name] = !this.imageInfo[e.target.name]
+    await this.updatePhotoProps()
+  }
+
+  @action
+  async updateName(e, setShowSuccessMsg, setSubmitted, artworkFieldRef) {
+    e.preventDefault()
+
+    const photo = this.imageInfo.photoGallery.find(
+      url => url.src === this.imageInfo.photoPreview
+    )
+    photo.name = this.imageInfo.artworkName
+
+    await axios.patch(
+      `https://api.virtualcanvas.app/api/artwork/${photo.id}`,
+      photo,
+      {
+        headers: {
+          Token: tokenRef,
+        },
+      }
+    )
+
+    if (this.imageInfo.artworkName) {
+      setShowSuccessMsg('Saved name to artwork')
+      setSubmitted(true)
+      artworkFieldRef.current.blur()
+    }
+  }
+
+  @action
+  async updatePhotoProps() {
+    const photo = this.imageInfo.photoGallery.find(
+      url => url.src === this.imageInfo.photoPreview
+    )
+
+    photo.background = this.imageInfo.backgroundColor
+    photo.texture = this.imageInfo.showTexture
+    photo.border = this.imageInfo.showBorder
+    photo.rotate = this.imageInfo.rotateIncrement
+    photo.lighting = this.imageInfo.lightIntensity
+
+    await axios.patch(
+      `https://api.virtualcanvas.app/api/artwork/${photo.id}`,
+      photo,
+      {
+        headers: {
+          Token: tokenRef,
+        },
+      }
+    )
+  }
+
+  @action
+  updateGalleryState(data) {
+    this.imageInfo.photoGallery = data
   }
 
   @action
