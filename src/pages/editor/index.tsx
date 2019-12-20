@@ -13,22 +13,9 @@ import { ArtworkContext } from '../../context/artwork-context'
 import { useStores } from '../../stores/useStores'
 
 const IndexAppPage: React.FC = () => {
-  const {
-    setArtworkName,
-    photoUploaded,
-    setPhotoUploaded,
-    photoPreview,
-    setPhotoPreview,
-    photoRatio,
-    setPhotoRatio,
-    photoGallery,
-    setPhotoGallery,
-    loader,
-    setLoader,
-    setLoaded,
-    setErrMsg,
-    setUploaded,
-  } = useContext(ArtworkContext)
+  const { loader, setLoader, setLoaded, setErrMsg, setUploaded } = useContext(
+    ArtworkContext
+  )
 
   const { artworkStore, userStore } = useStores()
 
@@ -36,8 +23,8 @@ const IndexAppPage: React.FC = () => {
     artworkStore.getAllArtwork()
   }, [artworkStore])
 
-  const handlePhotoUpload = async (e: React.FormEvent<HTMLFontElement>) => {
-    const { files } = e.target as HTMLInputElement
+  const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { files } = e.target
 
     const token = cookie.getJSON('vc_token')
 
@@ -47,79 +34,64 @@ const IndexAppPage: React.FC = () => {
       return null
     }
 
-    if (token) {
-      const data = new FormData()
-      data.append('file', files[0])
-      data.append('upload_preset', 'virtual_canvas')
+    const data = new FormData()
+    data.append('file', files[0])
+    data.append('upload_preset', 'virtual_canvas')
 
-      try {
-        const res = await axios.post(
-          'https://api.cloudinary.com/v1_1/dl9mctxsb/image/upload',
-          data,
-          {
-            onUploadProgress: progressEvent => {
-              setLoader(
-                Math.round((progressEvent.loaded / progressEvent.total) * 100) +
-                  '%'
-              )
-              if (progressEvent.loaded === progressEvent.total) {
-                setLoader('Finished uploading :)')
-                setLoaded(true)
-                setTimeout(() => {
-                  setLoader('')
-                }, 1000)
-              }
-            },
-          }
-        )
-
-        artworkStore.imageInfo.photoPreview = res.data.secure_url
-        artworkStore.imageInfo.photoRatio = res.data.width / res.data.height
-        setPhotoUploaded(true)
-        setUploaded(true)
-
-        const image = {
-          id: uuid(),
-          name: '',
-          ratio: res.data.width / res.data.height,
-          src: res.data.secure_url,
-          border: false,
-          rotate: false,
-          texture: false,
-          background: false,
+    try {
+      const res = await axios.post(
+        'https://api.cloudinary.com/v1_1/dl9mctxsb/image/upload',
+        data,
+        {
+          onUploadProgress: progressEvent => {
+            setLoader(
+              Math.round((progressEvent.loaded / progressEvent.total) * 100) +
+                '%'
+            )
+            if (progressEvent.loaded === progressEvent.total) {
+              setLoader('Finished uploading :)')
+              setLoaded(true)
+              setTimeout(() => {
+                setLoader('')
+              }, 1000)
+            }
+          },
         }
+      )
 
-        const info = await axios.post(
-          'https://api.virtualcanvas.app/api/add',
-          image,
-          {
-            headers: {
-              'Content-Type': 'application/json',
-              Token: token,
-            },
-          }
-        )
-
-        artworkStore.updateGalleryState([
-          ...artworkStore.imageInfo.photoGallery,
-          JSON.parse(info.config.data),
-        ])
-        setPhotoUploaded(false)
-        artworkStore.imageInfo.artworkName = ''
-        // artworkStore.getAllArtwork()
-      } catch (err) {
-        console.error(err)
-      }
-    } else {
-      let img = new Image()
-      img.onload = function() {
-        setPhotoRatio(this.width / this.height)
-      }
-
-      img.src = URL.createObjectURL(files && files[0])
-      setPhotoPreview(img.src)
-      setPhotoUploaded(true)
+      artworkStore.imageInfo.photoPreview = res.data.secure_url
+      artworkStore.imageInfo.photoRatio = res.data.width / res.data.height
       setUploaded(true)
+
+      const image = {
+        id: uuid(),
+        name: '',
+        ratio: res.data.width / res.data.height,
+        src: res.data.secure_url,
+        border: false,
+        rotate: false,
+        texture: false,
+        background: false,
+      }
+
+      const info = await axios.post(
+        'https://api.virtualcanvas.app/api/add',
+        image,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Token: token,
+          },
+        }
+      )
+
+      artworkStore.updateGalleryState([
+        ...artworkStore.imageInfo.photoGallery,
+        JSON.parse(info.config.data),
+      ])
+      artworkStore.imageInfo.artworkName = ''
+    } catch (err) {
+      console.error(err)
     }
   }
 
@@ -134,16 +106,7 @@ const IndexAppPage: React.FC = () => {
           path="/editor/:username"
           username={userStore.username}
           component={MainScene}
-          setPhotoGallery={setPhotoGallery}
-          photoPreview={photoPreview}
-          setPhotoPreview={setPhotoPreview}
           handlePhotoUpload={handlePhotoUpload}
-          photoGallery={photoGallery}
-          photoRatio={photoRatio}
-          setPhotoRatio={setPhotoRatio}
-          photoUploaded={photoUploaded}
-          setPhotoUploaded={setPhotoUploaded}
-          setUploaded={setUploaded}
           loader={loader}
         />
       </Router>

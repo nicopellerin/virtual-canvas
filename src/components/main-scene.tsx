@@ -28,14 +28,13 @@ import { observer } from 'mobx-react-lite'
 
 interface Props {
   photoUploaded: boolean
-  setPhotoUploaded: Dispatch<SetStateAction<boolean>>
   handlePhotoUpload: () => void
   setUploaded: Dispatch<SetStateAction<boolean>>
   loader: string
 }
 
 export const MainScene: React.FC<Props> = observer(
-  ({ setPhotoUploaded, handlePhotoUpload, setUploaded, loader }) => {
+  ({ handlePhotoUpload, setUploaded, loader }) => {
     extend({ OrbitControls })
 
     const { lightIntensity } = useContext(ArtworkContext)
@@ -44,7 +43,6 @@ export const MainScene: React.FC<Props> = observer(
 
     const [screenShot, setScreenShot] = useState()
     const [snap, setSnap] = useState(false)
-    const [switchAnim, setSwitchAnim] = useState(1)
 
     const getPhoto = React.useCallback(
       gl => {
@@ -108,10 +106,6 @@ export const MainScene: React.FC<Props> = observer(
       )
     }
 
-    const switchFunc = () => {
-      setSwitchAnim(1.1)
-    }
-
     return (
       <div>
         <Canvas
@@ -141,7 +135,6 @@ export const MainScene: React.FC<Props> = observer(
               rotateIncrement={artworkStore.artworkData.rotateIncrement}
               getPhoto={getPhoto}
               snap={snap}
-              switchAnim={switchAnim}
             />
             <Controls />
           </Suspense>
@@ -163,17 +156,10 @@ export const MainScene: React.FC<Props> = observer(
         <Logo backgroundColor={artworkStore.artworkData.backgroundColor} />
         <Sidebar
           handlePhotoUpload={handlePhotoUpload}
-          // checkedBackground={checkedBackground}
-          setPhotoUploaded={setPhotoUploaded}
-          photoGallery={artworkStore.artworkData.photoGallery}
-          photoPreview={artworkStore.artworkData.photoPreview}
           loader={loader}
           setSnap={setSnap}
         />
-        <Gallery
-          photoGallery={artworkStore.artworkData.photoGallery}
-          switchFunc={switchFunc}
-        />
+        <Gallery />
         <Menu />
         <ArtworkInfo />
         {artworkStore.artworkData.photoGallery.length === 0 && (

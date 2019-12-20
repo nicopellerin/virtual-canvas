@@ -16,8 +16,6 @@ import {
 } from 'react-icons/md'
 import styled from 'styled-components'
 import { useSpring, animated } from 'react-spring'
-import axios from 'axios'
-import cookie from 'js-cookie'
 import useDebouncedEffect from 'use-debounced-effect'
 import { observer } from 'mobx-react-lite'
 
@@ -32,33 +30,9 @@ import Logo from '../images/logo-text.svg'
 import SocialBar from './social-bar'
 
 interface Props {
-  handlePhotoUpload: (e: Event) => void
-  rotateCanvas: boolean
-  setRotateCanvas: Dispatch<SetStateAction<boolean>>
-  lightIntensity: number
-  setLightIntensity: Dispatch<SetStateAction<number>>
-  showTexture: boolean
-  setShowTexture: Dispatch<SetStateAction<boolean>>
-  showBorder: boolean
-  setShowBorder: Dispatch<SetStateAction<boolean>>
-  artworkName: string
-  setArtworkName: Dispatch<SetStateAction<string>>
-  photoGallery: Photo[]
-  setPhotoGallery: Dispatch<SetStateAction<Photo>>
-  photoPreview: string
+  handlePhotoUpload: (e: React.ChangeEvent<HTMLInputElement>) => void
   loader: string
   setSnap: Dispatch<SetStateAction<boolean>>
-}
-
-interface Photo {
-  id: string
-  src: string
-  ratio: number
-  name: string
-  rotate: boolean
-  border: boolean
-  texture: boolean
-  background: boolean
 }
 
 export const Sidebar: React.FC<Props> = observer(
@@ -271,7 +245,7 @@ export const Sidebar: React.FC<Props> = observer(
         {showSuccessMsg && (
           <Toast
             message={showSuccessMsg}
-            resetState={() => setShowSuccessMsg(false)}
+            resetState={() => setShowSuccessMsg('')}
             delay={3000}
           />
         )}

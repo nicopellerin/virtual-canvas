@@ -1,10 +1,4 @@
-import React, {
-  useState,
-  useEffect,
-  Dispatch,
-  SetStateAction,
-  Suspense,
-} from 'react'
+import React, { useState, useEffect, Suspense } from 'react'
 import { useSpring, animated } from 'react-spring'
 import styled from 'styled-components'
 import { MdClose } from 'react-icons/md'
@@ -17,7 +11,7 @@ import { observer } from 'mobx-react-lite'
 const ScrollAreaLazy = React.lazy(() => import('react-scrollbar'))
 
 interface Props {
-  switchFunc: () => void
+  switchFunc?: () => void
 }
 
 interface StyledProps {

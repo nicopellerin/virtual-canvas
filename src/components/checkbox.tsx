@@ -1,15 +1,17 @@
-import React from "react"
-import styled from "styled-components"
+import React from 'react'
+import styled from 'styled-components'
 
 interface Props {
-  className: string
+  className?: string
   checked: boolean
+  name: string
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
 
 const Checkbox: React.FC<Props> = ({ className, checked, ...props }) => (
   <CheckboxContainer className={className}>
     <HiddenCheckbox checked={checked} {...props} />
-    <StyledCheckbox checked={checked}>
+    <StyledCheckbox checked={checked} {...props}>
       <Icon viewBox="0 0 24 24">
         <polyline points="20 6 9 17 4 12" />
       </Icon>
@@ -30,7 +32,7 @@ const Icon = styled.svg`
   stroke: white;
   stroke-width: 2px;
 `
-const HiddenCheckbox = styled.input.attrs({ type: "checkbox" })`
+const HiddenCheckbox = styled.input.attrs({ type: 'checkbox' })`
   border: 0;
   clip: rect(0 0 0 0);
   /* clippath: inset(50%); */
@@ -47,12 +49,12 @@ const StyledCheckbox = styled.div`
   display: inline-block;
   width: 20px;
   height: 20px;
-  background: ${(props: Props) => (props.checked ? "#623CEA" : "#ddd")};
+  background: ${(props: Props) => (props.checked ? '#623CEA' : '#ddd')};
   border-radius: 3px;
   transition: all 150ms;
   cursor: pointer;
 
   ${Icon} {
-    visibility: ${(props: Props) => (props.checked ? "visible" : "hidden")};
+    visibility: ${(props: Props) => (props.checked ? 'visible' : 'hidden')};
   }
 `

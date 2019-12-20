@@ -1,33 +1,11 @@
-import React, { useRef, useState, Suspense } from 'react'
+import React from 'react'
 import { MdCloudUpload } from 'react-icons/md'
 import { motion } from 'framer-motion'
 import styled from 'styled-components'
 
-import BG from '../../images/toile.jpg'
 import Back from '../../images/back.png'
 
-import DemoScene from './demo-scene'
-
 const Main = () => {
-  const [photoPreview, setPhotoPreview] = useState(BG)
-  const [photoRatio, setPhotoRatio] = useState(0.7481622651783283)
-
-  const fileInputRef = useRef(null)
-
-  const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { files } = e.target as HTMLInputElement
-
-    let img = new Image()
-    img.onload = function() {
-      setPhotoRatio(this.width / this.height)
-    }
-
-    img.src = URL.createObjectURL(files && files[0])
-    setPhotoPreview(img.src)
-  }
-
-  // const springAnimation = { type: 'spring', stiffness: 10, damping: 150 }
-
   const containerVariants = {
     before: {},
     after: { transition: { staggerChildren: 0.1 } },
@@ -90,34 +68,11 @@ const Main = () => {
           >
             Turn your 2D art into 3D. Signup to try now.
           </Subtitle>
-          <input
-            type="file"
-            style={{ display: 'none' }}
-            ref={fileInputRef}
-            accept="image/x-png,image/jpeg"
-            onChange={e => {
-              handlePhotoUpload(e)
-            }}
-          />
-          {/* <UploadButton
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            onClick={() => fileInputRef.current && fileInputRef.current.click()}
-            height={26}
-            background={''}
-            style={{ position: 'relative' }}
-            variants={letterVariants}
-          >
-            <CloudUploadIcon />
-            Upload image
-          </UploadButton> */}
         </Content>
         <motion.img
           src={Back}
           alt="Background"
           style={{
-            // borderRadius: 5,
-            // boxShadow: '0 0 15px rgba(0,0,0,0.3)',
             opacity: 0,
           }}
           width={650}

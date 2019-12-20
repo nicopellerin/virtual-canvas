@@ -1,21 +1,15 @@
-import React, {
-  useRef,
-  useEffect,
-  useMemo,
-  Dispatch,
-  SetStateAction,
-} from 'react'
+import React, { useRef, useEffect, useMemo } from 'react'
 import * as THREE from 'three'
 import { TextureLoader } from 'three/src/loaders/TextureLoader'
-import { useLoader, useFrame, useThree, Dom } from 'react-three-fiber'
+import { useLoader, useFrame, useThree } from 'react-three-fiber'
 import lerp from 'lerp'
 import { observer } from 'mobx-react-lite'
 
 interface Props {
   url: string
   photoRatio: number
-  showTexture: Dispatch<SetStateAction<boolean>>
-  showBorder: Dispatch<SetStateAction<boolean>>
+  showTexture: boolean
+  showBorder: boolean
   rotateIncrement: boolean
   getPhoto: (gl) => void
   snap: boolean
@@ -30,7 +24,6 @@ export const Box: React.FC<Props> = observer(
     rotateIncrement,
     getPhoto,
     snap,
-    switchAnim,
   }) => {
     // Load image on box
     const [texture] = useLoader(THREE.TextureLoader, [url])

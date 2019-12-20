@@ -8,7 +8,7 @@ import LogoText from '../images/logo-text.svg'
 
 interface Props {
   backgroundColor: boolean
-  full: boolean
+  full?: boolean
 }
 
 export const Logo: React.FC<Props> = ({ backgroundColor, full }) => {
