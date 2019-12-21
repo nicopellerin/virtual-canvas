@@ -13,7 +13,6 @@ const Fallback = () => {
 export default Fallback
 
 // Styles
-// Styles
 const delay = keyframes`
 from {
   opacity: 0;

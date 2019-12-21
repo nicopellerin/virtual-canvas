@@ -88,8 +88,6 @@ export const MainScene: React.FC<Props> = observer(
 
       return (
         <orbitControls
-          // autoRotate={rotate}
-          autoRotateSpeed={0.3}
           enableDamping
           dampingFactor={0.05}
           enableKeys
