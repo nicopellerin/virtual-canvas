@@ -1,41 +1,48 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import { FaInstagram, FaFacebook, FaGlobe } from 'react-icons/fa'
 
-import { ArtworkContext } from '../../context/artwork-context'
-import { UserContext } from '../../context/user-context'
+import { useStores } from '../../stores/useStores'
+import { observer } from 'mobx-react-lite'
 
 const ProfileUsername = () => {
-  const { backgroundColor, username } = useContext(ArtworkContext)
-  const { socialLinks } = useContext(UserContext)
+  const { userStore, artworkStore } = useStores()
 
   return (
     <Wrapper>
-      <Username backgroundColor={backgroundColor ? true : false}>
-        {username}
+      <Username
+        backgroundColor={artworkStore.imageInfo.backgroundColor ? true : false}
+      >
+        {userStore.username}
       </Username>
       <Separator>|</Separator>
-      <Social backgroundColor={backgroundColor ? true : false}>
-        {socialLinks.instagram && (
+      <Social
+        backgroundColor={artworkStore.imageInfo.backgroundColor ? true : false}
+      >
+        {userStore.socialLinks.instagram && (
           <a
-            href={`https://instagram.com/${socialLinks.instagram}`}
+            href={`https://instagram.com/${userStore.socialLinks.instagram}`}
             target="_blank"
             rel="nofollower"
           >
             <FaInstagram size={20} />
           </a>
         )}
-        {socialLinks.facebook && (
+        {userStore.socialLinks.facebook && (
           <a
-            href={`https://facebook.com/${socialLinks.facebook}`}
+            href={`https://facebook.com/${userStore.socialLinks.facebook}`}
             target="_blank"
             rel="nofollower"
           >
             <FaFacebook size={20} />
           </a>
         )}
-        {socialLinks.website && (
-          <a href={`${socialLinks.website}`} target="_blank" rel="nofollower">
+        {userStore.socialLinks.website && (
+          <a
+            href={`${userStore.socialLinks.website}`}
+            target="_blank"
+            rel="nofollower"
+          >
             <FaGlobe size={20} />
           </a>
         )}
@@ -44,7 +51,7 @@ const ProfileUsername = () => {
   )
 }
 
-export default ProfileUsername
+export default observer(ProfileUsername)
 
 // Styles
 const Wrapper = styled.div`

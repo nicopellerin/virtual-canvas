@@ -1,23 +1,21 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import { MdExitToApp } from 'react-icons/md'
 import cookie from 'js-cookie'
 import { navigate, Link } from 'gatsby'
 import ReactTooltip from 'react-tooltip'
 
-import { UserContext } from '../context/user-context'
-import { ArtworkContext } from '../context/artwork-context'
+import { useStores } from '../stores/useStores'
 
 const Menu = () => {
-  const { setUserToken, setUser, user } = useContext(UserContext)
-  const { backgroundColor } = useContext(ArtworkContext)
+  const { artworkStore, userStore } = useStores()
 
   // Logout flow
   const handleLogout = () => {
     cookie.remove('vc_token')
     cookie.remove('vc_user')
-    setUserToken('')
-    setUser('')
+    userStore.userToken = ''
+    userStore.username = ''
 
     if (typeof window !== 'undefined') {
       navigate('/login')
@@ -27,8 +25,8 @@ const Menu = () => {
   return (
     <Wrapper>
       <ViewProfile
-        to={`/profile/${user}`}
-        backgroundColor={backgroundColor ? true : false}
+        to={`/profile/${userStore.username}`}
+        backgroundColor={artworkStore.imageInfo.backgroundColor ? true : false}
       >
         View public profile
       </ViewProfile>

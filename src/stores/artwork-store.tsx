@@ -185,4 +185,70 @@ export class ArtworkStore {
       artworkFieldRef.current.blur()
     }
   }
+
+  @action
+  showPreviousItemGallery = prevItem => {
+    runInAction(() => {
+      this.imageInfo.photoPreview = prevItem.src
+      this.imageInfo.photoRatio = prevItem.ratio
+      this.imageInfo.artworkName = prevItem.name
+      this.imageInfo.backgroundColor = prevItem.background
+      this.imageInfo.showBorder = prevItem.border
+      this.imageInfo.showTexture = prevItem.texture
+      this.imageInfo.rotateIncrement = prevItem.rotate
+      this.imageInfo.lightIntensity = prevItem.lighting
+    })
+  }
+
+  @action
+  showNextItemGallery = nextItem => {
+    runInAction(() => {
+      this.imageInfo.photoPreview = nextItem.src
+      this.imageInfo.photoRatio = nextItem.ratio
+      this.imageInfo.artworkName = nextItem.name
+      this.imageInfo.backgroundColor = nextItem.background
+      this.imageInfo.showBorder = nextItem.border
+      this.imageInfo.showTexture = nextItem.texture
+      this.imageInfo.rotateIncrement = nextItem.rotate
+      this.imageInfo.lightIntensity = nextItem.lighting
+    })
+  }
+
+  @action
+  showCurrentItemGallery = photo => {
+    runInAction(() => {
+      this.imageInfo.photoPreview = photo.src
+      this.imageInfo.photoRatio = photo.ratio
+      this.imageInfo.artworkName = photo.name
+      this.imageInfo.backgroundColor = photo.background
+      this.imageInfo.showBorder = photo.border
+      this.imageInfo.showTexture = photo.texture
+      this.imageInfo.rotateIncrement = photo.rotate
+      this.imageInfo.lightIntensity = photo.lighting
+    })
+  }
+
+  @action
+  removeArtwork = async (e, id: string): Promise<void> => {
+    e.stopPropagation()
+
+    const token = cookie.getJSON('vc_token')
+
+    const index = this.imageInfo.photoGallery.findIndex(
+      photo => photo.id === id
+    )
+
+    await axios.delete(`https://api.virtualcanvas.app/api/artwork/${id}`, {
+      headers: {
+        'Content-Type': 'application/json',
+        Token: token,
+      },
+    })
+
+    runInAction(() => {
+      if (index >= 0) {
+        this.imageInfo.photoGallery.splice(index, 1)
+      }
+    })
+  }
 }

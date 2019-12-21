@@ -6,6 +6,7 @@ import { ProfileScene } from '../../components/profile/profile-scene'
 import SEO from '../../components/seo'
 
 import { ArtworkContext } from '../../context/artwork-context'
+import { useStores } from '../../stores/useStores'
 
 const ProfileIndexPage = () => {
   const {
@@ -17,6 +18,8 @@ const ProfileIndexPage = () => {
     setPhotoRatio,
   } = useContext(ArtworkContext)
 
+  const { userStore } = useStores()
+
   const [profileTitle, setProfileTitle] = useState('')
 
   // Get username from url
@@ -24,6 +27,7 @@ const ProfileIndexPage = () => {
   useEffect(() => {
     username = window.location.href.split('/')[4]
     setProfileTitle(username)
+    userStore.getUserProfile()
   }, [])
 
   return (

@@ -3,7 +3,13 @@ import cookie from 'js-cookie'
 import axios from 'axios'
 
 const token: string = cookie.getJSON('vc_token')
-const usernameRef: string = cookie.getJSON('vc_user')
+const usernameRef: string =
+  cookie.getJSON('vc_user') || window.location.href.split('/')[4]
+
+// let usernameRef
+//   if (typeof window !== 'undefined') {
+//     username = window.location.href.split('/')[4]
+//   }
 
 export class UserStore {
   @observable username = usernameRef
@@ -14,13 +20,10 @@ export class UserStore {
   async getUserProfile() {
     try {
       const { data } = await axios.get(
-        `https://api.virtualcanvas.app/api/profile`,
-        {
-          headers: {
-            Token: token,
-          },
-        }
+        `https://api.virtualcanvas.app/api/account/${this.username}`
       )
+
+      console.log(data)
 
       this.socialLinks = {
         instagram: data.social_links.instagram,
@@ -38,7 +41,7 @@ export class UserStore {
   async updateUserProfile() {
     try {
       await axios.patch(
-        `https://api.virtualcanvas.app/api/profile/${username}`,
+        `https://api.virtualcanvas.app/api/profile/${this.username}`,
         this.socialLinks,
         {
           headers: {

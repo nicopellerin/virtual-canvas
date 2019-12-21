@@ -1,14 +1,14 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import { motion } from 'framer-motion'
 import { Link } from 'gatsby'
 
-import { UserContext } from '../../context/user-context'
+import { useStores } from '../../stores/useStores'
 
 const ProfileCta = () => {
-  const { user } = useContext(UserContext)
+  const { userStore } = useStores()
 
-  if (user) return null
+  if (userStore.username) return null
 
   return (
     <Wrapper>

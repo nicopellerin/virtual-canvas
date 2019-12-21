@@ -1,21 +1,24 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import { Link } from 'gatsby'
 import { MdChevronLeft } from 'react-icons/md'
 
-import { UserContext } from '../../context/user-context'
-import { ArtworkContext } from '../../context/artwork-context'
+import { useStores } from '../../stores/useStores'
 
 const ProfileBack = () => {
-  const { user } = useContext(UserContext)
-  const { backgroundColor } = useContext(ArtworkContext)
+  const { userStore, artworkStore } = useStores()
 
-  if (!user) return null
+  if (!userStore.userToken) return null
 
   return (
-    <Wrapper backgroundColor={backgroundColor ? true : false}>
-      <MdChevronLeft color={backgroundColor ? '#333' : '#f4f4f4'} size={24} />
-      <Link to={`/editor/${user}`}>Back to editor</Link>
+    <Wrapper
+      backgroundColor={artworkStore.imageInfo.backgroundColor ? true : false}
+    >
+      <MdChevronLeft
+        color={artworkStore.imageInfo.backgroundColor ? '#333' : '#f4f4f4'}
+        size={24}
+      />
+      <Link to={`/editor/${userStore.username}`}>Back to editor</Link>
     </Wrapper>
   )
 }
@@ -31,7 +34,8 @@ const Wrapper = styled.div`
   align-items: center;
 
   a {
-    color: ${props => (props.backgroundColor ? '#333' : '#f4f4f4')};
+    color: ${(props: { backgroundColor: boolean }) =>
+      props.backgroundColor ? '#333' : '#f4f4f4'};
     font-size: 1.4rem;
     font-weight: 600;
     text-decoration: none;

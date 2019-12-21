@@ -1,10 +1,4 @@
-import React, {
-  useState,
-  useEffect,
-  useContext,
-  Dispatch,
-  SetStateAction,
-} from 'react'
+import React, { useState, useEffect, Dispatch, SetStateAction } from 'react'
 import styled from 'styled-components'
 import { animated, useSpring } from 'react-spring'
 import { MdAccountCircle } from 'react-icons/md'
@@ -12,8 +6,6 @@ import { motion } from 'framer-motion'
 import { observer } from 'mobx-react-lite'
 
 import { Toast } from './toast'
-
-import { ArtworkContext } from '../context/artwork-context'
 
 import { useStores } from '../stores/useStores'
 
@@ -104,7 +96,7 @@ const SocialBar: React.FC<Props> = ({ toggleProfile, setToggleProfile }) => {
       {showSuccessMsg && (
         <Toast
           message={showSuccessMsg}
-          resetState={() => setShowSuccessMsg(false)}
+          resetState={() => setShowSuccessMsg('')}
           delay={3000}
         />
       )}
@@ -149,8 +141,6 @@ const UserIcon = styled(MdAccountCircle)`
 const SocialContainer = styled.div`
   margin-bottom: 3rem;
 `
-
-const ProfileContainer = styled.div``
 
 const InputFieldRow = styled.div`
   margin-bottom: 2.8rem;

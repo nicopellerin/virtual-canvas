@@ -114,7 +114,6 @@ export const MainScene: React.FC<Props> = observer(
               ? 'linear-gradient(45deg, rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(237,237,237,1) 100%'
               : '#000004',
           }}
-          // id="main-image"
           gl={{ preserveDrawingBuffer: true, antialias: true, alpha: true }}
           camera={{
             position: [0, 0, 3.8],

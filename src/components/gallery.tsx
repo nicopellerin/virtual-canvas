@@ -2,24 +2,18 @@ import React, { useState, useEffect, Suspense } from 'react'
 import { useSpring, animated } from 'react-spring'
 import styled from 'styled-components'
 import { MdClose } from 'react-icons/md'
-import axios from 'axios'
-import cookie from 'js-cookie'
 
 import { useStores } from '../stores/useStores'
 import { observer } from 'mobx-react-lite'
 
 const ScrollAreaLazy = React.lazy(() => import('react-scrollbar'))
 
-interface Props {
-  switchFunc?: () => void
-}
-
 interface StyledProps {
   disabled?: boolean
   backgroundColor?: boolean
 }
 
-const Gallery: React.FC<Props> = ({ switchFunc }) => {
+const Gallery: React.FC = () => {
   const [toggle, setToggle] = useState<boolean>(true)
 
   const { artworkStore } = useStores()
@@ -32,27 +26,6 @@ const Gallery: React.FC<Props> = ({ switchFunc }) => {
       setToggle(false)
     }
   }, [artworkStore.imageInfo.photoGallery])
-
-  const removeArtwork = async (e, id: string): Promise<void> => {
-    e.stopPropagation()
-
-    const token = cookie.getJSON('vc_token')
-
-    const index = artworkStore.imageInfo.photoGallery.findIndex(
-      photo => photo.id === id
-    )
-
-    await axios.delete(`https://api.virtualcanvas.app/api/artwork/${id}`, {
-      headers: {
-        'Content-Type': 'application/json',
-        Token: token,
-      },
-    })
-
-    if (index >= 0) {
-      artworkStore.imageInfo.photoGallery.splice(index, 1)
-    }
-  }
 
   const slideInOut = useSpring({
     transform: toggle
@@ -101,16 +74,7 @@ const Gallery: React.FC<Props> = ({ switchFunc }) => {
                       }
                       onClick={e => {
                         e.stopPropagation()
-                        artworkStore.imageInfo.photoPreview = photo.src
-                        artworkStore.imageInfo.photoRatio = photo.ratio
-                        artworkStore.imageInfo.artworkName = photo.name
-                        artworkStore.imageInfo.backgroundColor =
-                          photo.background
-                        artworkStore.imageInfo.showBorder = photo.border
-                        artworkStore.imageInfo.showTexture = photo.texture
-                        artworkStore.imageInfo.rotateIncrement = photo.rotate
-                        artworkStore.imageInfo.lightIntensity = photo.lighting
-                        switchFunc()
+                        artworkStore.showCurrentItemGallery(photo)
                       }}
                     />
                     <CloseIcon
@@ -118,34 +82,14 @@ const Gallery: React.FC<Props> = ({ switchFunc }) => {
                       color="white"
                       onClick={e => {
                         if (prevItem) {
-                          artworkStore.imageInfo.photoPreview = prevItem.src
-                          artworkStore.imageInfo.photoRatio = prevItem.ratio
-                          artworkStore.imageInfo.artworkName = prevItem.name
-                          artworkStore.imageInfo.backgroundColor =
-                            prevItem.background
-                          artworkStore.imageInfo.showBorder = prevItem.border
-                          artworkStore.imageInfo.showTexture = prevItem.texture
-                          artworkStore.imageInfo.rotateIncrement =
-                            prevItem.rotate
-                          artworkStore.imageInfo.lightIntensity =
-                            prevItem.lighting
+                          artworkStore.showPreviousItemGallery(prevItem)
                         } else if (nextItem) {
-                          artworkStore.imageInfo.photoPreview = nextItem.src
-                          artworkStore.imageInfo.photoRatio = nextItem.ratio
-                          artworkStore.imageInfo.artworkName = nextItem.name
-                          artworkStore.imageInfo.backgroundColor =
-                            nextItem.background
-                          artworkStore.imageInfo.showBorder = nextItem.border
-                          artworkStore.imageInfo.showTexture = nextItem.texture
-                          artworkStore.imageInfo.rotateIncrement =
-                            nextItem.rotate
-                          artworkStore.imageInfo.lightIntensity =
-                            nextItem.lighting
+                          artworkStore.showNextItemGallery(nextItem)
                         } else {
                           artworkStore.imageInfo.photoPreview = ''
                           artworkStore.imageInfo.artworkName = ''
                         }
-                        removeArtwork(e, photo.id)
+                        artworkStore.removeArtwork(e, photo.id)
                       }}
                     />
                   </ThumbnailWrapper>

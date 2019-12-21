@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import { motion } from 'framer-motion'
 import { Link } from 'gatsby'
@@ -7,15 +7,10 @@ import cookie from 'js-cookie'
 import { Circle } from 'better-react-spinkit'
 
 import SEO from '../components/seo'
-import Navbar from '../components/landing/navbar'
 
 import LogoHome from '../images/logo-text.svg'
 
-import { UserContext } from '../context/user-context'
-
-interface StyledProps {
-  background?: string
-}
+import { useStores } from '../stores/useStores'
 
 const SignupPage = () => {
   const [username, setUsername] = useState('')
@@ -24,7 +19,7 @@ const SignupPage = () => {
   const [loading, setLoading] = useState(false)
   const [errorMsg, setErrorMsg] = useState('')
 
-  const { setUserToken, setUser } = useContext(UserContext)
+  const { userStore } = useStores()
 
   // Signup flow
   const handleSignup = async e => {
@@ -51,8 +46,8 @@ const SignupPage = () => {
       )
       cookie.set('vc_token', res.data.token)
       cookie.set('vc_user', res.data.username)
-      setUserToken(res.data.token)
-      setUser(res.data.username)
+      userStore.userToken = res.data.token
+      userStore.username = res.data.username
 
       if (typeof window !== 'undefined') {
         window.location.replace(`/editor/${res.data.username}`)
@@ -82,7 +77,7 @@ const SignupPage = () => {
             <Logo src={LogoHome} alt="logo" />
           </Link>
           <Title>Sign up for an account</Title>
-          <form onSubmit={handleSignup} autoComplete="false" auto>
+          <form onSubmit={handleSignup} autoComplete="false">
             <FieldRow>
               <InputField
                 name="username"

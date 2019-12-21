@@ -5,14 +5,13 @@ import axios from 'axios'
 import { Circle } from 'better-react-spinkit'
 import { MdCheckCircle } from 'react-icons/md'
 import cookie from 'js-cookie'
-import { Link, navigate } from 'gatsby'
+import { Link } from 'gatsby'
 import SEO from '../components/seo'
 
-import BG from '../images/vg.jpg'
 import LogoHome from '../images/logo-text.svg'
 
 import { UserContext } from '../context/user-context'
-import Navbar from '../components/landing/navbar'
+import { useStores } from '../stores/useStores'
 
 interface StyledProps {
   background?: string
@@ -26,7 +25,7 @@ const LoginPage = () => {
   const [loggedIn, setLoggedIn] = useState(false)
   const [errorMsg, setErrorMsg] = useState('')
 
-  const { setUserToken, setUser } = useContext(UserContext)
+  const { userStore } = useStores()
 
   // Login flow
   const handleLogin = async e => {
@@ -53,8 +52,8 @@ const LoginPage = () => {
         setLoggedIn(true)
         cookie.set('vc_token', res.data.token)
         cookie.set('vc_user', res.data.username)
-        setUserToken(res.data.token)
-        setUser(res.data.username)
+        userStore.userToken = res.data.token
+        userStore.username = res.data.username
 
         if (typeof window !== 'undefined') {
           window.location.replace(`/editor/${res.data.username}`)
@@ -81,7 +80,7 @@ const LoginPage = () => {
             <Logo src={LogoHome} alt="logo" />
           </Link>
           <Title>Sign in to your account</Title>
-          <form onSubmit={handleLogin} autoComplete="false" auto>
+          <form onSubmit={handleLogin} autoComplete="false">
             <FieldRow>
               <InputField
                 name="username"
