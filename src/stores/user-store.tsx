@@ -3,16 +3,15 @@ import cookie from 'js-cookie'
 import axios from 'axios'
 
 const token: string = cookie.getJSON('vc_token')
-const usernameRef: string =
-  cookie.getJSON('vc_user') || window.location.href.split('/')[4]
+const usernameRef: string = cookie.getJSON('vc_user')
 
-// let usernameRef
-//   if (typeof window !== 'undefined') {
-//     username = window.location.href.split('/')[4]
-//   }
+let usernameURLRef: string
+if (typeof window !== 'undefined') {
+  usernameURLRef = window.location.href.split('/')[4]
+}
 
 export class UserStore {
-  @observable username = usernameRef
+  @observable username = usernameRef || usernameURLRef
   @observable userToken = ''
   @observable socialLinks = { instagram: '', facebook: '', website: '' }
 
