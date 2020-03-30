@@ -123,7 +123,7 @@ export const MainScene: React.FC<Props> = observer(
         >
           <ambientLight intensity={0.8} />
           <hemisphereLight intensity={0.2} />
-          <Suspense fallback={<Fallback />}>
+          <Suspense fallback={null}>
             <Box
               url={artworkStore.artworkData.photoPreview}
               photoRatio={artworkStore.artworkData.photoRatio}

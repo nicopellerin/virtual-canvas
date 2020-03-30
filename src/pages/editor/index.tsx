@@ -108,6 +108,7 @@ const IndexAppPage: React.FC = () => {
           component={MainScene}
           handlePhotoUpload={handlePhotoUpload}
           loader={loader}
+          setUploaded={setUploaded}
         />
       </Router>
     </>
