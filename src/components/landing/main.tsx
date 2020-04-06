@@ -37,9 +37,9 @@ const Main = () => {
     <Wrapper>
       <Container>
         <Content
-          variants={containerVariants}
-          initial={'before'}
-          animate={'after'}
+        // variants={containerVariants}
+        // initial={'before'}
+        // animate={'after'}
         >
           <TitleWrapper>
             <Title
@@ -72,21 +72,21 @@ const Main = () => {
         <motion.img
           src={Back}
           alt="Background"
-          style={{
-            opacity: 0,
-          }}
+          // style={{
+          //   opacity: 0,
+          // }}
           width={650}
-          animate={{
-            opacity: [0, 1],
-            y: [20, 0],
-            scale: [0.9, 1.02, 1],
-            transition: {
-              type: 'string',
-              damping: 26,
-              stiffness: 30,
-              delay: 0.2,
-            },
-          }}
+          // animate={{
+          //   opacity: [0, 1],
+          //   y: [20, 0],
+          //   scale: [0.9, 1.02, 1],
+          //   transition: {
+          //     type: 'string',
+          //     damping: 26,
+          //     stiffness: 30,
+          //     delay: 0.2,
+          //   },
+          // }}
         />
       </Container>
     </Wrapper>
