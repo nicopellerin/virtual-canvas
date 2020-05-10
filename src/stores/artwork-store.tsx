@@ -88,7 +88,7 @@ export class ArtworkStore {
 
     await client.request(query, {
       input: {
-        imageId: photo.id,
+        id: photo.id,
         src: photo.src,
         name: photo.name,
         ratio: photo.ratio,
@@ -191,7 +191,7 @@ export class ArtworkStore {
 
     await client.request(query, {
       input: {
-        imageId: photo.id,
+        id: photo.id,
         src: photo.src,
         name: photo.name,
         ratio: photo.ratio,

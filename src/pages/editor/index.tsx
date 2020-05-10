@@ -10,6 +10,8 @@ import PrivateRoute from '../../components/private-route'
 import SEO from '../../components/seo'
 
 import { useStores } from '../../stores/useStores'
+import { GraphQLClient } from 'graphql-request'
+import { clientUrl } from '../../utils/utils'
 
 const IndexAppPage: React.FC = () => {
   // const { loader, setLoader, setLoaded, setErrMsg, setUploaded } = useContext(
@@ -62,31 +64,58 @@ const IndexAppPage: React.FC = () => {
       artworkStore.imageInfo.photoRatio = res.data.width / res.data.height
       // setUploaded(true)
 
-      const image = {
-        id: uuid(),
-        name: '',
-        ratio: res.data.width / res.data.height,
-        src: res.data.secure_url,
-        border: false,
-        rotate: false,
-        texture: false,
-        background: false,
+      // const image = {
+      //   id: uuid(),
+      //   name: '',
+      //   ratio: res.data.width / res.data.height,
+      //   src: res.data.secure_url,
+      //   border: false,
+      //   rotate: false,
+      //   texture: false,
+      //   background: false,
+      // }
+
+      const client = new GraphQLClient(clientUrl, {
+        headers: {
+          Token: token,
+        },
+      })
+
+      const query = `
+    mutation addArtwork($input: AddArtworkInput!){
+      addArtwork(input: $input) {
+          id
+          src
+          name
+          ratio
+          border
+          texture
+          background
+          rotate
+          lighting
+      }
+    }
+    `
+      const variables = {
+        input: {
+          username: userStore.username,
+          id: uuid(),
+          name: '',
+          ratio: res.data.width / res.data.height,
+          src: res.data.secure_url,
+          border: false,
+          rotate: false,
+          texture: false,
+          background: false,
+          lighting: '3',
+        },
       }
 
-      const info = await axios.post(
-        'https://api.virtualcanvas.app/api/add',
-        image,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Token: token,
-          },
-        }
-      )
+      const { addArtwork } = await client.request(query, variables)
 
       artworkStore.updateGalleryState([
         ...artworkStore.imageInfo.photoGallery,
-        JSON.parse(info.config.data),
+        { ...addArtwork },
       ])
       artworkStore.imageInfo.artworkName = ''
     } catch (err) {
