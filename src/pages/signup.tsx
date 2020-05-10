@@ -2,16 +2,16 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 import { motion } from 'framer-motion'
 import { Link } from 'gatsby'
-import axios from 'axios'
 import cookie from 'js-cookie'
 import { Circle } from 'better-react-spinkit'
+import { request } from 'graphql-request'
 
 import SEO from '../components/seo'
 
 import LogoHome from '../images/logo-text.svg'
 
 import { useStores } from '../stores/useStores'
-import { request } from 'graphql-request'
+import { clientUrl } from '../utils/utils'
 
 const SignupPage = () => {
   const [username, setUsername] = useState('')
@@ -48,17 +48,13 @@ const SignupPage = () => {
       }
     `
 
-      const { signupUser } = await request(
-        'http://localhost:8080/query',
-        query,
-        {
-          input: {
-            username,
-            password,
-            email,
-          },
-        }
-      )
+      const { signupUser } = await request(clientUrl, query, {
+        input: {
+          username,
+          password,
+          email,
+        },
+      })
 
       cookie.set('vc_token', signupUser.authToken.accessToken)
       cookie.set('vc_user', signupUser.user.username)

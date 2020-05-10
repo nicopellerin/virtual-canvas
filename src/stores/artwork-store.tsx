@@ -2,6 +2,8 @@ import { observable, action, runInAction, toJS, computed } from 'mobx'
 import cookie from 'js-cookie'
 import { GraphQLClient } from 'graphql-request'
 
+import { clientUrl } from '../utils/utils'
+
 let usernameRef
 if (typeof window !== 'undefined') {
   usernameRef = window.location.href.split('/')[4]
@@ -9,12 +11,7 @@ if (typeof window !== 'undefined') {
 
 const tokenRef = cookie.getJSON('vc_token')
 
-const url =
-  process.env.NODE_ENV === 'production'
-    ? 'https://api.virtualcanvas.app/query'
-    : 'http://localhost:8080/query'
-
-const client = new GraphQLClient(url, {
+const client = new GraphQLClient(clientUrl, {
   headers: {
     Token: tokenRef,
   },

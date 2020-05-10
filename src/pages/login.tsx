@@ -11,6 +11,7 @@ import { request } from 'graphql-request'
 import LogoHome from '../images/logo-text.svg'
 
 import { useStores } from '../stores/useStores'
+import { clientUrl } from '../utils/utils'
 
 interface StyledProps {
   background?: string
@@ -59,16 +60,12 @@ const LoginPage = () => {
       }
     `
 
-      const { loginUser } = await request(
-        'http://localhost:8080/query',
-        query,
-        {
-          input: {
-            username,
-            password,
-          },
-        }
-      )
+      const { loginUser } = await request(clientUrl, query, {
+        input: {
+          username,
+          password,
+        },
+      })
 
       setLoggedIn(true)
       cookie.set('vc_token', loginUser.authToken.accessToken)
