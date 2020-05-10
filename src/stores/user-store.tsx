@@ -10,7 +10,12 @@ if (typeof window !== 'undefined') {
   usernameURLRef = window.location.href.split('/')[4]
 }
 
-const client = new GraphQLClient('http://localhost:8080/query', {
+const url =
+  process.env.NODE_ENV === 'production'
+    ? 'https://api.virtualcanvas.app/query'
+    : 'http://localhost:8080/query'
+
+const client = new GraphQLClient(url, {
   headers: {
     Token: token,
   },

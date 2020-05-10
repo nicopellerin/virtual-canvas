@@ -4,18 +4,18 @@ import { Router } from '@reach/router'
 import { ProfileScene } from '../../components/profile/profile-scene'
 import SEO from '../../components/seo'
 
-import { ArtworkContext } from '../../context/artwork-context'
+// import { ArtworkContext } from '../../context/artwork-context'
 import { useStores } from '../../stores/useStores'
 
 const ProfileIndexPage = () => {
-  const {
-    photoGallery,
-    setPhotoGallery,
-    photoPreview,
-    setPhotoPreview,
-    photoRatio,
-    setPhotoRatio,
-  } = useContext(ArtworkContext)
+  // const {
+  //   photoGallery,
+  //   setPhotoGallery,
+  //   photoPreview,
+  //   setPhotoPreview,
+  //   photoRatio,
+  //   setPhotoRatio,
+  // } = useContext(ArtworkContext)
 
   const { userStore } = useStores()
 
@@ -39,22 +39,22 @@ const ProfileIndexPage = () => {
         <ProfileScene
           path="/profile/:username"
           username={username}
-          photoGallery={photoGallery}
-          setPhotoGallery={setPhotoGallery}
-          photoPreview={photoPreview}
-          setPhotoPreview={setPhotoPreview}
-          photoRatio={photoRatio}
-          setPhotoRatio={setPhotoRatio}
+          // photoGallery={photoGallery}
+          // setPhotoGallery={setPhotoGallery}
+          // photoPreview={photoPreview}
+          // setPhotoPreview={setPhotoPreview}
+          // photoRatio={photoRatio}
+          // setPhotoRatio={setPhotoRatio}
         />
         <ProfileScene
           path="/profile/:username/:id"
           username={username}
-          photoGallery={photoGallery}
-          setPhotoGallery={setPhotoGallery}
-          photoPreview={photoPreview}
-          setPhotoPreview={setPhotoPreview}
-          photoRatio={photoRatio}
-          setPhotoRatio={setPhotoRatio}
+          // photoGallery={photoGallery}
+          // setPhotoGallery={setPhotoGallery}
+          // photoPreview={photoPreview}
+          // setPhotoPreview={setPhotoPreview}
+          // photoRatio={photoRatio}
+          // setPhotoRatio={setPhotoRatio}
         />
       </Router>
     </>

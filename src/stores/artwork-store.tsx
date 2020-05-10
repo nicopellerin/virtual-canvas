@@ -9,7 +9,12 @@ if (typeof window !== 'undefined') {
 
 const tokenRef = cookie.getJSON('vc_token')
 
-const client = new GraphQLClient('http://localhost:8080/query', {
+const url =
+  process.env.NODE_ENV === 'production'
+    ? 'https://api.virtualcanvas.app/query'
+    : 'http://localhost:8080/query'
+
+const client = new GraphQLClient(url, {
   headers: {
     Token: tokenRef,
   },
