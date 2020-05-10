@@ -22,7 +22,6 @@ import AddArtwork from './add-artwork'
 import Menu from './menu'
 import Fallback from './fallback'
 
-import { ArtworkContext } from '../context/artwork-context'
 import { useStores } from '../stores/useStores'
 import { observer } from 'mobx-react-lite'
 
@@ -37,7 +36,10 @@ export const MainScene: React.FC<Props> = observer(
   ({ handlePhotoUpload, setUploaded, loader }) => {
     extend({ OrbitControls })
 
-    const { lightIntensity } = useContext(ArtworkContext)
+    // const { lightIntensity } = useContext(ArtworkContext)
+
+    // Temp
+    const lightIntensity = 3
 
     const { artworkStore } = useStores()
 

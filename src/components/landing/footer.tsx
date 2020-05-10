@@ -5,7 +5,8 @@ const Footer = () => {
   return (
     <Wrapper>
       <Text>
-        Copyright &copy; 2019 Virtual Canvas. Made in Montreal by Nico Pellerin.
+        &copy; {new Date().getFullYear()} Virtual Canvas. Made in Montreal by
+        Nico Pellerin.
       </Text>
     </Wrapper>
   )

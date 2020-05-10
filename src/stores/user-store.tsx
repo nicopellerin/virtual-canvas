@@ -1,6 +1,6 @@
 import { observable, action } from 'mobx'
 import cookie from 'js-cookie'
-import axios from 'axios'
+import { GraphQLClient } from 'graphql-request'
 
 const token: string = cookie.getJSON('vc_token')
 const usernameRef: string = cookie.getJSON('vc_user')
@@ -10,6 +10,12 @@ if (typeof window !== 'undefined') {
   usernameURLRef = window.location.href.split('/')[4]
 }
 
+const client = new GraphQLClient('http://localhost:8080/query', {
+  headers: {
+    Token: token,
+  },
+})
+
 export class UserStore {
   @observable username = usernameRef || usernameURLRef
   @observable userToken = ''
@@ -18,36 +24,60 @@ export class UserStore {
   @action
   async getUserProfile() {
     try {
-      const { data } = await axios.get(
-        `https://api.virtualcanvas.app/api/account/${this.username}`
-      )
-
-      console.log(data)
-
-      this.socialLinks = {
-        instagram: data.social_links.instagram,
-        facebook: data.social_links.facebook,
-        website: data.social_links.website,
+      const query = `
+      query getUser($input: UsernameInput){
+        getUser(input: $input) {
+          email
+          username
+          social {
+            website
+            facebook
+            instagram
+          }
+        }
+      }
+      `
+      const variables = {
+        input: {
+          username: this.username,
+        },
       }
 
-      return data
+      const { getUser } = await client.request(query, variables)
+
+      this.socialLinks = {
+        instagram: getUser.social.instagram,
+        facebook: getUser.social.facebook,
+        website: getUser.social.website,
+      }
     } catch (err) {
-      return { msg: err }
+      console.log(err)
     }
   }
 
   @action
   async updateUserProfile() {
     try {
-      await axios.patch(
-        `https://api.virtualcanvas.app/api/profile/${this.username}`,
-        this.socialLinks,
-        {
-          headers: {
-            Token: token,
-          },
+      const query = `
+      mutation updateUser($input: UpdateUserInput!){
+        updateUser(
+          input: $input
+        ) {
+          id
         }
-      )
+      }
+      `
+      const variables = {
+        input: {
+          username: this.username,
+          facebook: this.socialLinks.facebook,
+          website: this.socialLinks.website,
+          instagram: this.socialLinks.instagram,
+        },
+      }
+
+      await client.request(query, variables)
+
       return { msg: 'Profile updated' }
     } catch (err) {
       console.error(err)

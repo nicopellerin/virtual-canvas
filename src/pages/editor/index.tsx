@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from 'react'
+import React, { useEffect } from 'react'
 import { Router } from '@reach/router'
 import axios from 'axios'
 import uuid from 'uuid/v4'
@@ -9,13 +9,12 @@ import { MainScene } from '../../components/main-scene'
 import PrivateRoute from '../../components/private-route'
 import SEO from '../../components/seo'
 
-import { ArtworkContext } from '../../context/artwork-context'
 import { useStores } from '../../stores/useStores'
 
 const IndexAppPage: React.FC = () => {
-  const { loader, setLoader, setLoaded, setErrMsg, setUploaded } = useContext(
-    ArtworkContext
-  )
+  // const { loader, setLoader, setLoaded, setErrMsg, setUploaded } = useContext(
+  //   ArtworkContext
+  // )
 
   const { artworkStore, userStore } = useStores()
 
@@ -30,7 +29,7 @@ const IndexAppPage: React.FC = () => {
 
     const maxAllowedSize = 5 * 1024 * 1024
     if (files[0].size > maxAllowedSize) {
-      setErrMsg('Maximum file size is 5mb')
+      // setErrMsg('Maximum file size is 5mb')
       return null
     }
 
@@ -41,27 +40,27 @@ const IndexAppPage: React.FC = () => {
     try {
       const res = await axios.post(
         'https://api.cloudinary.com/v1_1/dl9mctxsb/image/upload',
-        data,
-        {
-          onUploadProgress: progressEvent => {
-            setLoader(
-              Math.round((progressEvent.loaded / progressEvent.total) * 100) +
-                '%'
-            )
-            if (progressEvent.loaded === progressEvent.total) {
-              setLoader('Finished uploading :)')
-              setLoaded(true)
-              setTimeout(() => {
-                setLoader('')
-              }, 1000)
-            }
-          },
-        }
+        data
+        // {
+        //   onUploadProgress: progressEvent => {
+        //     setLoader(
+        //       Math.round((progressEvent.loaded / progressEvent.total) * 100) +
+        //         '%'
+        //     )
+        //     if (progressEvent.loaded === progressEvent.total) {
+        //       setLoader('Finished uploading :)')
+        //       setLoaded(true)
+        //       setTimeout(() => {
+        //         setLoader('')
+        //       }, 1000)
+        //     }
+        //   },
+        // }
       )
 
       artworkStore.imageInfo.photoPreview = res.data.secure_url
       artworkStore.imageInfo.photoRatio = res.data.width / res.data.height
-      setUploaded(true)
+      // setUploaded(true)
 
       const image = {
         id: uuid(),
@@ -107,8 +106,8 @@ const IndexAppPage: React.FC = () => {
           username={userStore.username}
           component={MainScene}
           handlePhotoUpload={handlePhotoUpload}
-          loader={loader}
-          setUploaded={setUploaded}
+          // loader={loader}
+          // setUploaded={setUploaded}
         />
       </Router>
     </>

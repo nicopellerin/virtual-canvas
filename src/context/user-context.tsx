@@ -39,9 +39,9 @@ export const UserProvider = ({ children }: Props) => {
 
       setSocialLinks(prevState => ({
         ...prevState,
-        instagram: data.social_links.instagram,
-        facebook: data.social_links.facebook,
-        website: data.social_links.website,
+        instagram: data.social.instagram,
+        facebook: data.social.facebook,
+        website: data.social.website,
       }))
 
       return data

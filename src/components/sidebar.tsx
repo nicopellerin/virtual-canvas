@@ -1,7 +1,6 @@
 import React, {
   useRef,
   useState,
-  useContext,
   useEffect,
   Dispatch,
   SetStateAction,
@@ -24,8 +23,6 @@ import { useStores } from '../stores/useStores'
 import Checkbox from './checkbox'
 import { Toast } from './toast'
 
-import { ArtworkContext } from '../context/artwork-context'
-
 import Logo from '../images/logo-text.svg'
 import SocialBar from './social-bar'
 
@@ -45,7 +42,8 @@ export const Sidebar: React.FC<Props> = observer(
 
     const { artworkStore } = useStores()
 
-    const { lightIntensity, setLightIntensity } = useContext(ArtworkContext)
+    // const { lightIntensity, setLightIntensity } = useContext(ArtworkContext)
+    const lightIntensity = 3
 
     useEffect(() => {
       if (
@@ -76,7 +74,7 @@ export const Sidebar: React.FC<Props> = observer(
     })
 
     const handleLightIntensity = e => {
-      setLightIntensity(e.target.value)
+      // setLightIntensity(e.target.value)
     }
 
     const handleChange = e => {
@@ -102,7 +100,7 @@ export const Sidebar: React.FC<Props> = observer(
             <Elements>
               <form
                 onSubmit={e =>
-                  artworkStore.handleArtworkNameChange(
+                  artworkStore.updateArtworkName(
                     e,
                     setShowSuccessMsg,
                     setSubmitted,
@@ -132,7 +130,7 @@ export const Sidebar: React.FC<Props> = observer(
                           size={24}
                           color="green"
                           onClick={e =>
-                            artworkStore.updateName(
+                            artworkStore.updateArtworkName(
                               e,
                               setShowSuccessMsg,
                               setSubmitted,

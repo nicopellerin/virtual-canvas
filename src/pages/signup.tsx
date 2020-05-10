@@ -11,6 +11,7 @@ import SEO from '../components/seo'
 import LogoHome from '../images/logo-text.svg'
 
 import { useStores } from '../stores/useStores'
+import { request } from 'graphql-request'
 
 const SignupPage = () => {
   const [username, setUsername] = useState('')
@@ -27,36 +28,56 @@ const SignupPage = () => {
 
     setLoading(true)
 
-    const user = {
-      username,
-      password,
-      email,
-      images: [],
-    }
-
     try {
-      const res = await axios.post(
-        'https://api.virtualcanvas.app/api/signup',
-        user,
+      const query = `
+      mutation signupUser($input: SignupUserInput!) {
+        signupUser(input: $input) {
+          authToken {
+            accessToken
+            expiredAt
+          }
+          user {
+            id
+            email	
+            username
+            social {
+              instagram
+            }
+          }
+        }
+      }
+    `
+
+      const { signupUser } = await request(
+        'http://localhost:8080/query',
+        query,
         {
-          headers: {
-            'Content-Type': 'application/json',
+          input: {
+            username,
+            password,
+            email,
           },
         }
       )
-      cookie.set('vc_token', res.data.token)
-      cookie.set('vc_user', res.data.username)
-      userStore.userToken = res.data.token
-      userStore.username = res.data.username
+
+      cookie.set('vc_token', signupUser.authToken.accessToken)
+      cookie.set('vc_user', signupUser.user.username)
+      userStore.userToken = signupUser.authToken.accessToken
+      userStore.username = signupUser.user.username
 
       if (typeof window !== 'undefined') {
-        window.location.replace(`/editor/${res.data.username}`)
+        window.location.replace(`/editor/${signupUser.user.username}`)
       }
     } catch (err) {
-      if (err.response.status === 400) {
-        setErrorMsg('Please fill in all required fields')
-      } else {
+      if (err.response.errors[0].message === 'User already exists') {
         setErrorMsg('Username already exists!')
+      } else if (
+        err.response.errors[0].message ===
+        'Please choose a password with a minimum of 8 characters'
+      ) {
+        setErrorMsg('Please choose a password with a minimum of 8 characters')
+      } else {
+        setErrorMsg('Please fill in all required fields')
       }
       setTimeout(() => setErrorMsg(''), 4000)
     } finally {
@@ -127,7 +148,8 @@ const SignupPage = () => {
           </Text>
         </Card>
         <FooterText>
-          Copyright © 2019 Virtual Canvas. Made in Montreal by Nico Pellerin.
+          © {new Date().getFullYear()} Virtual Canvas. Made in Montreal by Nico
+          Pellerin.
         </FooterText>
       </Wrapper>
     </>

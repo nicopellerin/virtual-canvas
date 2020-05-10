@@ -1,6 +1,6 @@
 import { observable, action, runInAction, toJS, computed } from 'mobx'
-import axios from 'axios'
 import cookie from 'js-cookie'
+import { GraphQLClient } from 'graphql-request'
 
 let usernameRef
 if (typeof window !== 'undefined') {
@@ -8,6 +8,12 @@ if (typeof window !== 'undefined') {
 }
 
 const tokenRef = cookie.getJSON('vc_token')
+
+const client = new GraphQLClient('http://localhost:8080/query', {
+  headers: {
+    Token: tokenRef,
+  },
+})
 
 export class ArtworkStore {
   @observable
@@ -42,7 +48,6 @@ export class ArtworkStore {
   @computed
   get artworkData() {
     const clone = toJS(this.imageInfo)
-    console.log(clone)
     return clone
   }
 
@@ -58,32 +63,6 @@ export class ArtworkStore {
   }
 
   @action
-  async updateName(e, setShowSuccessMsg, setSubmitted, artworkFieldRef) {
-    e.preventDefault()
-
-    const photo = this.imageInfo.photoGallery.find(
-      url => url.src === this.imageInfo.photoPreview
-    )
-    photo.name = this.imageInfo.artworkName
-
-    await axios.patch(
-      `https://api.virtualcanvas.app/api/artwork/${photo.id}`,
-      photo,
-      {
-        headers: {
-          Token: tokenRef,
-        },
-      }
-    )
-
-    if (this.imageInfo.artworkName) {
-      setShowSuccessMsg('Saved name to artwork')
-      setSubmitted(true)
-      artworkFieldRef.current.blur()
-    }
-  }
-
-  @action
   async updatePhotoProps() {
     const photo = this.imageInfo.photoGallery.find(
       url => url.src === this.imageInfo.photoPreview
@@ -95,15 +74,30 @@ export class ArtworkStore {
     photo.rotate = this.imageInfo.rotateIncrement
     photo.lighting = this.imageInfo.lightIntensity
 
-    await axios.patch(
-      `https://api.virtualcanvas.app/api/artwork/${photo.id}`,
-      photo,
-      {
-        headers: {
-          Token: tokenRef,
-        },
+    const query = `
+      mutation updateArtwork($input: UpdateArtworkInput!) {
+        updateArtwork(
+          input: $input
+        ) {
+          id
+        }
       }
-    )
+    `
+
+    await client.request(query, {
+      input: {
+        imageId: photo.id,
+        src: photo.src,
+        name: photo.name,
+        ratio: photo.ratio,
+        border: photo.border,
+        texture: photo.texture,
+        background: photo.background,
+        rotate: photo.rotate,
+        lighting: photo.lighting,
+        username: this.username,
+      },
+    })
   }
 
   @action
@@ -113,14 +107,35 @@ export class ArtworkStore {
 
   @action
   async getAllArtwork() {
-    const { data } = await axios.get(
-      `https://api.virtualcanvas.app/api/account/${this.username}`
-    )
+    const query = `
+    query getUser($input: UsernameInput){
+      getUser(input: $input) {
+        images {
+          id
+          src
+          name
+          ratio
+          border
+          texture
+          background
+          rotate
+          lighting
+        }
+      }
+    }
+    `
+    const variables = {
+      input: {
+        username: this.username,
+      },
+    }
+
+    const { getUser: getImages } = await client.request(query, variables)
 
     runInAction(() => {
-      if (data && data.images && data.images.length > 0) {
+      if (getImages && getImages.images && getImages.images.length > 0) {
         if (this.imageInfo.queryId) {
-          const photo = data.images.find(
+          const photo = getImages.images.find(
             url => url.id === this.imageInfo.queryId
           )
 
@@ -133,20 +148,20 @@ export class ArtworkStore {
             showBorder: photo.border,
             showTexture: photo.texture,
             lightIntensity: photo.lighting,
-            photoGallery: data.images,
+            photoGallery: getImages.images,
             queryId: photo.id,
           }
         } else {
           this.imageInfo = {
-            photoPreview: data.images[0].src,
-            photoRatio: data.images[0].ratio,
-            artworkName: data.images[0].name,
-            backgroundColor: data.images[0].background,
-            rotateIncrement: data.images[0].rotate,
-            showBorder: data.images[0].border,
-            showTexture: data.images[0].texture,
-            lightIntensity: data.images[0].lighting,
-            photoGallery: data.images,
+            photoPreview: getImages.images[0].src,
+            photoRatio: getImages.images[0].ratio,
+            artworkName: getImages.images[0].name,
+            backgroundColor: getImages.images[0].background,
+            rotateIncrement: getImages.images[0].rotate,
+            showBorder: getImages.images[0].border,
+            showTexture: getImages.images[0].texture,
+            lightIntensity: getImages.images[0].lighting,
+            photoGallery: getImages.images,
           }
         }
       }
@@ -154,30 +169,38 @@ export class ArtworkStore {
   }
 
   @action
-  async handleArtworkNameChange(
-    e,
-    setShowSuccessMsg,
-    setSubmitted,
-    artworkFieldRef
-  ) {
+  async updateArtworkName(e, setShowSuccessMsg, setSubmitted, artworkFieldRef) {
     e.preventDefault()
-
-    const token = cookie.getJSON('vc_token')
 
     const photo = this.imageInfo.photoGallery.find(
       url => url.src === this.imageInfo.photoPreview
     )
     photo.name = this.imageInfo.artworkName
 
-    await axios.patch(
-      `https://api.virtualcanvas.app/api/artwork/${photo.id}`,
-      photo,
-      {
-        headers: {
-          Token: token,
-        },
+    const query = `
+      mutation updateArtwork($input: UpdateArtworkInput!) {
+        updateArtwork(
+          input: $input
+        ) {
+          id
+        }
       }
-    )
+    `
+
+    await client.request(query, {
+      input: {
+        imageId: photo.id,
+        src: photo.src,
+        name: photo.name,
+        ratio: photo.ratio,
+        border: photo.border,
+        texture: photo.texture,
+        background: photo.background,
+        rotate: photo.rotate,
+        lighting: photo.lighting,
+        username: this.username,
+      },
+    })
 
     if (this.imageInfo.artworkName) {
       setShowSuccessMsg('Saved name to artwork')
@@ -232,16 +255,24 @@ export class ArtworkStore {
   removeArtwork = async (e, id: string): Promise<void> => {
     e.stopPropagation()
 
-    const token = cookie.getJSON('vc_token')
-
     const index = this.imageInfo.photoGallery.findIndex(
       photo => photo.id === id
     )
 
-    await axios.delete(`https://api.virtualcanvas.app/api/artwork/${id}`, {
-      headers: {
-        'Content-Type': 'application/json',
-        Token: token,
+    const query = `
+      mutation deleteArtwork($input: DeleteArtworkInput) {
+        deleteArtwork(
+          input: $input
+        ) {
+            id
+        }
+      }
+    `
+
+    await client.request(query, {
+      input: {
+        username: this.username,
+        id,
       },
     })
 

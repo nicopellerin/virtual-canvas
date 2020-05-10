@@ -78,9 +78,9 @@ export const ArtworkProvider = ({ children }: Props) => {
         setShowTexture(photo.texture)
         setLightIntensity(photo.lighting)
         setSocialLinks({
-          instagram: data.social_links.instagram,
-          facebook: data.social_links.facebook,
-          website: data.social_links.website,
+          instagram: data.social.instagram,
+          facebook: data.social.facebook,
+          website: data.social.website,
         })
       } else {
         setPhotoGallery(data.images)
@@ -93,9 +93,9 @@ export const ArtworkProvider = ({ children }: Props) => {
         setShowTexture(data.images[0].texture)
         setLightIntensity(data.images[0].lighting)
         setSocialLinks({
-          instagram: data.social_links.instagram,
-          facebook: data.social_links.facebook,
-          website: data.social_links.website,
+          instagram: data.social.instagram,
+          facebook: data.social.facebook,
+          website: data.social.website,
         })
       }
     }

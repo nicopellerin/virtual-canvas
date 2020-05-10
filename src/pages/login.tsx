@@ -1,16 +1,15 @@
-import React, { useState, useContext } from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import { motion } from 'framer-motion'
-import axios from 'axios'
 import { Circle } from 'better-react-spinkit'
 import { MdCheckCircle } from 'react-icons/md'
 import cookie from 'js-cookie'
 import { Link } from 'gatsby'
 import SEO from '../components/seo'
+import { request } from 'graphql-request'
 
 import LogoHome from '../images/logo-text.svg'
 
-import { UserContext } from '../context/user-context'
 import { useStores } from '../stores/useStores'
 
 interface StyledProps {
@@ -33,31 +32,52 @@ const LoginPage = () => {
 
     setLoading(true)
 
-    const user = {
-      username,
-      password,
-    }
-
     try {
-      const res = await axios.post(
-        'https://api.virtualcanvas.app/api/login',
-        user,
+      const query = `
+      mutation loginUser($input: LoginUserInput!) {
+        loginUser(
+          input: $input
+        ) {
+          authToken {
+            accessToken
+            expiredAt
+          }
+          user {
+            id
+            username
+            email
+            images {
+              name
+            }
+            social {
+              instagram
+              facebook
+              website
+            }
+          }
+        }
+      }
+    `
+
+      const { loginUser } = await request(
+        'http://localhost:8080/query',
+        query,
         {
-          headers: {
-            'Content-Type': 'application/json',
+          input: {
+            username,
+            password,
           },
         }
       )
-      if (res.status === 200) {
-        setLoggedIn(true)
-        cookie.set('vc_token', res.data.token)
-        cookie.set('vc_user', res.data.username)
-        userStore.userToken = res.data.token
-        userStore.username = res.data.username
 
-        if (typeof window !== 'undefined') {
-          window.location.replace(`/editor/${res.data.username}`)
-        }
+      setLoggedIn(true)
+      cookie.set('vc_token', loginUser.authToken.accessToken)
+      cookie.set('vc_user', loginUser.user.username)
+      userStore.userToken = loginUser.authToken.accessToken
+      userStore.username = loginUser.user.username
+
+      if (typeof window !== 'undefined') {
+        window.location.replace(`/editor/${loginUser.user.username}`)
       }
     } catch (err) {
       setErrorMsg('Invalid login! Please try again.')
@@ -133,7 +153,8 @@ const LoginPage = () => {
           </Text>
         </Card>
         <FooterText>
-          Copyright © 2019 Virtual Canvas. Made in Montreal by Nico Pellerin.
+          © {new Date().getFullYear()} Virtual Canvas. Made in Montreal by Nico
+          Pellerin.
         </FooterText>
       </Wrapper>
     </>

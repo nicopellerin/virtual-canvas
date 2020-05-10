@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { Router } from '@reach/router'
-import axios from 'axios'
 
 import { ProfileScene } from '../../components/profile/profile-scene'
 import SEO from '../../components/seo'

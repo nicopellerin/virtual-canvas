@@ -20,7 +20,9 @@ const SocialBar: React.FC<Props> = ({ toggleProfile, setToggleProfile }) => {
   const { userStore } = useStores()
 
   useEffect(() => {
-    userStore.getUserProfile()
+    ;(async () => {
+      await userStore.getUserProfile()
+    })()
   }, [])
 
   const handleSubmit = async e => {
