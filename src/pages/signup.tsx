@@ -10,7 +10,6 @@ import SEO from '../components/seo'
 
 import LogoHome from '../images/logo-text.svg'
 
-import { useStores } from '../stores/useStores'
 import { clientUrl } from '../utils/utils'
 
 const SignupPage = () => {
@@ -19,8 +18,6 @@ const SignupPage = () => {
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [errorMsg, setErrorMsg] = useState('')
-
-  const { userStore } = useStores()
 
   // Signup flow
   const handleSignup = async e => {
@@ -58,8 +55,6 @@ const SignupPage = () => {
 
       cookie.set('vc_token', signupUser.authToken.accessToken)
       cookie.set('vc_user', signupUser.user.username)
-      userStore.userToken = signupUser.authToken.accessToken
-      userStore.username = signupUser.user.username
 
       if (typeof window !== 'undefined') {
         window.location.replace(`/editor/${signupUser.user.username}`)

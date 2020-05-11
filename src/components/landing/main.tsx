@@ -6,56 +6,15 @@ import styled from 'styled-components'
 import Back from '../../images/back.png'
 
 const Main = () => {
-  const containerVariants = {
-    before: {},
-    after: { transition: { staggerChildren: 0.1 } },
-  }
-  const letterVariants = {
-    before: {
-      opacity: 0,
-      y: 50,
-      // x: 50,
-      transition: {
-        type: 'string',
-        damping: 26,
-        stiffness: 50,
-      },
-    },
-    after: {
-      opacity: 1,
-      y: 0,
-      // x: 10,
-      transition: {
-        type: 'spring',
-        damping: 26,
-        stiffness: 50,
-      },
-    },
-  }
-
   return (
     <Wrapper>
       <Container>
-        <Content
-        // variants={containerVariants}
-        // initial={'before'}
-        // animate={'after'}
-        >
+        <Content>
           <TitleWrapper>
-            <Title
-              height={26}
-              background={''}
-              style={{ position: 'relative' }}
-              variants={letterVariants}
-            >
+            <Title height={26} background={''} style={{ position: 'relative' }}>
               Bring your
             </Title>
-            <Title
-              height={26}
-              background={''}
-              style={{ position: 'relative' }}
-              variants={letterVariants}
-            >
+            <Title height={26} background={''} style={{ position: 'relative' }}>
               art to life.
             </Title>
           </TitleWrapper>
@@ -64,30 +23,11 @@ const Main = () => {
             height={26}
             background={''}
             style={{ position: 'relative' }}
-            variants={letterVariants}
           >
-            Turn your 2D art into 3D. Signup to try now.
+            Turn your 2D art into a 3D canvas. Signup to try now.
           </Subtitle>
         </Content>
-        <motion.img
-          src={Back}
-          alt="Background"
-          // style={{
-          //   opacity: 0,
-          // }}
-          width={650}
-          // animate={{
-          //   opacity: [0, 1],
-          //   y: [20, 0],
-          //   scale: [0.9, 1.02, 1],
-          //   transition: {
-          //     type: 'string',
-          //     damping: 26,
-          //     stiffness: 30,
-          //     delay: 0.2,
-          //   },
-          // }}
-        />
+        <motion.img src={Back} alt="Background" width={650} />
       </Container>
     </Wrapper>
   )
@@ -97,7 +37,7 @@ export default Main
 
 // Styles
 const Wrapper = styled.div`
-  max-width: 160rem;
+  max-width: 130rem;
   margin: 0 auto;
 `
 

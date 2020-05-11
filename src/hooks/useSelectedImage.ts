@@ -67,7 +67,7 @@ const updateImageDB = async (
   return {updateArtwork}
 }
 
-const initialState: = {
+const initialState = {
   image: {
     src: '',
     id: '',

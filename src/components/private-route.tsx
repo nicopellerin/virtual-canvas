@@ -2,10 +2,10 @@ import React from 'react'
 import cookie from 'js-cookie'
 import { navigate } from 'gatsby'
 
-const authCookie = cookie.getJSON('vc_token')
+const token = cookie.getJSON('vc_token')
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
-  if (!authCookie) {
+  if (!token) {
     if (typeof window !== 'undefined') {
       navigate('/login')
     }

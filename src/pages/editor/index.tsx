@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { Router } from '@reach/router'
 import { queryCache } from 'react-query'
+import { ReactQueryDevtools } from 'react-query-devtools'
 
 import { MainScene } from '../../components/main-scene'
 import PrivateRoute from '../../components/private-route'
@@ -25,6 +26,7 @@ const IndexAppPage: React.FC = () => {
           component={MainScene}
         />
       </Router>
+      <ReactQueryDevtools initialIsOpen={false} />
     </>
   )
 }

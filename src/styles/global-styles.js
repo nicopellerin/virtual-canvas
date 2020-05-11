@@ -24,14 +24,13 @@ export const GlobalStyles = createGlobalStyle`
   
 }
   
-
   html {
     box-sizing: border-box;
     font-size: 62.5%;
   }
 
-  html, body, #___gatsby {
-    height: 100%;
+  html, body, #___gatsby, #gatsby-focus-wrapper {
+    height: 100vh;
 }
   
   body{
@@ -48,6 +47,4 @@ export const GlobalStyles = createGlobalStyle`
   p, span {
     color: #333;
   }
-
-
 `

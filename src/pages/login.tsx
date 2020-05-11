@@ -10,7 +10,6 @@ import { request } from 'graphql-request'
 
 import LogoHome from '../images/logo-text.svg'
 
-import { useStores } from '../stores/useStores'
 import { clientUrl } from '../utils/utils'
 
 interface StyledProps {
@@ -24,8 +23,6 @@ const LoginPage = () => {
   const [loading, setLoading] = useState(false)
   const [loggedIn, setLoggedIn] = useState(false)
   const [errorMsg, setErrorMsg] = useState('')
-
-  const { userStore } = useStores()
 
   // Login flow
   const handleLogin = async e => {
@@ -70,8 +67,6 @@ const LoginPage = () => {
       setLoggedIn(true)
       cookie.set('vc_token', loginUser.authToken.accessToken)
       cookie.set('vc_user', loginUser.user.username)
-      userStore.userToken = loginUser.authToken.accessToken
-      userStore.username = loginUser.user.username
 
       if (typeof window !== 'undefined') {
         window.location.replace(`/editor/${loginUser.user.username}`)

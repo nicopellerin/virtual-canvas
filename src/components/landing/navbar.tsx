@@ -58,7 +58,7 @@ const Container = styled.div`
   justify-content: ${props => (props.showButtons ? 'space-between' : 'center')};
   height: 9rem;
   width: 100%;
-  max-width: 140rem;
+  max-width: 130rem;
   margin: 0 auto;
 `
 
