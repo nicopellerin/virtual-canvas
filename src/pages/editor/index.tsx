@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react'
+import * as React from 'react'
+import { useState } from 'react'
 import { Router } from '@reach/router'
 import axios from 'axios'
 import uuid from 'uuid/v4'
@@ -12,17 +13,21 @@ import SEO from '../../components/seo'
 import { useStores } from '../../stores/useStores'
 import { GraphQLClient } from 'graphql-request'
 import { clientUrl } from '../../utils/utils'
+import { queryCache } from 'react-query'
+import useUserProfile from '../../hooks/useUserProfile'
 
 const IndexAppPage: React.FC = () => {
   // const { loader, setLoader, setLoaded, setErrMsg, setUploaded } = useContext(
   //   ArtworkContext
   // )
+  const [loader, setLoader] = useState(false)
+  const [errMsg, setErrMsg] = useState('')
 
   const { artworkStore, userStore } = useStores()
 
-  useEffect(() => {
-    artworkStore.getAllArtwork()
-  }, [artworkStore])
+  const { data, error } = useUserProfile()
+
+  console.log(data, error)
 
   const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const { files } = e.target
@@ -31,7 +36,7 @@ const IndexAppPage: React.FC = () => {
 
     const maxAllowedSize = 5 * 1024 * 1024
     if (files[0].size > maxAllowedSize) {
-      // setErrMsg('Maximum file size is 5mb')
+      setErrMsg('Maximum file size is 5mb')
       return null
     }
 
@@ -42,38 +47,25 @@ const IndexAppPage: React.FC = () => {
     try {
       const res = await axios.post(
         'https://api.cloudinary.com/v1_1/dl9mctxsb/image/upload',
-        data
-        // {
-        //   onUploadProgress: progressEvent => {
-        //     setLoader(
-        //       Math.round((progressEvent.loaded / progressEvent.total) * 100) +
-        //         '%'
-        //     )
-        //     if (progressEvent.loaded === progressEvent.total) {
-        //       setLoader('Finished uploading :)')
-        //       setLoaded(true)
-        //       setTimeout(() => {
-        //         setLoader('')
-        //       }, 1000)
-        //     }
-        //   },
-        // }
+        data,
+        {
+          onUploadProgress: progressEvent => {
+            setLoader(
+              Math.round((progressEvent.loaded / progressEvent.total) * 100) +
+                '%'
+            )
+            if (progressEvent.loaded === progressEvent.total) {
+              setLoader('Finished uploading :)')
+              setTimeout(() => {
+                setLoader('')
+              }, 1000)
+            }
+          },
+        }
       )
 
       artworkStore.imageInfo.photoPreview = res.data.secure_url
       artworkStore.imageInfo.photoRatio = res.data.width / res.data.height
-      // setUploaded(true)
-
-      // const image = {
-      //   id: uuid(),
-      //   name: '',
-      //   ratio: res.data.width / res.data.height,
-      //   src: res.data.secure_url,
-      //   border: false,
-      //   rotate: false,
-      //   texture: false,
-      //   background: false,
-      // }
 
       const client = new GraphQLClient(clientUrl, {
         headers: {
@@ -113,11 +105,10 @@ const IndexAppPage: React.FC = () => {
 
       const { addArtwork } = await client.request(query, variables)
 
-      artworkStore.updateGalleryState([
-        ...artworkStore.imageInfo.photoGallery,
-        { ...addArtwork },
-      ])
-      artworkStore.imageInfo.artworkName = ''
+      queryCache.setQueryData('userProfile', old => ({
+        ...old,
+        images: [...old.images, addArtwork],
+      }))
     } catch (err) {
       console.error(err)
     }
@@ -135,8 +126,7 @@ const IndexAppPage: React.FC = () => {
           username={userStore.username}
           component={MainScene}
           handlePhotoUpload={handlePhotoUpload}
-          // loader={loader}
-          // setUploaded={setUploaded}
+          loader={loader}
         />
       </Router>
     </>

@@ -11,56 +11,29 @@ import styled from 'styled-components'
 import { navigate } from 'gatsby'
 
 import { ArtworkContext } from '../../context/artwork-context'
+import { useStores } from '../../stores/useStores'
 
 const ScrollAreaLazy = React.lazy(() => import('react-scrollbar'))
-
-interface Photo {
-  id: string
-  src: string
-  ratio: number
-  name: string
-  rotate: boolean
-  border: boolean
-  texture: boolean
-  background: boolean
-  lighting: string
-}
-
-interface Props {
-  photoGallery: Photo[]
-  setPhotoPreview: Dispatch<SetStateAction<string>>
-  setPhotoRatio: Dispatch<SetStateAction<number>>
-}
 
 interface StyledProps {
   disabled?: boolean
   backgroundColor?: boolean
 }
 
-const ProfileGallery: React.FC<Props> = ({
-  photoGallery,
-  setPhotoPreview,
-  setPhotoRatio,
-}) => {
+const ProfileGallery: React.FC = () => {
   const [toggle, setToggle] = useState<boolean>(true)
   const [photoId, setPhotoId] = useState('')
 
-  const {
-    setArtworkName,
-    setBackgroundColor,
-    backgroundColor,
-    setShowBorder,
-    setShowTexture,
-    setRotateIncrement,
-    setLightIntensity,
-    username,
-  } = useContext(ArtworkContext)
+  const { artworkStore } = useStores()
 
   useEffect(() => {
-    if (photoGallery && photoGallery.length === 0) {
+    if (
+      artworkStore.artworkData.photoGallery &&
+      artworkStore.artworkData.photoGallery.length === 0
+    ) {
       setToggle(false)
     }
-  }, [photoGallery])
+  }, [artworkStore.artworkData.photoGallery])
 
   const slideInOut = useSpring({
     transform: toggle
@@ -75,7 +48,7 @@ const ProfileGallery: React.FC<Props> = ({
     <Wrapper
       style={slideInOut}
       onClick={() => setToggle(prevState => !prevState)}
-      disabled={photoGallery.length === 0}
+      disabled={artworkStore.imageInfo.photoGallery.length === 0}
     >
       <Container>
         {!isSSR && (
@@ -94,28 +67,20 @@ const ProfileGallery: React.FC<Props> = ({
               verticalScrollbarStyle={{ background: '#000' }}
               verticalContainerStyle={{ background: '#eee' }}
             >
-              {photoGallery.map((photo, index) => {
+              {artworkStore.imageInfo.photoGallery.map((photo, index) => {
                 return (
-                  <ThumbnailWrapper>
+                  <ThumbnailWrapper key={photo.id}>
                     <Thumbnail
                       src={photo.src}
-                      key={photo.id}
                       alt="Preview thumbnail"
                       width={60}
                       height={60}
-                      lastImage={photoGallery.length - 1 === index}
+                      lastImage={
+                        artworkStore.imageInfo.photoGallery.length - 1 === index
+                      }
                       onClick={e => {
                         e.stopPropagation()
-                        navigate(`/profile/${username}/${photo.id}`)
-                        setPhotoId(photo.id)
-                        setPhotoPreview(photo.src)
-                        setPhotoRatio(photo.ratio)
-                        setArtworkName(photo.name)
-                        setBackgroundColor(photo.background)
-                        setShowBorder(photo.border)
-                        setShowTexture(photo.texture)
-                        setRotateIncrement(photo.rotate)
-                        setLightIntensity(photo.lighting)
+                        artworkStore.showCurrentItemGallery(photo)
                       }}
                     />
                   </ThumbnailWrapper>
@@ -125,7 +90,11 @@ const ProfileGallery: React.FC<Props> = ({
           </Suspense>
         )}
       </Container>
-      <Text backgroundColor={backgroundColor ? true : false}>Gallery</Text>
+      <Text
+        backgroundColor={artworkStore.imageInfo.backgroundColor ? true : false}
+      >
+        Gallery
+      </Text>
     </Wrapper>
   )
 }

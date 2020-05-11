@@ -3,15 +3,14 @@ import styled from 'styled-components'
 
 import { useStores } from '../stores/useStores'
 
-export const ArtworkInfo: React.FC = () => {
-  const { artworkStore } = useStores()
+export const ArtworkInfo: React.FC = ({selectedImage}) => {
 
   return (
     <Wrapper>
       <Name
-        backgroundColor={artworkStore.imageInfo.backgroundColor ? true : false}
+        backgroundColor={selectedImage?.background ? true : false}
       >
-        {artworkStore.imageInfo.artworkName}
+        {selectedImage?.name}
       </Name>
     </Wrapper>
   )

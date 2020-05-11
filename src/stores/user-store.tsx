@@ -1,4 +1,4 @@
-import { observable, action } from 'mobx'
+import { observable, action, runInAction, computed, toJS } from 'mobx'
 import cookie from 'js-cookie'
 import { GraphQLClient } from 'graphql-request'
 
@@ -20,8 +20,15 @@ const client = new GraphQLClient(clientUrl, {
 
 export class UserStore {
   @observable username = usernameRef || usernameURLRef
-  @observable userToken = ''
+  @observable userToken = token
   @observable socialLinks = { instagram: '', facebook: '', website: '' }
+  @observable images = []
+
+  @computed
+  get userImages() {
+    const clone = toJS(this.images)
+    return clone
+  }
 
   @action
   async getUserProfile() {
@@ -31,6 +38,17 @@ export class UserStore {
         getUser(input: $input) {
           email
           username
+          images {
+            id
+            src
+            name
+            ratio
+            border
+            texture
+            background
+            rotate
+            lighting
+          }
           social {
             website
             facebook
@@ -46,12 +64,15 @@ export class UserStore {
       }
 
       const { getUser } = await client.request(query, variables)
+      runInAction(() => {
+        this.images.push(getUser.images)
 
-      this.socialLinks = {
-        instagram: getUser.social.instagram,
-        facebook: getUser.social.facebook,
-        website: getUser.social.website,
-      }
+        this.socialLinks = {
+          instagram: getUser.social.instagram,
+          facebook: getUser.social.facebook,
+          website: getUser.social.website,
+        }
+      })
     } catch (err) {
       console.log(err)
     }

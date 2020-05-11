@@ -11,6 +11,7 @@ import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { Canvas, extend, useThree, useRender } from 'react-three-fiber'
 import { save } from 'save-file'
+import { queryCache } from 'react-query'
 
 import { Sidebar } from './sidebar'
 import { ArtworkInfo } from './artwork-info'
@@ -20,7 +21,9 @@ import Gallery from './gallery'
 import Tips from './tips'
 import AddArtwork from './add-artwork'
 import Menu from './menu'
-import Fallback from './fallback'
+// import Fallback from './fallback'
+
+import useSelectedImage from '../hooks/useSelectedImage'
 
 import { useStores } from '../stores/useStores'
 import { observer } from 'mobx-react-lite'
@@ -30,11 +33,20 @@ interface Props {
   handlePhotoUpload: () => void
   setUploaded: Dispatch<SetStateAction<boolean>>
   loader: string
+  errMsg: string
 }
 
 export const MainScene: React.FC<Props> = observer(
-  ({ handlePhotoUpload, setUploaded, loader }) => {
+  ({ handlePhotoUpload, setUploaded, loader, errMsg }) => {
     extend({ OrbitControls })
+
+    const [selectedImage, selectImage] = useSelectedImage()
+    const userProfile = queryCache.getQueryData('userProfile')
+
+
+    const [screenShot, setScreenShot] = useState()
+    const [snap, setSnap] = useState(false)
+
 
     // const { lightIntensity } = useContext(ArtworkContext)
 
@@ -43,8 +55,6 @@ export const MainScene: React.FC<Props> = observer(
 
     const { artworkStore } = useStores()
 
-    const [screenShot, setScreenShot] = useState()
-    const [snap, setSnap] = useState(false)
 
     const getPhoto = React.useCallback(
       gl => {
@@ -53,6 +63,8 @@ export const MainScene: React.FC<Props> = observer(
       },
       [screenShot]
     )
+
+    console.log(selectedImage)
 
     const saveToFile = async () => {
       await save(
@@ -77,7 +89,7 @@ export const MainScene: React.FC<Props> = observer(
 
       gl.setClearColor(
         Number(
-          artworkStore.artworkData.backgroundColor ? '0xffffff' : '0x000004'
+          selectedImage?.background ? '0xffffff' : '0x000004'
         ),
         1
       )
@@ -110,7 +122,7 @@ export const MainScene: React.FC<Props> = observer(
       <div>
         <Canvas
           style={{
-            background: artworkStore.artworkData.backgroundColor
+            background: selectedImage?.background
               ? 'linear-gradient(45deg, rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(237,237,237,1) 100%'
               : '#000004',
           }}
@@ -127,11 +139,11 @@ export const MainScene: React.FC<Props> = observer(
           <hemisphereLight intensity={0.2} />
           <Suspense fallback={null}>
             <Box
-              url={artworkStore.artworkData.photoPreview}
-              photoRatio={artworkStore.artworkData.photoRatio}
-              showTexture={artworkStore.artworkData.showTexture}
-              showBorder={artworkStore.artworkData.showBorder}
-              rotateIncrement={artworkStore.artworkData.rotateIncrement}
+              url={selectedImage?.src}
+              photoRatio={selectedImage?.ratio}
+              showTexture={selectedImage?.texture}
+              showBorder={selectedImage?.border}
+              rotateIncrement={selectedImage?.rotate}
               getPhoto={getPhoto}
               snap={snap}
             />
@@ -152,16 +164,18 @@ export const MainScene: React.FC<Props> = observer(
           />
         </Canvas>
         <Tips />
-        <Logo backgroundColor={artworkStore.artworkData.backgroundColor} />
+        <Logo backgroundColor={selectedImage?.background} />
         <Sidebar
           handlePhotoUpload={handlePhotoUpload}
           loader={loader}
           setSnap={setSnap}
+          selectedImage={selectedImage}
+          errMsg={errMsg}
         />
-        <Gallery />
+        <Gallery selectImage={selectImage} selectedImage={selectedImage}/>
         <Menu />
-        <ArtworkInfo />
-        {artworkStore.artworkData.photoGallery.length === 0 && (
+        <ArtworkInfo selectedImage={selectedImage} />
+        {userProfile?.images?.length === 0 && (
           <AddArtwork
             handlePhotoUpload={handlePhotoUpload}
             setUploaded={setUploaded}

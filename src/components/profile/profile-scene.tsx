@@ -18,24 +18,24 @@ import ProfileCta from './profile-cta'
 
 import { Logo } from '../logo'
 
-import { ArtworkContext } from '../../context/artwork-context'
 import ProfileBack from './profile-back'
 import ProfileUsername from './profile-username'
 import Fallback from '../fallback'
+import { useStores } from '../../stores/useStores'
 
-interface Props {
-  photoPreview: string
-  setPhotoPreview: Dispatch<SetStateAction<string>>
-  photoRatio: number
-  setPhotoRatio: Dispatch<SetStateAction<number>>
-  photoGallery: Photo[]
-  setPhotoGallery: Dispatch<SetStateAction<Photo[]>>
-  photoUploaded: boolean
-  setPhotoUploaded: Dispatch<SetStateAction<boolean>>
-  handlePhotoUpload: () => void
-  setUploaded: Dispatch<SetStateAction<boolean>>
-  loader: string
-}
+// interface Props {
+//   photoPreview: string
+//   setPhotoPreview: Dispatch<SetStateAction<string>>
+//   photoRatio: number
+//   setPhotoRatio: Dispatch<SetStateAction<number>>
+//   photoGallery: Photo[]
+//   setPhotoGallery: Dispatch<SetStateAction<Photo[]>>
+//   photoUploaded: boolean
+//   setPhotoUploaded: Dispatch<SetStateAction<boolean>>
+//   handlePhotoUpload: () => void
+//   setUploaded: Dispatch<SetStateAction<boolean>>
+//   loader: string
+// }
 
 interface Photo {
   id: string
@@ -44,31 +44,34 @@ interface Photo {
   name: string
 }
 
-export const ProfileScene: React.FC<Props> = ({
-  photoPreview,
-  setPhotoPreview,
-  photoGallery,
-  photoRatio,
-  setPhotoRatio,
-  id,
-}) => {
+export const ProfileScene: React.FC = (
+  {
+    // photoPreview,
+    // setPhotoPreview,
+    // photoGallery,
+    // photoRatio,
+    // setPhotoRatio,
+    // id,
+  }
+) => {
   extend({ OrbitControls })
 
-  const {
-    rotateCanvas,
-    lightIntensity,
-    showTexture,
-    showBorder,
-    backgroundColor,
-    rotateIncrement,
-    setQueryId,
-  } = useContext(ArtworkContext)
+  // const {
+  //   // rotateCanvas,
+  //   lightIntensity,
+  //   showTexture,
+  //   showBorder,
+  //   backgroundColor,
+  //   rotateIncrement,
+  //   setQueryId,
+  // } = useContext(ArtworkContext)
 
-  useEffect(() => {
-    if (id) {
-      setQueryId(id)
-    }
-  }, [])
+  // useEffect(() => {
+  //   if (id) {
+  //     setQueryId(id)
+  //   }
+  // }, [])
+  const { artworkStore } = useStores()
 
   // Control canvas
   const Controls = () => {
@@ -105,7 +108,7 @@ export const ProfileScene: React.FC<Props> = ({
     <div>
       <Canvas
         style={{
-          background: backgroundColor
+          background: artworkStore.artworkData.backgroundColor
             ? 'linear-gradient(45deg, rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(237,237,237,1) 100%'
             : '#000004',
         }}
@@ -123,19 +126,19 @@ export const ProfileScene: React.FC<Props> = ({
         <hemisphereLight intensity={0.2} />
         <Suspense fallback={null}>
           <ProfileBox
-            url={photoPreview}
-            photoRatio={photoRatio}
-            showTexture={showTexture}
-            showBorder={showBorder}
-            rotateIncrement={rotateIncrement}
+            url={artworkStore.artworkData.photoPreview}
+            photoRatio={artworkStore.artworkData.photoRatio}
+            showTexture={artworkStore.artworkData.showTexture}
+            showBorder={artworkStore.artworkData.showBorder}
+            rotateIncrement={artworkStore.artworkData.rotateIncrement}
           />
-          <Controls rotate={rotateCanvas} />
+          <Controls />
         </Suspense>
         <spotLight
           castShadow
           position={[-15, 0, 50]}
           penumbra={0}
-          intensity={lightIntensity / 100}
+          intensity={Number(artworkStore.artworkData.lightIntensity) / 100}
           lightColor="#fff"
         />
         <pointLight
@@ -145,21 +148,17 @@ export const ProfileScene: React.FC<Props> = ({
           color="white"
         />
       </Canvas>
-      <Logo backgroundColor={backgroundColor} full />
+      <Logo backgroundColor={artworkStore.artworkData.backgroundColor} full />
       <ProfileCta />
       <ProfileBack />
-      <ProfileGallery
-        photoGallery={photoGallery}
-        setPhotoRatio={setPhotoRatio}
-        setPhotoPreview={setPhotoPreview}
-      />
+      <ProfileGallery />
       <ProfileUsername />
-      <ProfileControls
-        photoGallery={photoGallery}
+      {/* <ProfileControls
+        photoGallery={artworkStore.artworkData.photoGallery}
         photoPreview={photoPreview}
         setPhotoPreview={setPhotoPreview}
         setPhotoRatio={setPhotoRatio}
-      />
+      /> */}
       <ProfileInfo />
     </div>
   )

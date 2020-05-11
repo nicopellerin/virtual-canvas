@@ -17,6 +17,7 @@ import styled from 'styled-components'
 import { useSpring, animated } from 'react-spring'
 import useDebouncedEffect from 'use-debounced-effect'
 import { observer } from 'mobx-react-lite'
+import { queryCache } from 'react-query'
 
 import { useStores } from '../stores/useStores'
 
@@ -30,29 +31,31 @@ interface Props {
   handlePhotoUpload: (e: React.ChangeEvent<HTMLInputElement>) => void
   loader: string
   setSnap: Dispatch<SetStateAction<boolean>>
+  selectedImage: any
 }
 
 export const Sidebar: React.FC<Props> = observer(
-  ({ handlePhotoUpload, loader, setSnap }) => {
+  ({ handlePhotoUpload, loader, setSnap, selectedImage }) => {
     const [toggle, setToggle] = useState<boolean>(false)
     const [toggleProfile, setToggleProfile] = useState<boolean>(false)
     const [showSuccessMsg, setShowSuccessMsg] = useState<string>('')
     const [submitted, setSubmitted] = useState<boolean>(false)
     const [fieldFocused, setFieldFocused] = useState<boolean>(false)
+    const [imageName, setImageName] = useState(selectedImage?.name) 
 
     const { artworkStore } = useStores()
+    const userProfile = queryCache.getQueryData('userProfile')
 
     // const { lightIntensity, setLightIntensity } = useContext(ArtworkContext)
     const lightIntensity = 3
 
     useEffect(() => {
-      if (
-        artworkStore.imageInfo.photoGallery &&
-        artworkStore.imageInfo.photoGallery.length === 0
-      ) {
-        setToggle(false)
-      }
-    })
+      userProfile?.images.length === 0 ? setToggle(false) : null
+    }, [userProfile])
+
+    useEffect(() => {
+      setImageName(selectedImage?.name)
+    }, [selectedImage])
 
     useDebouncedEffect(
       () => {
@@ -77,10 +80,6 @@ export const Sidebar: React.FC<Props> = observer(
       // setLightIntensity(e.target.value)
     }
 
-    const handleChange = e => {
-      artworkStore.imageInfo[e.target.name] = e.target.value
-    }
-
     return (
       <>
         <Wrapper style={slideInOut}>
@@ -89,7 +88,7 @@ export const Sidebar: React.FC<Props> = observer(
               setToggleProfile(false)
               setToggle(prev => !prev)
             }}
-            disabled={artworkStore.imageInfo.photoGallery.length === 0}
+            disabled={userProfile?.images?.length === 0}
           >
             {toggle ? <MdRemove size={26} /> : <MdAdd size={26} />}
           </ToggleButton>
@@ -112,17 +111,17 @@ export const Sidebar: React.FC<Props> = observer(
                 <InputFieldRow>
                   <Label style={{ display: 'block' }}>Artwork name</Label>
                   <InputField
-                    value={artworkStore.imageInfo.artworkName}
+                    value={imageName}
                     ref={artworkFieldRef}
                     name="artworkName"
                     onFocus={() => setFieldFocused(true)}
                     onBlur={() => setTimeout(() => setFieldFocused(false), 200)}
                     onChange={e => {
                       setSubmitted(false)
-                      handleChange(e)
+                      setImageName(e.target.value)
                     }}
                   />
-                  {artworkStore.imageInfo.artworkName.length > 0 &&
+                  {selectedImage?.name.length > 0 &&
                     !submitted &&
                     fieldFocused && (
                       <Add>
@@ -149,7 +148,7 @@ export const Sidebar: React.FC<Props> = observer(
                     <label>
                       <Checkbox
                         name="showBorder"
-                        checked={artworkStore.artworkData.showBorder}
+                        checked={selectedImage?.border}
                         onChange={e => artworkStore.updateCanvas(e)}
                       />
                       <BorderCheckboxLabel>Border</BorderCheckboxLabel>
@@ -159,7 +158,7 @@ export const Sidebar: React.FC<Props> = observer(
                     <label>
                       <Checkbox
                         name="showTexture"
-                        checked={artworkStore.artworkData.showTexture}
+                        checked={selectedImage?.texture}
                         onChange={e => artworkStore.updateCanvas(e)}
                       />
                       <TextureCheckboxLabel>Texture</TextureCheckboxLabel>
@@ -171,7 +170,7 @@ export const Sidebar: React.FC<Props> = observer(
                     <label>
                       <Checkbox
                         name="backgroundColor"
-                        checked={artworkStore.artworkData.backgroundColor}
+                        checked={selectedImage?.background}
                         onChange={e => artworkStore.updateCanvas(e)}
                       />
                       <BackgroudCheckboxLabel>
@@ -183,7 +182,7 @@ export const Sidebar: React.FC<Props> = observer(
                     <label>
                       <Checkbox
                         name="rotateIncrement"
-                        checked={artworkStore.artworkData.rotateIncrement}
+                        checked={selectedImage?.rotate}
                         onChange={e => artworkStore.updateCanvas(e)}
                       />
                       <BackgroudCheckboxLabel>

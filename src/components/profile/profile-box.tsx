@@ -7,8 +7,8 @@ import lerp from 'lerp'
 interface Props {
   url: string
   photoRatio: number
-  showTexture: Dispatch<SetStateAction<boolean>>
-  showBorder: Dispatch<SetStateAction<boolean>>
+  showTexture: boolean
+  showBorder: boolean
   rotateIncrement: boolean
 }
 

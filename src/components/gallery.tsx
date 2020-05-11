@@ -6,6 +6,10 @@ import { MdClose } from 'react-icons/md'
 import { useStores } from '../stores/useStores'
 import { observer } from 'mobx-react-lite'
 
+import { queryCache } from 'react-query'
+
+import useSelectedImage from '../hooks/useSelectedImage'
+
 const ScrollAreaLazy = React.lazy(() => import('react-scrollbar'))
 
 interface StyledProps {
@@ -13,19 +17,19 @@ interface StyledProps {
   backgroundColor?: boolean
 }
 
-const Gallery: React.FC = () => {
+
+const Gallery: React.FC = ({selectedImage, selectImage}) => {
   const [toggle, setToggle] = useState<boolean>(true)
 
-  const { artworkStore } = useStores()
+  const userProfile = queryCache.getQueryData('userProfile')
+
+  const { artworkStore, userStore } = useStores()
 
   useEffect(() => {
-    if (
-      artworkStore.imageInfo.photoGallery &&
-      artworkStore.imageInfo.photoGallery.length === 0
-    ) {
+    if (userProfile?.images?.length === 0) {
       setToggle(false)
     }
-  }, [artworkStore.imageInfo.photoGallery])
+  }, [userProfile])
 
   const slideInOut = useSpring({
     transform: toggle
@@ -40,7 +44,7 @@ const Gallery: React.FC = () => {
     <Wrapper
       style={slideInOut}
       onClick={() => setToggle(prevState => !prevState)}
-      disabled={artworkStore.imageInfo.photoGallery.length === 0}
+      disabled={userProfile?.images?.length === 0}
     >
       <Container>
         {!isSSR && (
@@ -57,9 +61,9 @@ const Gallery: React.FC = () => {
               verticalScrollbarStyle={{ background: '#000' }}
               verticalContainerStyle={{ background: '#eee' }}
             >
-              {artworkStore.imageInfo.photoGallery.map((photo, index) => {
-                const prevItem = artworkStore.imageInfo.photoGallery[index - 1]
-                const nextItem = artworkStore.imageInfo.photoGallery[index + 1]
+              {userProfile?.images?.map((photo, index) => {
+                const prevItem = userProfile?.images[index - 1]
+                const nextItem = userProfile?.images[index + 1]
                 return (
                   <ThumbnailWrapper key={photo.id}>
                     <Thumbnail
@@ -68,11 +72,12 @@ const Gallery: React.FC = () => {
                       width={60}
                       height={60}
                       lastImage={
-                        artworkStore.imageInfo.photoGallery.length - 1 === index
+                        userProfile?.images?.length - 1 === index
                       }
                       onClick={e => {
                         e.stopPropagation()
-                        artworkStore.showCurrentItemGallery(photo)
+                        selectImage(photo)
+                        // artworkStore.showCurrentItemGallery(photo)
                       }}
                     />
                     <CloseIcon
@@ -98,7 +103,7 @@ const Gallery: React.FC = () => {
         )}
       </Container>
       <Text
-        backgroundColor={artworkStore.imageInfo.backgroundColor ? true : false}
+        backgroundColor={selectedImage?.background ? true : false}
       >
         Gallery
       </Text>

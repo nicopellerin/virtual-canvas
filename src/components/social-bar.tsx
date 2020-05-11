@@ -3,11 +3,11 @@ import styled from 'styled-components'
 import { animated, useSpring } from 'react-spring'
 import { MdAccountCircle } from 'react-icons/md'
 import { motion } from 'framer-motion'
-import { observer } from 'mobx-react-lite'
+import { queryCache } from 'react-query'
 
 import { Toast } from './toast'
 
-import { useStores } from '../stores/useStores'
+import {updateUser} from '../hooks/useUserProfile'
 
 interface Props {
   toggleProfile: boolean
@@ -15,26 +15,29 @@ interface Props {
 }
 
 const SocialBar: React.FC<Props> = ({ toggleProfile, setToggleProfile }) => {
-  const [showSuccessMsg, setShowSuccessMsg] = useState<string>('')
+  const userProfile = queryCache.getQueryData('userProfile')
 
-  const { userStore } = useStores()
+  const [instagram, setInstagram] = useState("")
+  const [facebook, setFacebook] = useState("")
+  const [website, setWebsite] = useState("")
+
+  const [showSuccessMsg, setShowSuccessMsg] = useState('')
+  
 
   useEffect(() => {
-    ;(async () => {
-      await userStore.getUserProfile()
-    })()
-  }, [])
+    setInstagram(userProfile?.social?.instagram)
+    setFacebook(userProfile?.social?.facebook)
+    setWebsite(userProfile?.social?.website)
+  }, [userProfile])
+
 
   const handleSubmit = async e => {
     e.preventDefault()
-    const res = await userStore.updateUserProfile()
+   
+    const res = await updateUser({username: userProfile.username, facebook, website, instagram})
     if (res.msg === 'Profile updated') {
       setShowSuccessMsg('Social links updated')
     }
-  }
-
-  const handleChange = e => {
-    userStore.socialLinks[e.target.name] = e.target.value
   }
 
   const slideInOutProfile = useSpring({
@@ -58,24 +61,24 @@ const SocialBar: React.FC<Props> = ({ toggleProfile, setToggleProfile }) => {
                 </LabelSocial>
                 <InputFieldSocial
                   name="instagram"
-                  value={userStore.socialLinks.instagram}
-                  onChange={handleChange}
+                  value={instagram}
+                  onChange={e => setInstagram(e.target.value)}
                 />
               </InputFieldRowSocial>
               <InputFieldRowSocial>
                 <LabelSocial style={{ display: 'block' }}>Facebook</LabelSocial>
                 <InputFieldSocial
                   name="facebook"
-                  value={userStore.socialLinks.facebook}
-                  onChange={handleChange}
+                  value={facebook}
+                  onChange={e => setFacebook(e.target.value)}
                 />
               </InputFieldRowSocial>
               <InputFieldRowSocial>
                 <LabelSocial style={{ display: 'block' }}>Website</LabelSocial>
                 <InputFieldSocial
                   name="website"
-                  value={userStore.socialLinks.website}
-                  onChange={handleChange}
+                  value={website}
+                  onChange={e => setWebsite(e.target.value)}
                 />
               </InputFieldRowSocial>
             </SocialContainer>
@@ -85,7 +88,7 @@ const SocialBar: React.FC<Props> = ({ toggleProfile, setToggleProfile }) => {
                 <LabelSocial style={{ display: 'block' }}>Username</LabelSocial>
                 <InputFieldSocial
                   onChange={() => {}}
-                  value={userStore.username}
+                  value={userProfile?.username}
                 />
               </InputFieldRowSocial>
             </div>
@@ -106,7 +109,7 @@ const SocialBar: React.FC<Props> = ({ toggleProfile, setToggleProfile }) => {
   )
 }
 
-export default observer(SocialBar)
+export default SocialBar
 
 // Styles
 const Wrapper = styled(animated.div)`

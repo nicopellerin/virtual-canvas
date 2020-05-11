@@ -4,10 +4,13 @@ import { GraphQLClient } from 'graphql-request'
 
 import { clientUrl } from '../utils/utils'
 
-let usernameRef
-if (typeof window !== 'undefined') {
-  usernameRef = window.location.href.split('/')[4]
-}
+const usernameRef =
+  typeof window !== 'undefined' ? window.location.href.split('/')[4] : null
+
+const isProfilePage =
+  typeof window !== 'undefined'
+    ? window.location.href.split('/').includes('profile')
+    : null
 
 const tokenRef = cookie.getJSON('vc_token')
 
@@ -109,30 +112,61 @@ export class ArtworkStore {
 
   @action
   async getAllArtwork() {
-    const query = `
-    query getUser($input: UsernameInput){
-      getUser(input: $input) {
-        images {
-          id
-          src
-          name
-          ratio
-          border
-          texture
-          background
-          rotate
-          lighting
+    let query, getImages
+
+    if (!isProfilePage) {
+      query = `
+      query getUser($input: UsernameInput){
+        getUser(input: $input) {
+          images {
+            id
+            src
+            name
+            ratio
+            border
+            texture
+            background
+            rotate
+            lighting
+          }
         }
       }
-    }
-    `
-    const variables = {
-      input: {
-        username: this.username,
-      },
-    }
+      `
+      const variables = {
+        input: {
+          username: this.username,
+        },
+      }
 
-    const { getUser: getImages } = await client.request(query, variables)
+      const { getUser } = await client.request(query, variables)
+      getImages = getUser
+    } else {
+      query = `
+      query getPublicProfile($input: UsernameInput){
+        getPublicProfile(input: $input) {
+          images {
+            id
+            src
+            name
+            ratio
+            border
+            texture
+            background
+            rotate
+            lighting
+          }
+        }
+      }
+      `
+      const variables = {
+        input: {
+          username: this.username,
+        },
+      }
+
+      const { getPublicProfile } = await client.request(query, variables)
+      getImages = getPublicProfile
+    }
 
     runInAction(() => {
       if (getImages && getImages.images && getImages.images.length > 0) {

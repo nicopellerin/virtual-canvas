@@ -3,15 +3,20 @@ import styled from 'styled-components'
 import { motion } from 'framer-motion'
 
 import { ArtworkContext } from '../../context/artwork-context'
+import { useStores } from '../../stores/useStores'
 
 export const ProfileInfo: React.FC = () => {
-  const { artworkName, backgroundColor } = useContext(ArtworkContext)
+  const { artworkStore } = useStores()
 
   return (
     <Wrapper>
       <Content>
-        <Name backgroundColor={backgroundColor ? true : false}>
-          {artworkName}
+        <Name
+          backgroundColor={
+            artworkStore.imageInfo.backgroundColor ? true : false
+          }
+        >
+          {artworkStore.imageInfo.artworkName}
         </Name>
         {/* <Price backgroundColor={backgroundColor ? true : false}>0,00$</Price>
         <BuyNow>Buy now</BuyNow> */}
