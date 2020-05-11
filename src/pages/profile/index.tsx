@@ -1,10 +1,9 @@
-import React, { useContext, useEffect, useState } from 'react'
+import * as React from 'react'
 import { Router } from '@reach/router'
 
 import { ProfileScene } from '../../components/profile/profile-scene'
 import SEO from '../../components/seo'
 
-import { useStores } from '../../stores/useStores'
 import useUserProfile from '../../hooks/useUserProfile'
 
 const ProfileIndexPage = () => {

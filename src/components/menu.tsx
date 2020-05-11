@@ -4,18 +4,15 @@ import { MdExitToApp } from 'react-icons/md'
 import cookie from 'js-cookie'
 import { navigate, Link } from 'gatsby'
 import ReactTooltip from 'react-tooltip'
+import { queryCache } from 'react-query'
 
-import { useStores } from '../stores/useStores'
-
-const Menu = () => {
-  const { artworkStore, userStore } = useStores()
+const Menu = ({selectedImage}) => {
+  const userProfile = queryCache.getQueryData('userProfile')
 
   // Logout flow
   const handleLogout = () => {
     cookie.remove('vc_token')
     cookie.remove('vc_user')
-    userStore.userToken = ''
-    userStore.username = ''
 
     if (typeof window !== 'undefined') {
       navigate('/login')
@@ -25,8 +22,8 @@ const Menu = () => {
   return (
     <Wrapper>
       <ViewProfile
-        to={`/profile/${userStore.username}`}
-        backgroundColor={artworkStore.imageInfo.backgroundColor ? true : false}
+        to={`/profile/${userProfile?.username}`}
+        backgroundColor={selectedImage?.image?.background ? true : false}
       >
         View public profile
       </ViewProfile>

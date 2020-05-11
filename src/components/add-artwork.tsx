@@ -1,26 +1,18 @@
-import React, {
-  useRef,
-  useState,
-  useEffect,
-  Dispatch,
-  SetStateAction,
-} from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { MdCloudUpload } from 'react-icons/md'
 import { motion } from 'framer-motion'
 
+import usePhotoUpload from '../hooks/usePhotoUpload'
+
 interface Props {
-  handlePhotoUpload: (e: React.FormEvent<HTMLInputElement>) => void
-  setUploaded: Dispatch<SetStateAction<boolean>>
-  loader: string
+  selectImage: any
 }
 
-const AddArtwork: React.FC<Props> = ({
-  handlePhotoUpload,
-  setUploaded,
-  loader,
-}) => {
-  const [show, setShow] = useState<boolean>(false)
+const AddArtwork: React.FC<Props> = ({ selectImage }) => {
+  const [show, setShow] = useState(false)
+  const [loader, setLoader] = useState('')
+  const [errMsg, setErrMsg] = useState('')
 
   const fileInputRef = useRef(null)
 
@@ -49,8 +41,7 @@ const AddArtwork: React.FC<Props> = ({
             ref={fileInputRef}
             accept="image/x-png,image/jpeg"
             onChange={e => {
-              handlePhotoUpload(e)
-              setUploaded(true)
+              usePhotoUpload(e, setErrMsg, setLoader, selectImage)
             }}
           />
           <UploadButton

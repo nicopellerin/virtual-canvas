@@ -3,7 +3,6 @@ import * as THREE from 'three'
 import { TextureLoader } from 'three/src/loaders/TextureLoader'
 import { useLoader, useFrame, useThree } from 'react-three-fiber'
 import lerp from 'lerp'
-import { observer } from 'mobx-react-lite'
 
 interface Props {
   url: string
@@ -25,7 +24,6 @@ export const Box: React.FC<Props> = ({
   snap,
 }) => {
   // Load image on box
-
   const [texture] = useLoader(THREE.TextureLoader, [url])
 
   const { gl, camera } = useThree()

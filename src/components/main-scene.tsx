@@ -1,11 +1,8 @@
 import React, {
   useRef,
-  useContext,
   useEffect,
   useState,
   Suspense,
-  Dispatch,
-  SetStateAction,
 } from 'react'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
@@ -25,31 +22,20 @@ import Menu from './menu'
 
 import useSelectedImage from '../hooks/useSelectedImage'
 
-import { observer } from 'mobx-react-lite'
-
 interface Props {
-  photoUploaded: boolean
-  setUploaded: Dispatch<SetStateAction<boolean>>
   loader: string
   errMsg: string
 }
 
 export const MainScene: React.FC<Props> =
-  ({ setUploaded, loader, errMsg }) => {
+  ({ loader, errMsg }) => {
     extend({ OrbitControls })
 
     const {selectedImage, selectImage, updateImage} = useSelectedImage()
     const userProfile = queryCache.getQueryData('userProfile')
 
-
     const [screenShot, setScreenShot] = useState()
     const [snap, setSnap] = useState(false)
-
-
-    // const { lightIntensity } = useContext(ArtworkContext)
-
-    // Temp
-    // const lightIntensity = 3
 
     const getPhoto = React.useCallback(
       gl => {
@@ -147,7 +133,7 @@ export const MainScene: React.FC<Props> =
             castShadow
             position={[-15, 0, 50]}
             penumbra={0}
-            intensity={Number(selectedImage?.image?.lighting) / 100}
+            intensity={selectedImage?.image?.lighting / 100}
             lightColor="#fff"
           />
           <pointLight
@@ -162,18 +148,17 @@ export const MainScene: React.FC<Props> =
         <Sidebar
           loader={loader}
           setSnap={setSnap}
+          selectImage={selectImage}
           selectedImage={selectedImage}
           updateImage={updateImage}
           errMsg={errMsg}
         />
         <Gallery selectImage={selectImage} selectedImage={selectedImage}/>
-        <Menu />
+        <Menu selectedImage={selectedImage} />
         <ArtworkInfo selectedImage={selectedImage?.image} />
         {userProfile?.images?.length === 0 && (
           <AddArtwork
-            handlePhotoUpload={handlePhotoUpload}
-            setUploaded={setUploaded}
-            loader={loader}
+          selectImage={selectImage}
           />
         )}
       </div>

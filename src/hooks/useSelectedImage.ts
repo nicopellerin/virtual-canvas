@@ -19,7 +19,7 @@ const client = new GraphQLClient(clientUrl, {
 interface Image {
   src: string
   id: string
-  lighting: string
+  lighting: number
   name: string
   ratio: number
   rotate: boolean
@@ -29,7 +29,7 @@ interface Image {
 }
 
 const updateImageDB = async (
-  image
+  image: Image
 ) => {
   const query = `
       mutation updateArtwork($input: UpdateArtworkInput!) {
@@ -67,8 +67,22 @@ const updateImageDB = async (
   return {updateArtwork}
 }
 
+const initialState: = {
+  image: {
+    src: '',
+    id: '',
+    lighting: '',
+    name: '',
+    ratio: 0,
+    rotate: false,
+    texture: false,
+    border: false,
+    background: false,
+  },
+}
+
 export default function useSelectedImage() {
-  const {data, isFetching, isStale} = useUserProfile()
+  const {data, isFetching} = useUserProfile()
 
   const userProfile = queryCache.getQueryData('userProfile')
   const [mutate] = useMutation(updateImageDB, {
@@ -77,24 +91,12 @@ export default function useSelectedImage() {
     },
   })
 
-  const [selectedImage, setSelectedImage] = useImmer({
-    image: {
-      src: '',
-      id: '',
-      lighting: '',
-      name: '',
-      ratio: 0,
-      rotate: false,
-      texture: false,
-      border: false,
-      background: false,
-    },
-  })
+  const [selectedImage, setSelectedImage] = useImmer(initialState)
 
   let firstLoad = useRef(true)
 
   useEffect(() => {
-    if(!isFetching && firstLoad.current) {
+    if(!isFetching && firstLoad.current && data?.images?.length > 0) {
       setSelectedImage(draft => {
         draft.image = userProfile?.images[0]
       })
@@ -104,14 +106,20 @@ export default function useSelectedImage() {
 
   useEffect(() => {
     (async () => {
-      if(!firstLoad.current) {
+      if(!firstLoad.current && data?.images?.length > 0) {
       await mutate(selectedImage?.image)
       }
     })()
   }, [selectedImage])
 
   const selectImage = image => {
-    const img = data?.images?.find(i => i.id === image.id)
+    if (!image) {
+      setSelectedImage(draft => {
+        draft.image = initialState
+      })
+      return
+    }
+
     setSelectedImage(draft => {
       draft.image = image
     })

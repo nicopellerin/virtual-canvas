@@ -26,28 +26,29 @@ import SocialBar from './social-bar'
 import usePhotoUpload from '../hooks/usePhotoUpload'
 import useUserProfile from '../hooks/useUserProfile'
 
+
 interface Props {
   handlePhotoUpload: (e: React.ChangeEvent<HTMLInputElement>) => void
   loader: string
   setSnap: Dispatch<SetStateAction<boolean>>
+  selectImage: any
   selectedImage: any
   updateImage: any
 }
 
 export const Sidebar: React.FC<Props> = 
-  ({ setSnap, selectedImage, updateImage}) => {
+  ({ setSnap, selectImage, selectedImage, updateImage}) => {
     const [toggle, setToggle] = useState<boolean>(false)
     const [toggleProfile, setToggleProfile] = useState<boolean>(false)
     const [showSuccessMsg, setShowSuccessMsg] = useState<string>('')
     const [submitted, setSubmitted] = useState<boolean>(false)
     const [fieldFocused, setFieldFocused] = useState<boolean>(false)
     const [imageName, setImageName] = useState(selectedImage?.name) 
-    const [lightIntensity, setLightIntensity ] = useState(selectedImage?.image?.lighting)
+    const [lightIntensity, setLightIntensity ] = useState()
     const [loader, setLoader] = useState('')
     const [errMsg, setErrMsg] = useState('')
 
     const userProfile = queryCache.getQueryData('userProfile')
-  
 
     useEffect(() => {
       userProfile?.images?.length === 0 ? setToggle(false) : null
@@ -55,7 +56,10 @@ export const Sidebar: React.FC<Props> =
 
     useEffect(() => {
       setImageName(selectedImage?.image?.name)
+      setLightIntensity(selectedImage?.image?.lighting)
     }, [selectedImage])
+
+    console.log(selectedImage)
 
     useDebouncedEffect(
       () => {
@@ -215,7 +219,7 @@ export const Sidebar: React.FC<Props> =
               ref={fileInputRef}
               accept="image/x-png,image/jpeg"
               onChange={e => {
-                usePhotoUpload(e, setErrMsg, setLoader) 
+                usePhotoUpload(e, setErrMsg, setLoader, selectImage) 
               }}
             />
             <AddArtButton

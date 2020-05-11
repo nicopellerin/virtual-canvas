@@ -3,8 +3,6 @@ import { useSpring, animated } from 'react-spring'
 import styled from 'styled-components'
 import { MdClose } from 'react-icons/md'
 
-import { useStores } from '../stores/useStores'
-import { observer } from 'mobx-react-lite'
 
 import { queryCache } from 'react-query'
 
@@ -24,8 +22,6 @@ const Gallery: React.FC = ({selectedImage, selectImage}) => {
   const [toggle, setToggle] = useState(true)
   const userProfile = queryCache.getQueryData('userProfile')
   const {removeImage} = useSelectedImage()
-
-  const { artworkStore } = useStores()
 
   useEffect(() => {
     if (userProfile?.images?.length === 0) {
@@ -64,8 +60,8 @@ const Gallery: React.FC = ({selectedImage, selectImage}) => {
               verticalContainerStyle={{ background: '#eee' }}
             >
               {userProfile?.images?.map((image, index) => {
-                const prevItem = userProfile?.images[index - 1]
-                const nextItem = userProfile?.images[index + 1]
+                const prevImage = userProfile?.images[index - 1]
+                const nextImage = userProfile?.images[index + 1]
                 return (
                   <ThumbnailWrapper key={image.id}>
                     <Thumbnail
@@ -86,15 +82,13 @@ const Gallery: React.FC = ({selectedImage, selectImage}) => {
                       size={16}
                       color="white"
                       onClick={e => {
-                        if (prevItem) {
-                          artworkStore.showPreviousItemGallery(prevItem)
-                        } else if (nextItem) {
-                          artworkStore.showNextItemGallery(nextItem)
+                        if (prevImage) {
+                          selectImage(prevImage)
+                        } else if (nextImage) {
+                          selectImage(nextImage)
                         } else {
-                          artworkStore.imageInfo.photoPreview = ''
-                          artworkStore.imageInfo.artworkName = ''
+                          selectImage(null)
                         }
-                        // artworkStore.removeArtwork(e, photo.id)
                         removeImage(e, image.id)
                       }}
                     />
@@ -114,7 +108,7 @@ const Gallery: React.FC = ({selectedImage, selectImage}) => {
   )
 }
 
-export default observer(Gallery)
+export default Gallery
 
 // Styles
 const Wrapper = styled(animated.div)`

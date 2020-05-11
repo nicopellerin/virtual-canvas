@@ -10,7 +10,6 @@ import useUserProfile from '../../hooks/useUserProfile'
 
 const IndexAppPage: React.FC = () => {
   useUserProfile()
-
   const userProfile = queryCache.getQueryData('userProfile')
 
   return (

@@ -6,17 +6,16 @@ import { GraphQLClient } from 'graphql-request'
 
 import { clientUrl } from '../utils/utils'
 
-const usePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>, setErrMsg, setLoader) => {
-  const { files } = e.target
+const token = cookie.getJSON('vc_token')
 
-  const token = cookie.getJSON('vc_token')
+const usePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>, setErrMsg, setLoader, selectImage) => {
+  const { files } = e.target
 
   const userProfile = queryCache.getQueryData('userProfile')
 
-
   const maxAllowedSize = 5 * 1024 * 1024
   if (files[0].size > maxAllowedSize) {
-    // setErrMsg('Maximum file size is 5mb')
+    setErrMsg('Maximum file size is 5mb')
     return null
   }
 
@@ -77,12 +76,12 @@ const usePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>, setErrMsg,
         rotate: false,
         texture: false,
         background: false,
-        lighting: '3',
+        lighting: 3,
       },
     }
 
     const { addArtwork } = await client.request(query, variables)
-
+    selectImage(addArtwork)
     queryCache.setQueryData('userProfile', old => ({
       ...old,
       images: [...old.images, addArtwork],
