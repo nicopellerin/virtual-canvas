@@ -16,51 +16,50 @@ import {
 import styled from 'styled-components'
 import { useSpring, animated } from 'react-spring'
 import useDebouncedEffect from 'use-debounced-effect'
-import { observer } from 'mobx-react-lite'
 import { queryCache } from 'react-query'
-
-import { useStores } from '../stores/useStores'
 
 import Checkbox from './checkbox'
 import { Toast } from './toast'
 
 import Logo from '../images/logo-text.svg'
 import SocialBar from './social-bar'
+import usePhotoUpload from '../hooks/usePhotoUpload'
+import useUserProfile from '../hooks/useUserProfile'
 
 interface Props {
   handlePhotoUpload: (e: React.ChangeEvent<HTMLInputElement>) => void
   loader: string
   setSnap: Dispatch<SetStateAction<boolean>>
   selectedImage: any
+  updateImage: any
 }
 
-export const Sidebar: React.FC<Props> = observer(
-  ({ handlePhotoUpload, loader, setSnap, selectedImage }) => {
+export const Sidebar: React.FC<Props> = 
+  ({ setSnap, selectedImage, updateImage}) => {
     const [toggle, setToggle] = useState<boolean>(false)
     const [toggleProfile, setToggleProfile] = useState<boolean>(false)
     const [showSuccessMsg, setShowSuccessMsg] = useState<string>('')
     const [submitted, setSubmitted] = useState<boolean>(false)
     const [fieldFocused, setFieldFocused] = useState<boolean>(false)
     const [imageName, setImageName] = useState(selectedImage?.name) 
+    const [lightIntensity, setLightIntensity ] = useState(selectedImage?.image?.lighting)
+    const [loader, setLoader] = useState('')
+    const [errMsg, setErrMsg] = useState('')
 
-    const { artworkStore } = useStores()
     const userProfile = queryCache.getQueryData('userProfile')
-
-    // const { lightIntensity, setLightIntensity } = useContext(ArtworkContext)
-    const lightIntensity = 3
+  
 
     useEffect(() => {
-      userProfile?.images.length === 0 ? setToggle(false) : null
+      userProfile?.images?.length === 0 ? setToggle(false) : null
     }, [userProfile])
 
     useEffect(() => {
-      setImageName(selectedImage?.name)
+      setImageName(selectedImage?.image?.name)
     }, [selectedImage])
 
     useDebouncedEffect(
       () => {
-        console.log('call')
-        artworkStore.updateLight(lightIntensity)
+        updateImage('lighting', lightIntensity)
       },
       500,
       [lightIntensity]
@@ -77,7 +76,7 @@ export const Sidebar: React.FC<Props> = observer(
     })
 
     const handleLightIntensity = e => {
-      // setLightIntensity(e.target.value)
+      setLightIntensity(e.target.value)
     }
 
     return (
@@ -98,14 +97,13 @@ export const Sidebar: React.FC<Props> = observer(
             </TempLogo>
             <Elements>
               <form
-                onSubmit={e =>
-                  artworkStore.updateArtworkName(
-                    e,
-                    setShowSuccessMsg,
-                    setSubmitted,
-                    artworkFieldRef
-                  )
-                }
+                onSubmit={(e) =>{
+                  e.preventDefault()
+                  updateImage('name', imageName)
+                  setShowSuccessMsg('Saved name to artwork')
+                  setSubmitted(true)
+                  artworkFieldRef.current.blur()
+                }}
                 style={{ flex: 4 }}
               >
                 <InputFieldRow>
@@ -121,35 +119,32 @@ export const Sidebar: React.FC<Props> = observer(
                       setImageName(e.target.value)
                     }}
                   />
-                  {selectedImage?.name.length > 0 &&
+                  {selectedImage?.image?.name?.length > 0 &&
                     !submitted &&
                     fieldFocused && (
                       <Add>
                         <MdAddCircle
                           size={24}
                           color="green"
-                          onClick={e =>
-                            artworkStore.updateArtworkName(
-                              e,
-                              setShowSuccessMsg,
-                              setSubmitted,
-                              artworkFieldRef
-                            )
+                          onClick={e => {e.preventDefault()
+                            updateImage('name', imageName)
+                            setShowSuccessMsg('Saved name to artwork')
+                            setSubmitted(true)
+                            artworkFieldRef.current.blur()}
                           }
                         />
                       </Add>
                     )}
                 </InputFieldRow>
               </form>
-
               <CheckboxGrid>
                 <div>
                   <BorderCheckbox>
                     <label>
                       <Checkbox
-                        name="showBorder"
-                        checked={selectedImage?.border}
-                        onChange={e => artworkStore.updateCanvas(e)}
+                        name="border"
+                        checked={selectedImage?.image?.border}
+                        onChange={() => updateImage('border', !selectedImage?.image?.border)}
                       />
                       <BorderCheckboxLabel>Border</BorderCheckboxLabel>
                     </label>
@@ -157,9 +152,9 @@ export const Sidebar: React.FC<Props> = observer(
                   <TextureCheckbox>
                     <label>
                       <Checkbox
-                        name="showTexture"
-                        checked={selectedImage?.texture}
-                        onChange={e => artworkStore.updateCanvas(e)}
+                        name="texture"
+                        checked={selectedImage?.image?.texture}
+                        onChange={() => updateImage('texture', !selectedImage?.image?.texture)}
                       />
                       <TextureCheckboxLabel>Texture</TextureCheckboxLabel>
                     </label>
@@ -169,9 +164,9 @@ export const Sidebar: React.FC<Props> = observer(
                   <BackgroudCheckbox>
                     <label>
                       <Checkbox
-                        name="backgroundColor"
-                        checked={selectedImage?.background}
-                        onChange={e => artworkStore.updateCanvas(e)}
+                        name="background"
+                        checked={selectedImage?.image?.background}
+                        onChange={() => updateImage('background', !selectedImage?.image?.background)}
                       />
                       <BackgroudCheckboxLabel>
                         Light background
@@ -181,9 +176,9 @@ export const Sidebar: React.FC<Props> = observer(
                   <BackgroudCheckbox>
                     <label>
                       <Checkbox
-                        name="rotateIncrement"
-                        checked={selectedImage?.rotate}
-                        onChange={e => artworkStore.updateCanvas(e)}
+                        name="rotate"
+                        checked={selectedImage?.image?.rotate}
+                        onChange={() => updateImage('rotate', !selectedImage?.image?.rotate)}
                       />
                       <BackgroudCheckboxLabel>
                         Rotate 90˚ CW
@@ -220,7 +215,7 @@ export const Sidebar: React.FC<Props> = observer(
               ref={fileInputRef}
               accept="image/x-png,image/jpeg"
               onChange={e => {
-                handlePhotoUpload(e)
+                usePhotoUpload(e, setErrMsg, setLoader) 
               }}
             />
             <AddArtButton
@@ -249,7 +244,7 @@ export const Sidebar: React.FC<Props> = observer(
       </>
     )
   }
-)
+
 
 // Styles
 const Wrapper = styled(animated.div)`

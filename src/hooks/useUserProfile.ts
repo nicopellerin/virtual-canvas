@@ -13,12 +13,7 @@ const client = new GraphQLClient(clientUrl, {
   },
 })
 
-export const updateUser = async ({
-  username,
-  facebook,
-  website,
-  instagram,
-}) => {
+const updateUser = async ({ username, facebook, website, instagram }) => {
   try {
     const query = `
     mutation updateUser($input: UpdateUserInput!){
@@ -87,6 +82,8 @@ const getUserProfil = async () => {
   return getUser
 }
 
-export default function useUserProfile() {
+const useUserProfile = () => {
   return useQuery('userProfile', getUserProfil)
 }
+
+export { useUserProfile as default, updateUser }

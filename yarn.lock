@@ -16802,6 +16802,11 @@ use-debounced-effect@^0.0.3:
   resolved "https://registry.yarnpkg.com/use-debounced-effect/-/use-debounced-effect-0.0.3.tgz#ec349c3b837a5b5dcf193d8757ae773fb19998e7"
   integrity sha512-9cAkZCFv/FYkF+cIGM0/oSMxbxWyz26wrx6wI6Bpq7kiV0JfF1qMOQHy1m802ZE4D0vCn9G7E4NNT3lttqQLCg==
 
+use-immer@^0.4.0:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/use-immer/-/use-immer-0.4.0.tgz#9992280c2d8b5777e5bfc4827c69dbdcc1b219eb"
+  integrity sha512-mxx4jbRRc1/56geSc3VHx8gg3FvlzUpQPfVNJXtU1NRK/iTdK0pV3k3YPi7iFUcCM8YJ6/0dUBENyuk3WO/gxw==
+
 use@^3.1.0:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/use/-/use-3.1.1.tgz#d50c8cac79a19fbc20f2911f56eb973f4e10070f"

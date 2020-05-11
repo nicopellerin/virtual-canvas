@@ -8,13 +8,7 @@ import { useStores } from '../../stores/useStores'
 import useUserProfile from '../../hooks/useUserProfile'
 
 const ProfileIndexPage = () => {
-  const { userStore, artworkStore } = useStores()
-
-  useEffect(() => {
-    artworkStore.getAllArtwork()
-  }, [artworkStore])
-
-  const { status, data, error, isFetching } = useUserProfile()
+  const { data } = useUserProfile()
 
   return (
     <>
@@ -26,13 +20,7 @@ const ProfileIndexPage = () => {
         <ProfileScene path="/profile/:username" username={data?.username} />
         <ProfileScene
           path="/profile/:username/:id"
-          username={username}
-          // photoGallery={photoGallery}
-          // setPhotoGallery={setPhotoGallery}
-          // photoPreview={photoPreview}
-          // setPhotoPreview={setPhotoPreview}
-          // photoRatio={photoRatio}
-          // setPhotoRatio={setPhotoRatio}
+          username={data?.username}
         />
       </Router>
     </>

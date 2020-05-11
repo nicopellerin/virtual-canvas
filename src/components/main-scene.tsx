@@ -25,22 +25,20 @@ import Menu from './menu'
 
 import useSelectedImage from '../hooks/useSelectedImage'
 
-import { useStores } from '../stores/useStores'
 import { observer } from 'mobx-react-lite'
 
 interface Props {
   photoUploaded: boolean
-  handlePhotoUpload: () => void
   setUploaded: Dispatch<SetStateAction<boolean>>
   loader: string
   errMsg: string
 }
 
-export const MainScene: React.FC<Props> = observer(
-  ({ handlePhotoUpload, setUploaded, loader, errMsg }) => {
+export const MainScene: React.FC<Props> =
+  ({ setUploaded, loader, errMsg }) => {
     extend({ OrbitControls })
 
-    const [selectedImage, selectImage] = useSelectedImage()
+    const {selectedImage, selectImage, updateImage} = useSelectedImage()
     const userProfile = queryCache.getQueryData('userProfile')
 
 
@@ -51,10 +49,7 @@ export const MainScene: React.FC<Props> = observer(
     // const { lightIntensity } = useContext(ArtworkContext)
 
     // Temp
-    const lightIntensity = 3
-
-    const { artworkStore } = useStores()
-
+    // const lightIntensity = 3
 
     const getPhoto = React.useCallback(
       gl => {
@@ -64,12 +59,11 @@ export const MainScene: React.FC<Props> = observer(
       [screenShot]
     )
 
-    console.log(selectedImage)
 
     const saveToFile = async () => {
       await save(
         screenShot,
-        `${artworkStore.artworkData.artworkName || 'virtual-canvas'}.jpg`
+        `${selectedImage?.image?.name || 'virtual-canvas'}.jpg`
       )
     }
 
@@ -89,7 +83,7 @@ export const MainScene: React.FC<Props> = observer(
 
       gl.setClearColor(
         Number(
-          selectedImage?.background ? '0xffffff' : '0x000004'
+          selectedImage?.image?.background ? '0xffffff' : '0x000004'
         ),
         1
       )
@@ -139,11 +133,11 @@ export const MainScene: React.FC<Props> = observer(
           <hemisphereLight intensity={0.2} />
           <Suspense fallback={null}>
             <Box
-              url={selectedImage?.src}
-              photoRatio={selectedImage?.ratio}
-              showTexture={selectedImage?.texture}
-              showBorder={selectedImage?.border}
-              rotateIncrement={selectedImage?.rotate}
+              url={selectedImage?.image?.src}
+              photoRatio={selectedImage?.image?.ratio}
+              showTexture={selectedImage?.image?.texture}
+              showBorder={selectedImage?.image?.border}
+              rotateIncrement={selectedImage?.image?.rotate}
               getPhoto={getPhoto}
               snap={snap}
             />
@@ -153,7 +147,7 @@ export const MainScene: React.FC<Props> = observer(
             castShadow
             position={[-15, 0, 50]}
             penumbra={0}
-            intensity={lightIntensity / 100}
+            intensity={Number(selectedImage?.image?.lighting) / 100}
             lightColor="#fff"
           />
           <pointLight
@@ -164,17 +158,17 @@ export const MainScene: React.FC<Props> = observer(
           />
         </Canvas>
         <Tips />
-        <Logo backgroundColor={selectedImage?.background} />
+        <Logo backgroundColor={selectedImage?.image?.background} />
         <Sidebar
-          handlePhotoUpload={handlePhotoUpload}
           loader={loader}
           setSnap={setSnap}
           selectedImage={selectedImage}
+          updateImage={updateImage}
           errMsg={errMsg}
         />
         <Gallery selectImage={selectImage} selectedImage={selectedImage}/>
         <Menu />
-        <ArtworkInfo selectedImage={selectedImage} />
+        <ArtworkInfo selectedImage={selectedImage?.image} />
         {userProfile?.images?.length === 0 && (
           <AddArtwork
             handlePhotoUpload={handlePhotoUpload}
@@ -185,4 +179,4 @@ export const MainScene: React.FC<Props> = observer(
       </div>
     )
   }
-)
+

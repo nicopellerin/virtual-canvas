@@ -15,15 +15,17 @@ const ScrollAreaLazy = React.lazy(() => import('react-scrollbar'))
 interface StyledProps {
   disabled?: boolean
   backgroundColor?: boolean
+  selectedImage: any
+  selectImage: any
 }
 
 
 const Gallery: React.FC = ({selectedImage, selectImage}) => {
-  const [toggle, setToggle] = useState<boolean>(true)
-
+  const [toggle, setToggle] = useState(true)
   const userProfile = queryCache.getQueryData('userProfile')
+  const {removeImage} = useSelectedImage()
 
-  const { artworkStore, userStore } = useStores()
+  const { artworkStore } = useStores()
 
   useEffect(() => {
     if (userProfile?.images?.length === 0) {
@@ -61,13 +63,13 @@ const Gallery: React.FC = ({selectedImage, selectImage}) => {
               verticalScrollbarStyle={{ background: '#000' }}
               verticalContainerStyle={{ background: '#eee' }}
             >
-              {userProfile?.images?.map((photo, index) => {
+              {userProfile?.images?.map((image, index) => {
                 const prevItem = userProfile?.images[index - 1]
                 const nextItem = userProfile?.images[index + 1]
                 return (
-                  <ThumbnailWrapper key={photo.id}>
+                  <ThumbnailWrapper key={image.id}>
                     <Thumbnail
-                      src={photo.src}
+                      src={image.src}
                       alt="Preview thumbnail"
                       width={60}
                       height={60}
@@ -76,7 +78,7 @@ const Gallery: React.FC = ({selectedImage, selectImage}) => {
                       }
                       onClick={e => {
                         e.stopPropagation()
-                        selectImage(photo)
+                        selectImage(image)
                         // artworkStore.showCurrentItemGallery(photo)
                       }}
                     />
@@ -92,7 +94,8 @@ const Gallery: React.FC = ({selectedImage, selectImage}) => {
                           artworkStore.imageInfo.photoPreview = ''
                           artworkStore.imageInfo.artworkName = ''
                         }
-                        artworkStore.removeArtwork(e, photo.id)
+                        // artworkStore.removeArtwork(e, photo.id)
+                        removeImage(e, image.id)
                       }}
                     />
                   </ThumbnailWrapper>
@@ -103,7 +106,7 @@ const Gallery: React.FC = ({selectedImage, selectImage}) => {
         )}
       </Container>
       <Text
-        backgroundColor={selectedImage?.background ? true : false}
+        backgroundColor={selectedImage?.image?.background ? true : false}
       >
         Gallery
       </Text>
