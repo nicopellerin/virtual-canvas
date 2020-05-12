@@ -1,19 +1,18 @@
 import * as React from 'react'
-import { Router, useLocation } from '@reach/router'
+import { Router } from '@reach/router'
 import cookie from 'js-cookie'
 
 import { ProfileScene } from '../../components/profile/profile-scene'
 import SEO from '../../components/seo'
 
 import usePublicProfile from '../../hooks/usePublicProfile'
+import { usernameFromPathname as username } from '../../utils/utils'
 
 const ProfileIndexPage = () => {
-  const { pathname } = useLocation()
-  const username = pathname.split('/').pop()
+  usePublicProfile()
+
   const token = cookie.get('vc_token')
 
-  const res = usePublicProfile(username)
-  console.log(res)
   return (
     <>
       <SEO

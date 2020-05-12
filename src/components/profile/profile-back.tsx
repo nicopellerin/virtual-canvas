@@ -2,12 +2,12 @@ import React from 'react'
 import styled from 'styled-components'
 import { Link } from 'gatsby'
 import { MdChevronLeft } from 'react-icons/md'
-import { queryCache } from 'react-query'
 
 import useSelectedImage from '../../hooks/useSelectedImage'
 
+import { usernameFromPathname } from '../../utils/utils'
+
 const ProfileBack = ({ token }) => {
-  const publicProfile = queryCache.getQueryData('publicProfile')
   const { selectedImage } = useSelectedImage()
 
   if (!token) return null
@@ -18,7 +18,7 @@ const ProfileBack = ({ token }) => {
         color={selectedImage?.background ? '#333' : '#f4f4f4'}
         size={24}
       />
-      <Link to={`/editor/${publicProfile?.username}`}>Back to editor</Link>
+      <Link to={`/editor/${usernameFromPathname}`}>Back to editor</Link>
     </Wrapper>
   )
 }

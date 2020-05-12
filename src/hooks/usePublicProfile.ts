@@ -6,7 +6,9 @@ import { clientUrl, isPublicProfile } from '../utils/utils'
 
 const client = new GraphQLClient(clientUrl)
 
-const getPublicProfile = async (_, username): Promise<PublicProfile> => {
+import { usernameFromPathname as username } from '../utils/utils'
+
+const getPublicProfile = async (): Promise<PublicProfile> => {
   const query = `
       query getPublicProfile($input: UsernameInput){
         getPublicProfile(input: $input) {
@@ -41,11 +43,8 @@ const getPublicProfile = async (_, username): Promise<PublicProfile> => {
   return getPublicProfile
 }
 
-const usePublicProfile = (username: string) => {
-  return useQuery(
-    isPublicProfile && ['publicProfile', username],
-    getPublicProfile
-  )
+const usePublicProfile = () => {
+  return useQuery(isPublicProfile && 'publicProfile', getPublicProfile)
 }
 
 export default usePublicProfile

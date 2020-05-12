@@ -70,7 +70,7 @@ const initialState = {
 
 export default function useSelectedImage() {
   const { isFetching: isFetchingUserProfile } = useUserProfile()
-  const { isFetching: isFetchingPublicProfile } = usePublicProfile(username)
+  const { isFetching: isFetchingPublicProfile } = usePublicProfile()
 
   const userProfile = queryCache.getQueryData('userProfile') as UserProfile
   const publicProfile = queryCache.getQueryData(

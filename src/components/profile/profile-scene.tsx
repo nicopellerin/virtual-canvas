@@ -25,7 +25,7 @@ interface Props {
 export const ProfileScene: React.FC<Props> = ({ username, token }) => {
   extend({ OrbitControls })
 
-  const { isFetching } = usePublicProfile(username)
+  const { isFetching } = usePublicProfile()
 
   const { selectedImage, selectImage } = useSelectedImage()
 

@@ -1,6 +1,5 @@
 import * as React from 'react'
 import { Router } from '@reach/router'
-import { queryCache } from 'react-query'
 import { ReactQueryDevtools } from 'react-query-devtools'
 
 import { MainScene } from '../../components/main-scene'
@@ -8,11 +7,11 @@ import PrivateRoute from '../../components/private-route'
 import SEO from '../../components/seo'
 
 import useUserProfile from '../../hooks/useUserProfile'
-import { UserProfile } from '../../modules/types'
+
+import { usernameFromPathname } from '../../utils/utils'
 
 const IndexAppPage: React.FC = () => {
   useUserProfile()
-  const userProfile = queryCache.getQueryData('userProfile') as UserProfile
 
   return (
     <>
@@ -23,7 +22,7 @@ const IndexAppPage: React.FC = () => {
       <Router>
         <PrivateRoute
           path="/editor/:username"
-          username={userProfile?.username}
+          username={usernameFromPathname}
           component={MainScene}
         />
       </Router>

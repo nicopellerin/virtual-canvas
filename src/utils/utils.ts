@@ -6,3 +6,6 @@ export const clientUrl =
 export const isPublicProfile =
   typeof window !== 'undefined' &&
   window.location.pathname.split('/')[1] === 'profile'
+
+export const usernameFromPathname =
+  typeof window !== 'undefined' && window.location.pathname.split('/').pop()
