@@ -1,13 +1,10 @@
 import React from 'react'
 import styled from 'styled-components'
 
-export const ArtworkInfo: React.FC = ({selectedImage}) => {
-
+export const ArtworkInfo: React.FC = ({ selectedImage }) => {
   return (
     <Wrapper>
-      <Name
-        backgroundColor={selectedImage?.image?.background ? true : false}
-      >
+      <Name backgroundColor={selectedImage?.background ? true : false}>
         {selectedImage?.name}
       </Name>
     </Wrapper>

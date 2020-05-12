@@ -1,4 +1,4 @@
-import { queryCache } from "react-query"
+import { queryCache } from 'react-query'
 import axios from 'axios'
 import uuid from 'uuid/v4'
 import cookie from 'js-cookie'
@@ -8,7 +8,12 @@ import { clientUrl } from '../utils/utils'
 
 const token = cookie.getJSON('vc_token')
 
-const usePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>, setErrMsg, setLoader, selectImage) => {
+const usePhotoUpload = async (
+  e: React.ChangeEvent<HTMLInputElement>,
+  setErrMsg,
+  setLoader,
+  selectImage
+) => {
   const { files } = e.target
 
   const userProfile = queryCache.getQueryData('userProfile')
@@ -30,8 +35,7 @@ const usePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>, setErrMsg,
       {
         onUploadProgress: progressEvent => {
           setLoader(
-            Math.round((progressEvent.loaded / progressEvent.total) * 100) +
-              '%'
+            Math.round((progressEvent.loaded / progressEvent.total) * 100) + '%'
           )
           if (progressEvent.loaded === progressEvent.total) {
             setLoader('Finished uploading :)')
@@ -42,7 +46,6 @@ const usePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>, setErrMsg,
         },
       }
     )
-
 
     const client = new GraphQLClient(clientUrl, {
       headers: {

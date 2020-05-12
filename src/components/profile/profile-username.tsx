@@ -2,44 +2,44 @@ import React from 'react'
 import styled from 'styled-components'
 import { FaInstagram, FaFacebook, FaGlobe } from 'react-icons/fa'
 
-import { useStores } from '../../stores/useStores'
-import { observer } from 'mobx-react-lite'
+import { queryCache } from 'react-query'
 
 const ProfileUsername = () => {
-  const { userStore, artworkStore } = useStores()
+
+  const publicProfile = queryCache.getQueryData('publicProfile')
 
   return (
     <Wrapper>
       <Username
-        backgroundColor={artworkStore.imageInfo.backgroundColor ? true : false}
+        // backgroundColor={artworkStore.imageInfo.backgroundColor ? true : false}
       >
-        {userStore.username}
+        {publicProfile?.username}
       </Username>
       <Separator>|</Separator>
       <Social
-        backgroundColor={artworkStore.imageInfo.backgroundColor ? true : false}
+        // backgroundColor={artworkStore.imageInfo.backgroundColor ? true : false}
       >
-        {userStore.socialLinks.instagram && (
+        {publicProfile?.social?.instagram && (
           <a
-            href={`https://instagram.com/${userStore.socialLinks.instagram}`}
+            href={`https://instagram.com/${publicProfile?.social?.instagram}`}
             target="_blank"
             rel="nofollower"
           >
             <FaInstagram size={20} />
           </a>
         )}
-        {userStore.socialLinks.facebook && (
+        {publicProfile?.social?.facebook && (
           <a
-            href={`https://facebook.com/${userStore.socialLinks.facebook}`}
+            href={`https://facebook.com/${publicProfile?.social?.facebook}`}
             target="_blank"
             rel="nofollower"
           >
             <FaFacebook size={20} />
           </a>
         )}
-        {userStore.socialLinks.website && (
+        {publicProfile?.social?.website && (
           <a
-            href={`${userStore.socialLinks.website}`}
+            href={`${publicProfile?.social?.website}`}
             target="_blank"
             rel="nofollower"
           >
@@ -51,7 +51,7 @@ const ProfileUsername = () => {
   )
 }
 
-export default observer(ProfileUsername)
+export default ProfileUsername
 
 // Styles
 const Wrapper = styled.div`

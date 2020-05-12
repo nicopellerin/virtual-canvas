@@ -6,7 +6,7 @@ import { navigate, Link } from 'gatsby'
 import ReactTooltip from 'react-tooltip'
 import { queryCache } from 'react-query'
 
-const Menu = ({selectedImage}) => {
+const Menu = ({ selectedImage }) => {
   const userProfile = queryCache.getQueryData('userProfile')
 
   // Logout flow
@@ -23,7 +23,7 @@ const Menu = ({selectedImage}) => {
     <Wrapper>
       <ViewProfile
         to={`/profile/${userProfile?.username}`}
-        backgroundColor={selectedImage?.image?.background ? true : false}
+        backgroundColor={selectedImage?.background ? true : false}
       >
         View public profile
       </ViewProfile>

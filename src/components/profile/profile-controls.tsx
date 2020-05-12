@@ -1,76 +1,37 @@
-import React, { useContext, Dispatch, SetStateAction } from 'react'
+import * as React from 'react'
 import { MdChevronLeft, MdChevronRight } from 'react-icons/md'
 import styled from 'styled-components'
 import ReactTooltip from 'react-tooltip'
-import { navigate } from 'gatsby'
+import { queryCache } from 'react-query'
 
-import { ArtworkContext } from '../../context/artwork-context'
-
-interface Photo {
-  id: string
-  src: string
-  ratio: number
-  name: string
-  rotate: boolean
-  border: boolean
-  texture: boolean
-  background: boolean
-}
+import { Image, PublicProfile } from '../../modules/types'
 
 interface Props {
-  photoGallery: Photo[]
-  photoPreview: string
-  setPhotoPreview: Dispatch<SetStateAction<string>>
-  setPhotoRatio: Dispatch<SetStateAction<number>>
+  selectedImage: Image
+  selectImage: (image: Image) => void
 }
 
-const ProfileControls: React.FC<Props> = ({
-  photoGallery,
-  photoPreview,
-  setPhotoPreview,
-  setPhotoRatio,
-}) => {
-  const {
-    setArtworkName,
-    setBackgroundColor,
-    setShowBorder,
-    setShowTexture,
-    setRotateIncrement,
-    backgroundColor,
-    username,
-  } = useContext(ArtworkContext)
+const ProfileControls: React.FC<Props> = ({ selectedImage, selectImage }) => {
+  const publicProfile = queryCache.getQueryData(
+    'publicProfile'
+  ) as PublicProfile
 
-  // Find current index of selected artwork
-  const currentItem = photoGallery.findIndex(
-    photo => photo.src === photoPreview
+  const currentItem = publicProfile?.images?.findIndex(
+    photo => photo.src === selectedImage?.src
   )
-  const prevItem = photoGallery[currentItem - 1]
-  const nextItem = photoGallery[currentItem + 1]
-  const galleryLength = photoGallery.length
+  const prevItem = publicProfile?.images[currentItem - 1]
+  const nextItem = publicProfile?.images[currentItem + 1]
+  const galleryLength = publicProfile?.images?.length
 
   const handlePrevItem = () => {
     if (currentItem - 1 >= 0) {
-      navigate(`/profile/${username}/${prevItem.id}`)
-      setPhotoPreview(prevItem.src)
-      setPhotoRatio(prevItem.ratio)
-      setArtworkName(prevItem.name)
-      setBackgroundColor(prevItem.background)
-      setShowBorder(prevItem.border)
-      setShowTexture(prevItem.texture)
-      setRotateIncrement(prevItem.rotate)
+      selectImage(prevItem)
     }
   }
 
   const handleNextItem = () => {
     if (currentItem + 1 <= galleryLength - 1) {
-      navigate(`/profile/${username}/${nextItem.id}`)
-      setPhotoPreview(nextItem.src)
-      setPhotoRatio(nextItem.ratio)
-      setArtworkName(nextItem.name)
-      setBackgroundColor(nextItem.background)
-      setShowBorder(nextItem.border)
-      setShowTexture(nextItem.texture)
-      setRotateIncrement(nextItem.rotate)
+      selectImage(nextItem)
     }
   }
 
@@ -79,7 +40,7 @@ const ProfileControls: React.FC<Props> = ({
       {currentItem - 1 >= 0 && (
         <>
           <LeftArrow
-            backgroundColor={backgroundColor ? true : false}
+            // backgroundColor={backgroundColor ? true : false}
             data-tip={prevItem && prevItem.name}
             size={48}
             onClick={handlePrevItem}
@@ -90,7 +51,7 @@ const ProfileControls: React.FC<Props> = ({
       {currentItem + 1 <= galleryLength - 1 && (
         <>
           <RightArrow
-            backgroundColor={backgroundColor ? true : false}
+            // backgroundColor={backgroundColor ? true : false}
             data-tip={nextItem && nextItem.name}
             size={48}
             onClick={handleNextItem}

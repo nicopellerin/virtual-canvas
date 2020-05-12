@@ -1,26 +1,28 @@
 import * as React from 'react'
-import { Router } from '@reach/router'
+import { Router, useLocation } from '@reach/router'
+import cookie from 'js-cookie'
 
 import { ProfileScene } from '../../components/profile/profile-scene'
 import SEO from '../../components/seo'
 
-import useUserProfile from '../../hooks/useUserProfile'
-
 const ProfileIndexPage = () => {
-  const { data } = useUserProfile()
+  const { pathname } = useLocation()
+  const username = pathname.split('/').pop()
+  const token = cookie.get('vc_token')
 
   return (
     <>
       <SEO
-        title={`${data?.username} | Virtual Canvas`}
+        title={`${username} | Virtual Canvas`}
         description="Turn your art into a virtual 3D canvas"
       />
       <Router>
-        <ProfileScene path="/profile/:username" username={data?.username} />
         <ProfileScene
-          path="/profile/:username/:id"
-          username={data?.username}
+          path="/profile/:username"
+          username={username}
+          token={token}
         />
+        <ProfileScene path="/profile/:username/:id" username={username} />
       </Router>
     </>
   )

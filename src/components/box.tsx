@@ -10,8 +10,8 @@ interface Props {
   showTexture: boolean
   showBorder: boolean
   rotateIncrement: boolean
-  getPhoto: (gl) => void
-  snap: boolean
+  getPhoto?: (gl) => void
+  snap?: boolean
 }
 
 export const Box: React.FC<Props> = ({

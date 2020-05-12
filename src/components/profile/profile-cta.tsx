@@ -3,12 +3,8 @@ import styled from 'styled-components'
 import { motion } from 'framer-motion'
 import { Link } from 'gatsby'
 
-import { useStores } from '../../stores/useStores'
-
-const ProfileCta = () => {
-  const { userStore } = useStores()
-
-  if (userStore.username) return null
+const ProfileCta = ({ token }) => {
+  if (token) return null
 
   return (
     <Wrapper>

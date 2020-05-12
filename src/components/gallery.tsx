@@ -3,10 +3,10 @@ import { useSpring, animated } from 'react-spring'
 import styled from 'styled-components'
 import { MdClose } from 'react-icons/md'
 
-
 import { queryCache } from 'react-query'
 
 import useSelectedImage from '../hooks/useSelectedImage'
+import { isPublicProfile } from '../utils/utils'
 
 const ScrollAreaLazy = React.lazy(() => import('react-scrollbar'))
 
@@ -17,11 +17,20 @@ interface StyledProps {
   selectImage: any
 }
 
+interface Props {
+  selectedImage: any
+  selectImage: (image) => void
+  type: string
+}
 
-const Gallery: React.FC = ({selectedImage, selectImage}) => {
+const Gallery: React.FC<Props> = ({
+  selectedImage,
+  selectImage,
+  type = 'userProfile',
+}) => {
   const [toggle, setToggle] = useState(true)
-  const userProfile = queryCache.getQueryData('userProfile')
-  const {removeImage} = useSelectedImage()
+  const userProfile = queryCache.getQueryData(type)
+  const { removeImage } = useSelectedImage()
 
   useEffect(() => {
     if (userProfile?.images?.length === 0) {
@@ -69,29 +78,28 @@ const Gallery: React.FC = ({selectedImage, selectImage}) => {
                       alt="Preview thumbnail"
                       width={60}
                       height={60}
-                      lastImage={
-                        userProfile?.images?.length - 1 === index
-                      }
+                      lastImage={userProfile?.images?.length - 1 === index}
                       onClick={e => {
                         e.stopPropagation()
                         selectImage(image)
-                        // artworkStore.showCurrentItemGallery(photo)
                       }}
                     />
-                    <CloseIcon
-                      size={16}
-                      color="white"
-                      onClick={e => {
-                        if (prevImage) {
-                          selectImage(prevImage)
-                        } else if (nextImage) {
-                          selectImage(nextImage)
-                        } else {
-                          selectImage(null)
-                        }
-                        removeImage(e, image.id)
-                      }}
-                    />
+                    {!isPublicProfile && (
+                      <CloseIcon
+                        size={16}
+                        color="white"
+                        onClick={e => {
+                          if (prevImage) {
+                            selectImage(prevImage)
+                          } else if (nextImage) {
+                            selectImage(nextImage)
+                          } else {
+                            selectImage(null)
+                          }
+                          removeImage(e, image.id)
+                        }}
+                      />
+                    )}
                   </ThumbnailWrapper>
                 )
               })}
@@ -99,9 +107,7 @@ const Gallery: React.FC = ({selectedImage, selectImage}) => {
           </Suspense>
         )}
       </Container>
-      <Text
-        backgroundColor={selectedImage?.image?.background ? true : false}
-      >
+      <Text backgroundColor={selectedImage?.background ? true : false}>
         Gallery
       </Text>
     </Wrapper>

@@ -26,7 +26,6 @@ import SocialBar from './social-bar'
 import usePhotoUpload from '../hooks/usePhotoUpload'
 import useUserProfile from '../hooks/useUserProfile'
 
-
 interface Props {
   handlePhotoUpload: (e: React.ChangeEvent<HTMLInputElement>) => void
   loader: string
@@ -36,219 +35,225 @@ interface Props {
   updateImage: any
 }
 
-export const Sidebar: React.FC<Props> = 
-  ({ setSnap, selectImage, selectedImage, updateImage}) => {
-    const [toggle, setToggle] = useState<boolean>(false)
-    const [toggleProfile, setToggleProfile] = useState<boolean>(false)
-    const [showSuccessMsg, setShowSuccessMsg] = useState<string>('')
-    const [submitted, setSubmitted] = useState<boolean>(false)
-    const [fieldFocused, setFieldFocused] = useState<boolean>(false)
-    const [imageName, setImageName] = useState(selectedImage?.name) 
-    const [lightIntensity, setLightIntensity ] = useState()
-    const [loader, setLoader] = useState('')
-    const [errMsg, setErrMsg] = useState('')
+export const Sidebar: React.FC<Props> = ({
+  setSnap,
+  selectImage,
+  selectedImage,
+  updateImage,
+}) => {
+  const [toggle, setToggle] = useState<boolean>(false)
+  const [toggleProfile, setToggleProfile] = useState<boolean>(false)
+  const [showSuccessMsg, setShowSuccessMsg] = useState<string>('')
+  const [submitted, setSubmitted] = useState<boolean>(false)
+  const [fieldFocused, setFieldFocused] = useState<boolean>(false)
+  const [imageName, setImageName] = useState(selectedImage?.name)
+  const [lightIntensity, setLightIntensity] = useState()
+  const [loader, setLoader] = useState('')
+  const [errMsg, setErrMsg] = useState('')
 
-    const userProfile = queryCache.getQueryData('userProfile')
+  const userProfile = queryCache.getQueryData('userProfile')
 
-    useEffect(() => {
-      userProfile?.images?.length === 0 ? setToggle(false) : null
-    }, [userProfile])
+  useEffect(() => {
+    userProfile?.images?.length === 0 ? setToggle(false) : null
+  }, [userProfile])
 
-    useEffect(() => {
-      setImageName(selectedImage?.image?.name)
-      setLightIntensity(selectedImage?.image?.lighting)
-    }, [selectedImage])
+  useEffect(() => {
+    setImageName(selectedImage?.name)
+    setLightIntensity(selectedImage?.lighting)
+  }, [selectedImage])
 
-    console.log(selectedImage)
+  console.log(selectedImage)
 
-    useDebouncedEffect(
-      () => {
-        updateImage('lighting', lightIntensity)
-      },
-      500,
-      [lightIntensity]
-    )
+  useDebouncedEffect(
+    () => {
+      updateImage('lighting', lightIntensity)
+    },
+    500,
+    [lightIntensity]
+  )
 
-    const fileInputRef = useRef(null)
-    const artworkFieldRef = useRef(null)
+  const fileInputRef = useRef(null)
+  const artworkFieldRef = useRef(null)
 
-    const slideInOut = useSpring({
-      transform: toggle
-        ? 'translate3d(0, -50%, 0)'
-        : 'translate3d(88%, -50%, 0)',
-      config: { mass: 1, tension: 120, friction: 18 },
-    })
+  const slideInOut = useSpring({
+    transform: toggle ? 'translate3d(0, -50%, 0)' : 'translate3d(88%, -50%, 0)',
+    config: { mass: 1, tension: 120, friction: 18 },
+  })
 
-    const handleLightIntensity = e => {
-      setLightIntensity(e.target.value)
-    }
-
-    return (
-      <>
-        <Wrapper style={slideInOut}>
-          <ToggleButton
-            onClick={() => {
-              setToggleProfile(false)
-              setToggle(prev => !prev)
-            }}
-            disabled={userProfile?.images?.length === 0}
-          >
-            {toggle ? <MdRemove size={26} /> : <MdAdd size={26} />}
-          </ToggleButton>
-          <Container>
-            <TempLogo>
-              <img src={Logo} alt="logo" width={270} />
-            </TempLogo>
-            <Elements>
-              <form
-                onSubmit={(e) =>{
-                  e.preventDefault()
-                  updateImage('name', imageName)
-                  setShowSuccessMsg('Saved name to artwork')
-                  setSubmitted(true)
-                  artworkFieldRef.current.blur()
-                }}
-                style={{ flex: 4 }}
-              >
-                <InputFieldRow>
-                  <Label style={{ display: 'block' }}>Artwork name</Label>
-                  <InputField
-                    value={imageName}
-                    ref={artworkFieldRef}
-                    name="artworkName"
-                    onFocus={() => setFieldFocused(true)}
-                    onBlur={() => setTimeout(() => setFieldFocused(false), 200)}
-                    onChange={e => {
-                      setSubmitted(false)
-                      setImageName(e.target.value)
-                    }}
-                  />
-                  {selectedImage?.image?.name?.length > 0 &&
-                    !submitted &&
-                    fieldFocused && (
-                      <Add>
-                        <MdAddCircle
-                          size={24}
-                          color="green"
-                          onClick={e => {e.preventDefault()
-                            updateImage('name', imageName)
-                            setShowSuccessMsg('Saved name to artwork')
-                            setSubmitted(true)
-                            artworkFieldRef.current.blur()}
-                          }
-                        />
-                      </Add>
-                    )}
-                </InputFieldRow>
-              </form>
-              <CheckboxGrid>
-                <div>
-                  <BorderCheckbox>
-                    <label>
-                      <Checkbox
-                        name="border"
-                        checked={selectedImage?.image?.border}
-                        onChange={() => updateImage('border', !selectedImage?.image?.border)}
-                      />
-                      <BorderCheckboxLabel>Border</BorderCheckboxLabel>
-                    </label>
-                  </BorderCheckbox>
-                  <TextureCheckbox>
-                    <label>
-                      <Checkbox
-                        name="texture"
-                        checked={selectedImage?.image?.texture}
-                        onChange={() => updateImage('texture', !selectedImage?.image?.texture)}
-                      />
-                      <TextureCheckboxLabel>Texture</TextureCheckboxLabel>
-                    </label>
-                  </TextureCheckbox>
-                </div>
-                <div>
-                  <BackgroudCheckbox>
-                    <label>
-                      <Checkbox
-                        name="background"
-                        checked={selectedImage?.image?.background}
-                        onChange={() => updateImage('background', !selectedImage?.image?.background)}
-                      />
-                      <BackgroudCheckboxLabel>
-                        Light background
-                      </BackgroudCheckboxLabel>
-                    </label>
-                  </BackgroudCheckbox>
-                  <BackgroudCheckbox>
-                    <label>
-                      <Checkbox
-                        name="rotate"
-                        checked={selectedImage?.image?.rotate}
-                        onChange={() => updateImage('rotate', !selectedImage?.image?.rotate)}
-                      />
-                      <BackgroudCheckboxLabel>
-                        Rotate 90˚ CW
-                      </BackgroudCheckboxLabel>
-                    </label>
-                  </BackgroudCheckbox>
-                </div>
-              </CheckboxGrid>
-            </Elements>
-            <ZoomRange>
-              <ZoomTitle>Spotlight intensity</ZoomTitle>
-              <ZoomText>{lightIntensity}%</ZoomText>
-              <input
-                type="range"
-                min="0"
-                max="20"
-                onChange={handleLightIntensity}
-                value={lightIntensity}
-              />
-            </ZoomRange>
-            <DownloadButton
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              onClick={() => {
-                setSnap(true)
-              }}
-            >
-              <MdPhotoCamera style={{ marginRight: 10 }} />
-              Take screenshot
-            </DownloadButton>
-            <input
-              type="file"
-              style={{ display: 'none' }}
-              ref={fileInputRef}
-              accept="image/x-png,image/jpeg"
-              onChange={e => {
-                usePhotoUpload(e, setErrMsg, setLoader, selectImage) 
-              }}
-            />
-            <AddArtButton
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              onClick={() =>
-                fileInputRef.current && fileInputRef.current.click()
-              }
-            >
-              <MdAddAPhoto style={{ marginRight: 10 }} />
-              {loader ? loader : 'Add image to gallery'}
-            </AddArtButton>
-          </Container>
-          <SocialBar
-            toggleProfile={toggleProfile}
-            setToggleProfile={setToggleProfile}
-          />
-        </Wrapper>
-        {showSuccessMsg && (
-          <Toast
-            message={showSuccessMsg}
-            resetState={() => setShowSuccessMsg('')}
-            delay={3000}
-          />
-        )}
-      </>
-    )
+  const handleLightIntensity = e => {
+    setLightIntensity(e.target.value)
   }
 
+  return (
+    <>
+      <Wrapper style={slideInOut}>
+        <ToggleButton
+          onClick={() => {
+            setToggleProfile(false)
+            setToggle(prev => !prev)
+          }}
+          disabled={userProfile?.images?.length === 0}
+        >
+          {toggle ? <MdRemove size={26} /> : <MdAdd size={26} />}
+        </ToggleButton>
+        <Container>
+          <TempLogo>
+            <img src={Logo} alt="logo" width={270} />
+          </TempLogo>
+          <Elements>
+            <form
+              onSubmit={e => {
+                e.preventDefault()
+                updateImage('name', imageName)
+                setShowSuccessMsg('Saved name to artwork')
+                setSubmitted(true)
+                artworkFieldRef.current.blur()
+              }}
+              style={{ flex: 4 }}
+            >
+              <InputFieldRow>
+                <Label style={{ display: 'block' }}>Artwork name</Label>
+                <InputField
+                  value={imageName}
+                  ref={artworkFieldRef}
+                  name="artworkName"
+                  onFocus={() => setFieldFocused(true)}
+                  onBlur={() => setTimeout(() => setFieldFocused(false), 200)}
+                  onChange={e => {
+                    setSubmitted(false)
+                    setImageName(e.target.value)
+                  }}
+                />
+                {selectedImage?.name?.length > 0 && !submitted && fieldFocused && (
+                  <Add>
+                    <MdAddCircle
+                      size={24}
+                      color="green"
+                      onClick={e => {
+                        e.preventDefault()
+                        updateImage('name', imageName)
+                        setShowSuccessMsg('Saved name to artwork')
+                        setSubmitted(true)
+                        artworkFieldRef.current.blur()
+                      }}
+                    />
+                  </Add>
+                )}
+              </InputFieldRow>
+            </form>
+            <CheckboxGrid>
+              <div>
+                <BorderCheckbox>
+                  <label>
+                    <Checkbox
+                      name="border"
+                      checked={selectedImage?.border}
+                      onChange={() =>
+                        updateImage('border', !selectedImage?.border)
+                      }
+                    />
+                    <BorderCheckboxLabel>Border</BorderCheckboxLabel>
+                  </label>
+                </BorderCheckbox>
+                <TextureCheckbox>
+                  <label>
+                    <Checkbox
+                      name="texture"
+                      checked={selectedImage?.texture}
+                      onChange={() =>
+                        updateImage('texture', !selectedImage?.texture)
+                      }
+                    />
+                    <TextureCheckboxLabel>Texture</TextureCheckboxLabel>
+                  </label>
+                </TextureCheckbox>
+              </div>
+              <div>
+                <BackgroudCheckbox>
+                  <label>
+                    <Checkbox
+                      name="background"
+                      checked={selectedImage?.background}
+                      onChange={() =>
+                        updateImage('background', !selectedImage?.background)
+                      }
+                    />
+                    <BackgroudCheckboxLabel>
+                      Light background
+                    </BackgroudCheckboxLabel>
+                  </label>
+                </BackgroudCheckbox>
+                <BackgroudCheckbox>
+                  <label>
+                    <Checkbox
+                      name="rotate"
+                      checked={selectedImage?.rotate}
+                      onChange={() =>
+                        updateImage('rotate', !selectedImage?.rotate)
+                      }
+                    />
+                    <BackgroudCheckboxLabel>
+                      Rotate 90˚ CW
+                    </BackgroudCheckboxLabel>
+                  </label>
+                </BackgroudCheckbox>
+              </div>
+            </CheckboxGrid>
+          </Elements>
+          <ZoomRange>
+            <ZoomTitle>Spotlight intensity</ZoomTitle>
+            <ZoomText>{lightIntensity}%</ZoomText>
+            <input
+              type="range"
+              min="0"
+              max="20"
+              onChange={handleLightIntensity}
+              value={lightIntensity}
+            />
+          </ZoomRange>
+          <DownloadButton
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            onClick={() => {
+              setSnap(true)
+            }}
+          >
+            <MdPhotoCamera style={{ marginRight: 10 }} />
+            Take screenshot
+          </DownloadButton>
+          <input
+            type="file"
+            style={{ display: 'none' }}
+            ref={fileInputRef}
+            accept="image/x-png,image/jpeg"
+            onChange={e => {
+              usePhotoUpload(e, setErrMsg, setLoader, selectImage)
+            }}
+          />
+          <AddArtButton
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            onClick={() => fileInputRef.current && fileInputRef.current.click()}
+          >
+            <MdAddAPhoto style={{ marginRight: 10 }} />
+            {loader ? loader : 'Add image to gallery'}
+          </AddArtButton>
+        </Container>
+        <SocialBar
+          toggleProfile={toggleProfile}
+          setToggleProfile={setToggleProfile}
+        />
+      </Wrapper>
+      {showSuccessMsg && (
+        <Toast
+          message={showSuccessMsg}
+          resetState={() => setShowSuccessMsg('')}
+          delay={3000}
+        />
+      )}
+    </>
+  )
+}
 
 // Styles
 const Wrapper = styled(animated.div)`

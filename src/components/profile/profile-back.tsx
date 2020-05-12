@@ -2,23 +2,23 @@ import React from 'react'
 import styled from 'styled-components'
 import { Link } from 'gatsby'
 import { MdChevronLeft } from 'react-icons/md'
+import { queryCache } from 'react-query'
 
-import { useStores } from '../../stores/useStores'
+import useSelectedImage from '../../hooks/useSelectedImage'
 
-const ProfileBack = () => {
-  const { userStore, artworkStore } = useStores()
+const ProfileBack = ({ token }) => {
+  const publicProfile = queryCache.getQueryData('publicProfile')
+  const { selectedImage } = useSelectedImage()
 
-  if (!userStore.userToken) return null
+  if (!token) return null
 
   return (
-    <Wrapper
-      backgroundColor={artworkStore.imageInfo.backgroundColor ? true : false}
-    >
+    <Wrapper backgroundColor={selectedImage?.background ? true : false}>
       <MdChevronLeft
-        color={artworkStore.imageInfo.backgroundColor ? '#333' : '#f4f4f4'}
+        color={selectedImage?.background ? '#333' : '#f4f4f4'}
         size={24}
       />
-      <Link to={`/editor/${userStore.username}`}>Back to editor</Link>
+      <Link to={`/editor/${publicProfile?.username}`}>Back to editor</Link>
     </Wrapper>
   )
 }

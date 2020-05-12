@@ -1,88 +1,44 @@
-import React, {
-  useRef,
-  useContext,
-  useEffect,
-  Suspense,
-  Dispatch,
-  SetStateAction,
-} from 'react'
+import React, { useRef, Suspense } from 'react'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
-import { Canvas, extend, useThree, useRender } from 'react-three-fiber'
+import { Canvas, extend, useThree, useFrame } from 'react-three-fiber'
 
 import { ProfileInfo } from './profile-info'
-import { ProfileBox } from './profile-box'
-import ProfileGallery from './profile-gallery'
+import { Box } from '../box'
+import Gallery from '../gallery'
 import ProfileControls from './profile-controls'
 import ProfileCta from './profile-cta'
+import ProfileBack from './profile-back'
+import ProfileUsername from './profile-username'
 
 import { Logo } from '../logo'
 
-import ProfileBack from './profile-back'
-import ProfileUsername from './profile-username'
-import Fallback from '../fallback'
 import { useStores } from '../../stores/useStores'
+import useSelectedImage from '../../hooks/useSelectedImage'
+import usePublicProfile from '../../hooks/usePublicProfile'
 
-// interface Props {
-//   photoPreview: string
-//   setPhotoPreview: Dispatch<SetStateAction<string>>
-//   photoRatio: number
-//   setPhotoRatio: Dispatch<SetStateAction<number>>
-//   photoGallery: Photo[]
-//   setPhotoGallery: Dispatch<SetStateAction<Photo[]>>
-//   photoUploaded: boolean
-//   setPhotoUploaded: Dispatch<SetStateAction<boolean>>
-//   handlePhotoUpload: () => void
-//   setUploaded: Dispatch<SetStateAction<boolean>>
-//   loader: string
-// }
-
-interface Photo {
-  id: string
-  src: string
-  ratio: number
-  name: string
+interface Props {
+  username: string
+  token: string
 }
 
-export const ProfileScene: React.FC = (
-  {
-    // photoPreview,
-    // setPhotoPreview,
-    // photoGallery,
-    // photoRatio,
-    // setPhotoRatio,
-    // id,
-  }
-) => {
+export const ProfileScene: React.FC<Props> = ({ username, token }) => {
   extend({ OrbitControls })
 
-  // const {
-  //   // rotateCanvas,
-  //   lightIntensity,
-  //   showTexture,
-  //   showBorder,
-  //   backgroundColor,
-  //   rotateIncrement,
-  //   setQueryId,
-  // } = useContext(ArtworkContext)
+  const { isFetching } = usePublicProfile(username)
 
-  // useEffect(() => {
-  //   if (id) {
-  //     setQueryId(id)
-  //   }
-  // }, [])
-  const { artworkStore } = useStores()
+  const { selectedImage, selectImage } = useSelectedImage()
 
   // Control canvas
   const Controls = () => {
     const orbitRef = useRef(null)
     const { camera, gl } = useThree()
 
-    useRender(() => {
+    useFrame(() => {
       if (orbitRef.current) {
         orbitRef.current.update()
       }
-    }, false)
+    })
 
     return (
       <orbitControls
@@ -108,7 +64,7 @@ export const ProfileScene: React.FC = (
     <div>
       <Canvas
         style={{
-          background: artworkStore.artworkData.backgroundColor
+          background: selectedImage?.background
             ? 'linear-gradient(45deg, rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(237,237,237,1) 100%'
             : '#000004',
         }}
@@ -125,12 +81,12 @@ export const ProfileScene: React.FC = (
         <ambientLight intensity={0.8} />
         <hemisphereLight intensity={0.2} />
         <Suspense fallback={null}>
-          <ProfileBox
-            url={artworkStore.artworkData.photoPreview}
-            photoRatio={artworkStore.artworkData.photoRatio}
-            showTexture={artworkStore.artworkData.showTexture}
-            showBorder={artworkStore.artworkData.showBorder}
-            rotateIncrement={artworkStore.artworkData.rotateIncrement}
+          <Box
+            url={selectedImage?.src}
+            photoRatio={selectedImage?.ratio}
+            showTexture={selectedImage?.texture}
+            showBorder={selectedImage?.border}
+            rotateIncrement={selectedImage?.rotate}
           />
           <Controls />
         </Suspense>
@@ -138,7 +94,7 @@ export const ProfileScene: React.FC = (
           castShadow
           position={[-15, 0, 50]}
           penumbra={0}
-          intensity={Number(artworkStore.artworkData.lightIntensity) / 100}
+          intensity={selectedImage?.lighting / 100}
           lightColor="#fff"
         />
         <pointLight
@@ -148,18 +104,18 @@ export const ProfileScene: React.FC = (
           color="white"
         />
       </Canvas>
-      <Logo backgroundColor={artworkStore.artworkData.backgroundColor} full />
-      <ProfileCta />
-      <ProfileBack />
-      <ProfileGallery />
+      <Logo backgroundColor={selectedImage?.background} full />
+      <ProfileCta token={token} />
+      {token && <ProfileBack token={token} />}
+      <Gallery type="publicProfile" selectImage={selectImage} />
       <ProfileUsername />
-      {/* <ProfileControls
-        photoGallery={artworkStore.artworkData.photoGallery}
-        photoPreview={photoPreview}
-        setPhotoPreview={setPhotoPreview}
-        setPhotoRatio={setPhotoRatio}
-      /> */}
-      <ProfileInfo />
+      {!isFetching && (
+        <ProfileControls
+          selectedImage={selectedImage}
+          selectImage={selectImage}
+        />
+      )}
+      {/* <ProfileInfo /> */}
     </div>
   )
 }

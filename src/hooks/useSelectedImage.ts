@@ -28,9 +28,7 @@ interface Image {
   background: boolean
 }
 
-const updateImageDB = async (
-  image: Image
-) => {
+const updateImageDB = async (image: Image) => {
   const query = `
       mutation updateArtwork($input: UpdateArtworkInput!) {
         updateArtwork(
@@ -49,7 +47,7 @@ const updateImageDB = async (
       }
     `
 
-  const {updateArtwork} = await client.request(query, {
+  const { updateArtwork } = await client.request(query, {
     input: {
       id: image.id,
       src: image.src,
@@ -64,28 +62,26 @@ const updateImageDB = async (
     },
   })
 
-  return {updateArtwork}
+  return { updateArtwork }
 }
 
 const initialState = {
-  image: {
-    src: '',
-    id: '',
-    lighting: '',
-    name: '',
-    ratio: 0,
-    rotate: false,
-    texture: false,
-    border: false,
-    background: false,
-  },
+  src: '',
+  id: '',
+  lighting: 3,
+  name: '',
+  ratio: 0,
+  rotate: false,
+  texture: false,
+  border: false,
+  background: false,
 }
 
 export default function useSelectedImage() {
-  const {data, isFetching} = useUserProfile()
+  const { data, isFetching } = useUserProfile()
 
   const userProfile = queryCache.getQueryData('userProfile')
-  const [mutate] = useMutation(updateImageDB, {
+  const [updateImageDBMutation] = useMutation(updateImageDB, {
     onSuccess: () => {
       queryCache.refetchQueries('userProfile')
     },
@@ -96,38 +92,34 @@ export default function useSelectedImage() {
   let firstLoad = useRef(true)
 
   useEffect(() => {
-    if(!isFetching && firstLoad.current && data?.images?.length > 0) {
+    if (!isFetching && firstLoad.current && data?.images?.length > 0) {
       setSelectedImage(draft => {
         draft.image = userProfile?.images[0]
       })
       firstLoad.current = false
-    } 
+    }
   }, [isFetching])
 
   useEffect(() => {
-    (async () => {
-      if(!firstLoad.current && data?.images?.length > 0) {
-      await mutate(selectedImage?.image)
+    ;(async () => {
+      if (!firstLoad.current && data?.images?.length > 0) {
+        await updateImageDBMutation(selectedImage)
       }
     })()
   }, [selectedImage])
 
   const selectImage = image => {
     if (!image) {
-      setSelectedImage(draft => {
-        draft.image = initialState
-      })
+      setSelectedImage(() => initialState)
       return
     }
 
-    setSelectedImage(draft => {
-      draft.image = image
-    })
+    setSelectedImage(() => image)
   }
 
   const updateImage = async (attr, val) => {
     setSelectedImage(draft => {
-      draft.image[attr] = val
+      draft[attr] = val
     })
   }
 

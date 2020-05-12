@@ -2,7 +2,7 @@ import { useQuery, queryCache } from 'react-query'
 import cookie from 'js-cookie'
 import { GraphQLClient } from 'graphql-request'
 
-import { clientUrl } from '../utils/utils'
+import { clientUrl, isPublicProfile } from '../utils/utils'
 
 const token: string = cookie.getJSON('vc_token')
 const username: string = cookie.getJSON('vc_user')
@@ -83,7 +83,7 @@ const getUserProfil = async () => {
 }
 
 const useUserProfile = () => {
-  return useQuery('userProfile', getUserProfil)
+  return useQuery(!isPublicProfile && 'userProfile', getUserProfil)
 }
 
 export { useUserProfile as default, updateUser }
