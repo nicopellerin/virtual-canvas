@@ -55,7 +55,8 @@ const Wrapper = styled.div`
 const Container = styled.div`
   display: flex;
   align-items: center;
-  justify-content: ${props => (props.showButtons ? 'space-between' : 'center')};
+  justify-content: ${(props: { showButtons: boolean }) =>
+    props.showButtons ? 'space-between' : 'center'};
   height: 9rem;
   width: 100%;
   max-width: 130rem;

@@ -1,25 +1,24 @@
-import React, { useContext } from 'react'
+import * as React from 'react'
 import styled from 'styled-components'
 import { motion } from 'framer-motion'
 
-import { ArtworkContext } from '../../context/artwork-context'
-import { useStores } from '../../stores/useStores'
+import { Image } from '../../modules/types'
 
-export const ProfileInfo: React.FC = () => {
-  const { artworkStore } = useStores()
+interface Props {
+  selectedImage: Image
+}
 
+export const ProfileInfo: React.FC<Props> = ({ selectedImage }) => {
   return (
     <Wrapper>
       <Content>
-        <Name
-          backgroundColor={
-            artworkStore.imageInfo.backgroundColor ? true : false
-          }
-        >
-          {artworkStore.imageInfo.artworkName}
+        <Name backgroundColor={selectedImage?.background ? true : false}>
+          {selectedImage?.name}
         </Name>
-        {/* <Price backgroundColor={backgroundColor ? true : false}>0,00$</Price>
-        <BuyNow>Buy now</BuyNow> */}
+        <Price backgroundColor={selectedImage?.background ? true : false}>
+          80,00$
+        </Price>
+        <BuyNow>Buy now</BuyNow>
       </Content>
     </Wrapper>
   )
@@ -30,7 +29,7 @@ const Wrapper = styled.div`
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  bottom: 2rem;
+  bottom: 3rem;
 `
 
 const Content = styled.div`
@@ -41,7 +40,7 @@ const Content = styled.div`
 const Name = styled.h2`
   color: ${(props: { backgroundColor: boolean }) =>
     props.backgroundColor ? '#333' : '#f4f4f4'};
-  /* margin-right: 3rem; */
+  margin-right: 3rem;
 `
 
 const Price = styled.span`

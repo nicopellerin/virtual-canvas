@@ -13,7 +13,6 @@ import ProfileUsername from './profile-username'
 
 import { Logo } from '../logo'
 
-import { useStores } from '../../stores/useStores'
 import useSelectedImage from '../../hooks/useSelectedImage'
 import usePublicProfile from '../../hooks/usePublicProfile'
 
@@ -42,7 +41,6 @@ export const ProfileScene: React.FC<Props> = ({ username, token }) => {
 
     return (
       <orbitControls
-        // autoRotate={rotate}
         autoRotateSpeed={0.3}
         enableDamping
         dampingFactor={0.05}
@@ -115,7 +113,7 @@ export const ProfileScene: React.FC<Props> = ({ username, token }) => {
           selectImage={selectImage}
         />
       )}
-      {/* <ProfileInfo /> */}
+      <ProfileInfo selectedImage={selectedImage} />
     </div>
   )
 }
