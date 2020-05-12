@@ -41,7 +41,7 @@ const AddArtwork: React.FC<Props> = ({ selectImage }) => {
             ref={fileInputRef}
             accept="image/x-png,image/jpeg"
             onChange={e => {
-              usePhotoUpload(e, setErrMsg, setLoader, selectImage)
+              usePhotoUpload({ e, setErrMsg, setLoader, selectImage })
             }}
           />
           <UploadButton

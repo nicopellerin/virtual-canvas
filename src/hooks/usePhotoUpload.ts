@@ -5,18 +5,26 @@ import cookie from 'js-cookie'
 import { GraphQLClient } from 'graphql-request'
 
 import { clientUrl } from '../utils/utils'
+import { UserProfile, Image } from '../modules/types'
 
-const token = cookie.getJSON('vc_token')
+const token = cookie.getJSON('vc_token') as string
 
-const usePhotoUpload = async (
-  e: React.ChangeEvent<HTMLInputElement>,
+interface Props {
+  e: React.ChangeEvent<HTMLInputElement>
+  setErrMsg: React.Dispatch<React.SetStateAction<string>>
+  setLoader: React.Dispatch<React.SetStateAction<string>>
+  selectImage: (image: Image) => void
+}
+
+const usePhotoUpload = async ({
+  e,
   setErrMsg,
   setLoader,
-  selectImage
-) => {
+  selectImage,
+}: Props) => {
   const { files } = e.target
 
-  const userProfile = queryCache.getQueryData('userProfile')
+  const userProfile = queryCache.getQueryData('userProfile') as UserProfile
 
   const maxAllowedSize = 5 * 1024 * 1024
   if (files[0].size > maxAllowedSize) {

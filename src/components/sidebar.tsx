@@ -25,6 +25,7 @@ import Logo from '../images/logo-text.svg'
 import SocialBar from './social-bar'
 import usePhotoUpload from '../hooks/usePhotoUpload'
 import useUserProfile from '../hooks/useUserProfile'
+import { UserProfile } from '../modules/types'
 
 interface Props {
   handlePhotoUpload: (e: React.ChangeEvent<HTMLInputElement>) => void
@@ -51,7 +52,7 @@ export const Sidebar: React.FC<Props> = ({
   const [loader, setLoader] = useState('')
   const [errMsg, setErrMsg] = useState('')
 
-  const userProfile = queryCache.getQueryData('userProfile')
+  const userProfile = queryCache.getQueryData('userProfile') as UserProfile
 
   useEffect(() => {
     userProfile?.images?.length === 0 ? setToggle(false) : null
@@ -61,8 +62,6 @@ export const Sidebar: React.FC<Props> = ({
     setImageName(selectedImage?.name)
     setLightIntensity(selectedImage?.lighting)
   }, [selectedImage])
-
-  console.log(selectedImage)
 
   useDebouncedEffect(
     () => {
@@ -227,7 +226,7 @@ export const Sidebar: React.FC<Props> = ({
             ref={fileInputRef}
             accept="image/x-png,image/jpeg"
             onChange={e => {
-              usePhotoUpload(e, setErrMsg, setLoader, selectImage)
+              usePhotoUpload({ e, setErrMsg, setLoader, selectImage })
             }}
           />
           <AddArtButton

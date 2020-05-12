@@ -5,11 +5,15 @@ import cookie from 'js-cookie'
 import { ProfileScene } from '../../components/profile/profile-scene'
 import SEO from '../../components/seo'
 
+import usePublicProfile from '../../hooks/usePublicProfile'
+
 const ProfileIndexPage = () => {
   const { pathname } = useLocation()
   const username = pathname.split('/').pop()
   const token = cookie.get('vc_token')
 
+  const res = usePublicProfile(username)
+  console.log(res)
   return (
     <>
       <SEO

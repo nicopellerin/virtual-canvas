@@ -5,9 +5,10 @@ import cookie from 'js-cookie'
 import { navigate, Link } from 'gatsby'
 import ReactTooltip from 'react-tooltip'
 import { queryCache } from 'react-query'
+import { UserProfile } from '../modules/types'
 
 const Menu = ({ selectedImage }) => {
-  const userProfile = queryCache.getQueryData('userProfile')
+  const userProfile = queryCache.getQueryData('userProfile') as UserProfile
 
   // Logout flow
   const handleLogout = () => {

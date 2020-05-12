@@ -1,11 +1,12 @@
-import { useQuery, queryCache } from 'react-query'
+import { useQuery } from 'react-query'
 import { GraphQLClient } from 'graphql-request'
 
+import { PublicProfile } from '../modules/types'
 import { clientUrl, isPublicProfile } from '../utils/utils'
 
 const client = new GraphQLClient(clientUrl)
 
-const getPublicProfile = async username => {
+const getPublicProfile = async (_, username): Promise<PublicProfile> => {
   const query = `
       query getPublicProfile($input: UsernameInput){
         getPublicProfile(input: $input) {
@@ -40,9 +41,10 @@ const getPublicProfile = async username => {
   return getPublicProfile
 }
 
-const usePublicProfile = username => {
-  return useQuery(isPublicProfile && 'publicProfile', () =>
-    getPublicProfile(username)
+const usePublicProfile = (username: string) => {
+  return useQuery(
+    isPublicProfile && ['publicProfile', username],
+    getPublicProfile
   )
 }
 

@@ -4,8 +4,11 @@ import { useImmer } from 'use-immer'
 import cookie from 'js-cookie'
 import { GraphQLClient } from 'graphql-request'
 
-import { clientUrl } from '../utils/utils'
 import useUserProfile from './useUserProfile'
+import usePublicProfile from './usePublicProfile'
+
+import { clientUrl, isPublicProfile } from '../utils/utils'
+import { Image, PublicProfile, UserProfile } from '../modules/types'
 
 const token: string = cookie.getJSON('vc_token')
 const username: string = cookie.getJSON('vc_user')
@@ -15,18 +18,6 @@ const client = new GraphQLClient(clientUrl, {
     Token: token,
   },
 })
-
-interface Image {
-  src: string
-  id: string
-  lighting: number
-  name: string
-  ratio: number
-  rotate: boolean
-  texture: boolean
-  border: boolean
-  background: boolean
-}
 
 const updateImageDB = async (image: Image) => {
   const query = `
@@ -78,9 +69,14 @@ const initialState = {
 }
 
 export default function useSelectedImage() {
-  const { data, isFetching } = useUserProfile()
+  const { isFetching: isFetchingUserProfile } = useUserProfile()
+  const { isFetching: isFetchingPublicProfile } = usePublicProfile(username)
 
-  const userProfile = queryCache.getQueryData('userProfile')
+  const userProfile = queryCache.getQueryData('userProfile') as UserProfile
+  const publicProfile = queryCache.getQueryData(
+    'publicProfile'
+  ) as PublicProfile
+
   const [updateImageDBMutation] = useMutation(updateImageDB, {
     onSuccess: () => {
       queryCache.refetchQueries('userProfile')
@@ -91,18 +87,24 @@ export default function useSelectedImage() {
 
   let firstLoad = useRef(true)
 
+  const firstImage = isPublicProfile
+    ? publicProfile?.images[0]
+    : userProfile?.images[0]
+
+  const isFetching = isPublicProfile
+    ? isFetchingPublicProfile
+    : isFetchingUserProfile
+
   useEffect(() => {
-    if (!isFetching && firstLoad.current && data?.images?.length > 0) {
-      setSelectedImage(draft => {
-        draft.image = userProfile?.images[0]
-      })
+    if (!isFetching && firstLoad.current && firstImage) {
+      setSelectedImage(() => firstImage)
       firstLoad.current = false
     }
   }, [isFetching])
 
   useEffect(() => {
     ;(async () => {
-      if (!firstLoad.current && data?.images?.length > 0) {
+      if (!firstLoad.current && userProfile?.images?.length > 0) {
         await updateImageDBMutation(selectedImage)
       }
     })()

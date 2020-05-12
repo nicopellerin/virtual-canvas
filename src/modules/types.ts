@@ -7,6 +7,18 @@ export interface Image {
   border: boolean
   texture: boolean
   background: boolean
+  lighting: number
+}
+
+export interface UserProfile {
+  username: string
+  email: string
+  social: {
+    instagram: string
+    facebook: string
+    website: string
+  }
+  images: Image[]
 }
 
 export interface PublicProfile {

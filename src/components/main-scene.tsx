@@ -16,6 +16,7 @@ import Menu from './menu'
 // import Fallback from './fallback'
 
 import useSelectedImage from '../hooks/useSelectedImage'
+import { UserProfile } from '../modules/types'
 
 interface Props {
   loader: string
@@ -26,7 +27,7 @@ export const MainScene: React.FC<Props> = ({ loader, errMsg }) => {
   extend({ OrbitControls })
 
   const { selectedImage, selectImage, updateImage } = useSelectedImage()
-  const userProfile = queryCache.getQueryData('userProfile')
+  const userProfile = queryCache.getQueryData('userProfile') as UserProfile
 
   const [screenShot, setScreenShot] = useState()
   const [snap, setSnap] = useState(false)

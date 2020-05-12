@@ -3,6 +3,7 @@ import cookie from 'js-cookie'
 import { GraphQLClient } from 'graphql-request'
 
 import { clientUrl, isPublicProfile } from '../utils/utils'
+import { UserProfile } from '../modules/types'
 
 const token: string = cookie.getJSON('vc_token')
 const username: string = cookie.getJSON('vc_user')
@@ -13,7 +14,12 @@ const client = new GraphQLClient(clientUrl, {
   },
 })
 
-const updateUser = async ({ username, facebook, website, instagram }) => {
+const updateUser = async ({
+  username,
+  facebook,
+  website,
+  instagram,
+}): Promise<{ msg: string }> => {
   try {
     const query = `
     mutation updateUser($input: UpdateUserInput!){
@@ -46,7 +52,7 @@ const updateUser = async ({ username, facebook, website, instagram }) => {
   }
 }
 
-const getUserProfil = async () => {
+const getUserProfil = async (): Promise<UserProfile> => {
   const query = `
       query getUser($input: UsernameInput){
         getUser(input: $input) {

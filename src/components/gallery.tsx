@@ -7,6 +7,7 @@ import { queryCache } from 'react-query'
 
 import useSelectedImage from '../hooks/useSelectedImage'
 import { isPublicProfile } from '../utils/utils'
+import { UserProfile, PublicProfile } from '../modules/types'
 
 const ScrollAreaLazy = React.lazy(() => import('react-scrollbar'))
 
@@ -29,14 +30,14 @@ const Gallery: React.FC<Props> = ({
   type = 'userProfile',
 }) => {
   const [toggle, setToggle] = useState(true)
-  const userProfile = queryCache.getQueryData(type)
+  const profile = queryCache.getQueryData(type) as UserProfile | PublicProfile
   const { removeImage } = useSelectedImage()
 
   useEffect(() => {
-    if (userProfile?.images?.length === 0) {
+    if (profile?.images?.length === 0) {
       setToggle(false)
     }
-  }, [userProfile])
+  }, [profile])
 
   const slideInOut = useSpring({
     transform: toggle
@@ -51,7 +52,7 @@ const Gallery: React.FC<Props> = ({
     <Wrapper
       style={slideInOut}
       onClick={() => setToggle(prevState => !prevState)}
-      disabled={userProfile?.images?.length === 0}
+      disabled={profile?.images?.length === 0}
     >
       <Container>
         {!isSSR && (
@@ -68,9 +69,9 @@ const Gallery: React.FC<Props> = ({
               verticalScrollbarStyle={{ background: '#000' }}
               verticalContainerStyle={{ background: '#eee' }}
             >
-              {userProfile?.images?.map((image, index) => {
-                const prevImage = userProfile?.images[index - 1]
-                const nextImage = userProfile?.images[index + 1]
+              {profile?.images?.map((image, index) => {
+                const prevImage = profile?.images[index - 1]
+                const nextImage = profile?.images[index + 1]
                 return (
                   <ThumbnailWrapper key={image.id}>
                     <Thumbnail
@@ -78,7 +79,7 @@ const Gallery: React.FC<Props> = ({
                       alt="Preview thumbnail"
                       width={60}
                       height={60}
-                      lastImage={userProfile?.images?.length - 1 === index}
+                      lastImage={profile?.images?.length - 1 === index}
                       onClick={e => {
                         e.stopPropagation()
                         selectImage(image)

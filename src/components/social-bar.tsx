@@ -7,7 +7,8 @@ import { queryCache } from 'react-query'
 
 import { Toast } from './toast'
 
-import {updateUser} from '../hooks/useUserProfile'
+import { updateUser } from '../hooks/useUserProfile'
+import { UserProfile } from '../modules/types'
 
 interface Props {
   toggleProfile: boolean
@@ -15,14 +16,13 @@ interface Props {
 }
 
 const SocialBar: React.FC<Props> = ({ toggleProfile, setToggleProfile }) => {
-  const userProfile = queryCache.getQueryData('userProfile')
+  const userProfile = queryCache.getQueryData('userProfile') as UserProfile
 
-  const [instagram, setInstagram] = useState("")
-  const [facebook, setFacebook] = useState("")
-  const [website, setWebsite] = useState("")
+  const [instagram, setInstagram] = useState('')
+  const [facebook, setFacebook] = useState('')
+  const [website, setWebsite] = useState('')
 
   const [showSuccessMsg, setShowSuccessMsg] = useState('')
-  
 
   useEffect(() => {
     setInstagram(userProfile?.social?.instagram)
@@ -30,11 +30,15 @@ const SocialBar: React.FC<Props> = ({ toggleProfile, setToggleProfile }) => {
     setWebsite(userProfile?.social?.website)
   }, [userProfile])
 
-
   const handleSubmit = async e => {
     e.preventDefault()
-   
-    const res = await updateUser({username: userProfile.username, facebook, website, instagram})
+
+    const res = await updateUser({
+      username: userProfile.username,
+      facebook,
+      website,
+      instagram,
+    })
     if (res.msg === 'Profile updated') {
       setShowSuccessMsg('Social links updated')
     }

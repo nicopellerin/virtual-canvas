@@ -8,10 +8,11 @@ import PrivateRoute from '../../components/private-route'
 import SEO from '../../components/seo'
 
 import useUserProfile from '../../hooks/useUserProfile'
+import { UserProfile } from '../../modules/types'
 
 const IndexAppPage: React.FC = () => {
   useUserProfile()
-  const userProfile = queryCache.getQueryData('userProfile')
+  const userProfile = queryCache.getQueryData('userProfile') as UserProfile
 
   return (
     <>
