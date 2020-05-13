@@ -47,4 +47,8 @@ export const GlobalStyles = createGlobalStyle`
   p, span {
     color: #333;
   }
+
+  a {
+    text-decoration: none;
+  }
 `

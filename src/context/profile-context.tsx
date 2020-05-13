@@ -26,6 +26,8 @@ export const ProfileProvider = ({ children }) => {
             background
             rotate
             lighting
+            price
+            buyLink
           }
           social {
             website

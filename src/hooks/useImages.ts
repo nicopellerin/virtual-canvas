@@ -106,7 +106,12 @@ const useImages = ({ isPublicProfile }: Props) => {
 
   useEffect(() => {
     ;(async () => {
-      if (!firstLoad.current && userProfile?.images?.length > 0) {
+      if (
+        !firstLoad.current &&
+        !isPublicProfile &&
+        userProfile?.images?.length > 0
+      ) {
+        console.log(selectedImage)
         await updateImageDBMutation(selectedImage)
       }
     })()

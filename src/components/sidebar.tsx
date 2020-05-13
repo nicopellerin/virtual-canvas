@@ -231,6 +231,7 @@ export const Sidebar: React.FC<Props> = ({
               <Label style={{ display: 'block' }}>Price</Label>
               <InputField
                 type="number"
+                step="0.01"
                 value={price}
                 ref={priceFieldRef}
                 name="price"

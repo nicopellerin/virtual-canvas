@@ -24,7 +24,7 @@ const ProfileUsername = () => {
             target="_blank"
             rel="nofollower"
           >
-            <FaInstagram size={20} />
+            <FaInstagram size={20} style={{ marginRight: 5 }} />
           </a>
         )}
         {publicProfile?.social?.facebook && (
@@ -33,7 +33,7 @@ const ProfileUsername = () => {
             target="_blank"
             rel="nofollower"
           >
-            <FaFacebook size={20} />
+            <FaFacebook size={20} style={{ marginRight: 5 }} />
           </a>
         )}
         {publicProfile?.social?.website && (
@@ -71,7 +71,7 @@ const Username = styled.span`
 `
 
 const Separator = styled.span`
-  margin: 0 0.7rem 0 0rem;
+  margin: 0 1rem 0 0rem;
   font-size: 1.6rem;
 `
 

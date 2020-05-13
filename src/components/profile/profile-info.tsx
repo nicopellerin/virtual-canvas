@@ -1,6 +1,7 @@
 import * as React from 'react'
 import styled from 'styled-components'
 import { motion } from 'framer-motion'
+import { FaDollarSign } from 'react-icons/fa'
 
 import { Image } from '../../modules/types'
 
@@ -20,7 +21,10 @@ export const ProfileInfo: React.FC<Props> = ({ selectedImage }) => {
         </Price>
         {selectedImage?.buyLink && (
           <a href={selectedImage?.buyLink} target="_blank" rel="nofollower">
-            <BuyNow>Buy now</BuyNow>
+            <BuyNow>
+              <FaDollarSign style={{ marginRight: 3 }} />
+              Buy now
+            </BuyNow>
           </a>
         )}
       </Content>
@@ -57,8 +61,14 @@ const Price = styled.span`
 
 const BuyNow = styled(motion.button)`
   border: none;
-  padding: 7px 12px;
+  background: #623cea;
+  color: #f4f4f4;
+  padding: 0.9em 1.1em;
   border-radius: 5px;
   font-size: 1.4rem;
   font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
 `
