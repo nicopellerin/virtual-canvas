@@ -8,7 +8,7 @@ const IndexPage = () => {
     <>
       <SEO
         title="Virtual Canvas | Bring your art to life"
-        description="Bring your art to life"
+        description="Turn your 2D art into a 3D canvas."
       />
       <Landing />
     </>

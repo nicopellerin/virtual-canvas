@@ -1,12 +1,13 @@
-import React, { useState, useEffect, Suspense } from 'react'
+import * as React from 'react'
+import { useState, useEffect, Suspense, useContext } from 'react'
 import { useSpring, animated } from 'react-spring'
 import styled from 'styled-components'
 import { MdClose } from 'react-icons/md'
 
 import { queryCache } from 'react-query'
 
-import useSelectedImage from '../hooks/useSelectedImage'
-import { isPublicProfile } from '../utils/utils'
+import useImages from '../hooks/useImages'
+
 import { UserProfile, PublicProfile } from '../modules/types'
 
 const ScrollAreaLazy = React.lazy(() => import('react-scrollbar'))
@@ -21,17 +22,20 @@ interface StyledProps {
 interface Props {
   selectedImage: any
   selectImage: (image) => void
-  type: string
+  type?: string
+  isPublicProfile: boolean
 }
 
 const Gallery: React.FC<Props> = ({
   selectedImage,
   selectImage,
-  type = 'userProfile',
+  type,
+  isPublicProfile,
 }) => {
   const [toggle, setToggle] = useState(true)
+
   const profile = queryCache.getQueryData(type) as UserProfile | PublicProfile
-  const { removeImage } = useSelectedImage()
+  const { removeImage } = useImages({ isPublicProfile })
 
   useEffect(() => {
     if (profile?.images?.length === 0) {

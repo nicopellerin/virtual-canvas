@@ -1,7 +1,13 @@
 import React from 'react'
 import styled from 'styled-components'
 
-export const ArtworkInfo: React.FC = ({ selectedImage }) => {
+import { Image } from '../modules/types'
+
+interface Props {
+  selectedImage: Image
+}
+
+export const ArtworkInfo: React.FC<Props> = ({ selectedImage }) => {
   return (
     <Wrapper>
       <Name backgroundColor={selectedImage?.background ? true : false}>

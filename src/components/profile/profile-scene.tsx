@@ -1,4 +1,5 @@
-import React, { useRef, Suspense } from 'react'
+import * as React from 'react'
+import { useRef, Suspense, useContext } from 'react'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { Canvas, extend, useThree, useFrame } from 'react-three-fiber'
@@ -13,20 +14,18 @@ import ProfileUsername from './profile-username'
 
 import { Logo } from '../logo'
 
-import useSelectedImage from '../../hooks/useSelectedImage'
-import usePublicProfile from '../../hooks/usePublicProfile'
+import useImages from '../../hooks/useImages'
 
 interface Props {
-  username: string
   token: string
 }
 
-export const ProfileScene: React.FC<Props> = ({ username, token }) => {
+export const ProfileScene: React.FC<Props> = ({ token }) => {
   extend({ OrbitControls })
 
-  const { isFetching } = usePublicProfile()
+  const isPublicProfile = true
 
-  const { selectedImage, selectImage } = useSelectedImage()
+  const { selectedImage, selectImage } = useImages({ isPublicProfile })
 
   // Control canvas
   const Controls = () => {
@@ -81,10 +80,10 @@ export const ProfileScene: React.FC<Props> = ({ username, token }) => {
         <Suspense fallback={null}>
           <Box
             url={selectedImage?.src}
-            photoRatio={selectedImage?.ratio}
-            showTexture={selectedImage?.texture}
-            showBorder={selectedImage?.border}
-            rotateIncrement={selectedImage?.rotate}
+            ratio={selectedImage?.ratio}
+            bumpTexture={selectedImage?.texture}
+            border={selectedImage?.border}
+            rotate={selectedImage?.rotate}
           />
           <Controls />
         </Suspense>
@@ -105,14 +104,17 @@ export const ProfileScene: React.FC<Props> = ({ username, token }) => {
       <Logo backgroundColor={selectedImage?.background} full />
       <ProfileCta token={token} />
       {token && <ProfileBack token={token} />}
-      <Gallery type="publicProfile" selectImage={selectImage} />
+      <Gallery
+        type="publicProfile"
+        selectImage={selectImage}
+        selectedImage={selectedImage}
+        isPublicProfile={isPublicProfile}
+      />
       <ProfileUsername />
-      {!isFetching && (
-        <ProfileControls
-          selectedImage={selectedImage}
-          selectImage={selectImage}
-        />
-      )}
+      <ProfileControls
+        selectedImage={selectedImage}
+        selectImage={selectImage}
+      />
       <ProfileInfo selectedImage={selectedImage} />
     </div>
   )

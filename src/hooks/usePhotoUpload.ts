@@ -92,7 +92,9 @@ const usePhotoUpload = async ({
     }
 
     const { addArtwork } = await client.request(query, variables)
+
     selectImage(addArtwork)
+
     queryCache.setQueryData('userProfile', old => ({
       ...old,
       images: [...old.images, addArtwork],

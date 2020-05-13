@@ -5,19 +5,18 @@ import { FaInstagram, FaFacebook, FaGlobe } from 'react-icons/fa'
 import { queryCache } from 'react-query'
 
 const ProfileUsername = () => {
-
   const publicProfile = queryCache.getQueryData('publicProfile')
 
   return (
     <Wrapper>
       <Username
-        // backgroundColor={artworkStore.imageInfo.backgroundColor ? true : false}
+      // backgroundColor={artworkStore.imageInfo.backgroundColor ? true : false}
       >
         {publicProfile?.username}
       </Username>
       <Separator>|</Separator>
       <Social
-        // backgroundColor={artworkStore.imageInfo.backgroundColor ? true : false}
+      // backgroundColor={artworkStore.imageInfo.backgroundColor ? true : false}
       >
         {publicProfile?.social?.instagram && (
           <a

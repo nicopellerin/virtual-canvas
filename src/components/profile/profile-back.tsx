@@ -1,14 +1,17 @@
-import React from 'react'
+import * as React from 'react'
+import { useContext } from 'react'
 import styled from 'styled-components'
 import { Link } from 'gatsby'
 import { MdChevronLeft } from 'react-icons/md'
 
-import useSelectedImage from '../../hooks/useSelectedImage'
+import useImages from '../../hooks/useImages'
 
-import { usernameFromPathname } from '../../utils/utils'
+// import { usernameFromPathname } from '../../utils/utils'
+import { ProfileContext } from '../../context/profile-context'
 
 const ProfileBack = ({ token }) => {
-  const { selectedImage } = useSelectedImage()
+  const { isPublicProfile, username } = useContext(ProfileContext)
+  const { selectedImage } = useImages({ isPublicProfile })
 
   if (!token) return null
 
@@ -18,7 +21,7 @@ const ProfileBack = ({ token }) => {
         color={selectedImage?.background ? '#333' : '#f4f4f4'}
         size={24}
       />
-      <Link to={`/editor/${usernameFromPathname}`}>Back to editor</Link>
+      <Link to={`/editor/${username}`}>Back to editor</Link>
     </Wrapper>
   )
 }

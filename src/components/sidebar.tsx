@@ -24,7 +24,6 @@ import { Toast } from './toast'
 import Logo from '../images/logo-text.svg'
 import SocialBar from './social-bar'
 import usePhotoUpload from '../hooks/usePhotoUpload'
-import useUserProfile from '../hooks/useUserProfile'
 import { UserProfile } from '../modules/types'
 
 interface Props {

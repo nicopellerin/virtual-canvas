@@ -6,20 +6,20 @@ import lerp from 'lerp'
 
 interface Props {
   url: string
-  photoRatio: number
-  showTexture: boolean
-  showBorder: boolean
-  rotateIncrement: boolean
+  ratio: number
+  bumpTexture: boolean
+  border: boolean
+  rotate: boolean
   getPhoto?: (gl) => void
   snap?: boolean
 }
 
 export const Box: React.FC<Props> = ({
   url,
-  photoRatio,
-  showTexture,
-  showBorder,
-  rotateIncrement,
+  ratio,
+  bumpTexture,
+  border,
+  rotate,
   getPhoto,
   snap,
 }) => {
@@ -55,9 +55,9 @@ export const Box: React.FC<Props> = ({
   })
 
   return (
-    <group ref={ref} rotation={rotateIncrement ? [0, 0, 1.57] : [0, 0, 0]}>
+    <group ref={ref} rotation={rotate ? [0, 0, 1.57] : [0, 0, 0]}>
       <mesh castShadow rotation={[0, 0, 0]}>
-        <boxBufferGeometry attach="geometry" args={[3 * photoRatio, 3, 0.2]} />
+        <boxBufferGeometry attach="geometry" args={[3 * ratio, 3, 0.2]} />
         <meshBasicMaterial
           attach="material"
           map={canvasTexture}
@@ -67,13 +67,13 @@ export const Box: React.FC<Props> = ({
       <mesh receiveShadow rotation={[0, 0, 0]} position={[0, 0, 0.112]}>
         <planeBufferGeometry
           attach="geometry"
-          args={showBorder ? [2.92 * photoRatio, 2.92] : [3 * photoRatio, 3]}
+          args={border ? [2.92 * ratio, 2.92] : [3 * ratio, 3]}
         />
         <meshPhongMaterial
           attach="material"
           map={texture}
           bumpMap={bump}
-          bumpScale={showTexture ? 0.012 : 0}
+          bumpScale={bumpTexture ? 0.012 : 0}
           specular="rgb(255,255,255)"
           shininess={2}
           args={[2, 2, 2]}

@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState, Suspense } from 'react'
+import React, { useRef, useEffect, useState, Suspense, useContext } from 'react'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { Canvas, extend, useThree, useFrame } from 'react-three-fiber'
@@ -15,7 +15,8 @@ import AddArtwork from './add-artwork'
 import Menu from './menu'
 // import Fallback from './fallback'
 
-import useSelectedImage from '../hooks/useSelectedImage'
+import useImages from '../hooks/useImages'
+
 import { UserProfile } from '../modules/types'
 
 interface Props {
@@ -26,7 +27,10 @@ interface Props {
 export const MainScene: React.FC<Props> = ({ loader, errMsg }) => {
   extend({ OrbitControls })
 
-  const { selectedImage, selectImage, updateImage } = useSelectedImage()
+  const isPublicProfile = false
+  const { selectedImage, selectImage, updateImage } = useImages({
+    isPublicProfile,
+  })
   const userProfile = queryCache.getQueryData('userProfile') as UserProfile
 
   const [screenShot, setScreenShot] = useState()
@@ -109,10 +113,10 @@ export const MainScene: React.FC<Props> = ({ loader, errMsg }) => {
         <Suspense fallback={null}>
           <Box
             url={selectedImage?.src}
-            photoRatio={selectedImage?.ratio}
-            showTexture={selectedImage?.texture}
-            showBorder={selectedImage?.border}
-            rotateIncrement={selectedImage?.rotate}
+            ratio={selectedImage?.ratio}
+            bumpTexture={selectedImage?.texture}
+            border={selectedImage?.border}
+            rotate={selectedImage?.rotate}
             getPhoto={getPhoto}
             snap={snap}
           />
@@ -142,9 +146,14 @@ export const MainScene: React.FC<Props> = ({ loader, errMsg }) => {
         updateImage={updateImage}
         errMsg={errMsg}
       />
-      <Gallery selectImage={selectImage} selectedImage={selectedImage} />
+      <Gallery
+        type="userProfile"
+        selectImage={selectImage}
+        selectedImage={selectedImage}
+        isPublicProfile={isPublicProfile}
+      />
       <Menu selectedImage={selectedImage} />
-      <ArtworkInfo selectedImage={selectedImage?.image} />
+      <ArtworkInfo selectedImage={selectedImage} />
       {userProfile?.images?.length === 0 && (
         <AddArtwork selectImage={selectImage} />
       )}

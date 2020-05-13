@@ -1,13 +1,10 @@
 import { useRef, useEffect } from 'react'
-import { queryCache, useMutation } from 'react-query'
+import { queryCache, useMutation, useIsFetching } from 'react-query'
 import { useImmer } from 'use-immer'
 import cookie from 'js-cookie'
 import { GraphQLClient } from 'graphql-request'
 
-import useUserProfile from './useUserProfile'
-import usePublicProfile from './usePublicProfile'
-
-import { clientUrl, isPublicProfile } from '../utils/utils'
+import { clientUrl } from '../utils/utils'
 import { Image, PublicProfile, UserProfile } from '../modules/types'
 
 const token: string = cookie.getJSON('vc_token')
@@ -68,39 +65,39 @@ const initialState = {
   background: false,
 }
 
-export default function useSelectedImage() {
-  const { isFetching: isFetchingUserProfile } = useUserProfile()
-  const { isFetching: isFetchingPublicProfile } = usePublicProfile()
+interface Props {
+  isPublicProfile: boolean
+}
+
+const useImages = ({ isPublicProfile }: Props) => {
+  const isFetching = useIsFetching()
 
   const userProfile = queryCache.getQueryData('userProfile') as UserProfile
   const publicProfile = queryCache.getQueryData(
     'publicProfile'
   ) as PublicProfile
 
-  const [updateImageDBMutation] = useMutation(updateImageDB, {
-    onSuccess: () => {
-      queryCache.refetchQueries('userProfile')
-    },
-  })
-
   const [selectedImage, setSelectedImage] = useImmer(initialState)
-
-  let firstLoad = useRef(true)
 
   const firstImage = isPublicProfile
     ? publicProfile?.images[0]
     : userProfile?.images[0]
 
-  const isFetching = isPublicProfile
-    ? isFetchingPublicProfile
-    : isFetchingUserProfile
+  let firstLoad = useRef(true)
 
   useEffect(() => {
     if (!isFetching && firstLoad.current && firstImage) {
+      console.log(firstImage)
       setSelectedImage(() => firstImage)
       firstLoad.current = false
     }
   }, [isFetching])
+
+  const [updateImageDBMutation] = useMutation(updateImageDB, {
+    onSuccess: () => {
+      queryCache.refetchQueries('userProfile')
+    },
+  })
 
   useEffect(() => {
     ;(async () => {
@@ -159,3 +156,5 @@ export default function useSelectedImage() {
     removeImage,
   }
 }
+
+export default useImages
