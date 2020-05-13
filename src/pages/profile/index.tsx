@@ -10,6 +10,8 @@ import { ProfileProvider } from '../../context/profile-context'
 
 const ProfileIndexPage = () => {
   const token = cookie.get('vc_token')
+  const userToken = cookie.get('vc_user')
+
   return (
     <>
       <SEO
@@ -22,8 +24,8 @@ const ProfileIndexPage = () => {
             path="/profile/:username"
             username={username}
             token={token}
+            userToken={userToken}
           />
-          <ProfileScene path="/profile/:username/:id" username={username} />
         </Router>
       </ProfileProvider>
     </>

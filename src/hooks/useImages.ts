@@ -31,6 +31,8 @@ const updateImageDB = async (image: Image) => {
           background
           rotate
           lighting
+          buyLink
+          price
         }
       }
     `
@@ -46,6 +48,8 @@ const updateImageDB = async (image: Image) => {
       background: image.background,
       rotate: image.rotate,
       lighting: image.lighting,
+      buyLink: image.buyLink,
+      price: image.price,
       username,
     },
   })
@@ -63,6 +67,8 @@ const initialState = {
   texture: false,
   border: false,
   background: false,
+  price: 0,
+  buyLink: '',
 }
 
 interface Props {
@@ -87,7 +93,6 @@ const useImages = ({ isPublicProfile }: Props) => {
 
   useEffect(() => {
     if (!isFetching && firstLoad.current && firstImage) {
-      console.log(firstImage)
       setSelectedImage(() => firstImage)
       firstLoad.current = false
     }

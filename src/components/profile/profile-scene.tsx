@@ -15,12 +15,14 @@ import ProfileUsername from './profile-username'
 import { Logo } from '../logo'
 
 import useImages from '../../hooks/useImages'
+import { usernameFromPathname } from '../../utils/utils'
 
 interface Props {
   token: string
+  userToken: string
 }
 
-export const ProfileScene: React.FC<Props> = ({ token }) => {
+export const ProfileScene: React.FC<Props> = ({ token, userToken }) => {
   extend({ OrbitControls })
 
   const isPublicProfile = true
@@ -103,7 +105,9 @@ export const ProfileScene: React.FC<Props> = ({ token }) => {
       </Canvas>
       <Logo backgroundColor={selectedImage?.background} full />
       <ProfileCta token={token} />
-      {token && <ProfileBack token={token} />}
+      {userToken && usernameFromPathname === userToken && (
+        <ProfileBack token={token} />
+      )}
       <Gallery
         type="publicProfile"
         selectImage={selectImage}

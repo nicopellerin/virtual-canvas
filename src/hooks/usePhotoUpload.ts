@@ -73,6 +73,8 @@ const usePhotoUpload = async ({
         background
         rotate
         lighting
+        price
+        buyLink
     }
   }
   `
@@ -88,6 +90,8 @@ const usePhotoUpload = async ({
         texture: false,
         background: false,
         lighting: 3,
+        buyLink: '',
+        price: 0,
       },
     }
 

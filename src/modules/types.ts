@@ -8,6 +8,8 @@ export interface Image {
   texture: boolean
   background: boolean
   lighting: number
+  price: number
+  buyLink: string
 }
 
 export interface UserProfile {

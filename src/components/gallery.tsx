@@ -37,6 +37,8 @@ const Gallery: React.FC<Props> = ({
   const profile = queryCache.getQueryData(type) as UserProfile | PublicProfile
   const { removeImage } = useImages({ isPublicProfile })
 
+  console.log(selectedImage)
+
   useEffect(() => {
     if (profile?.images?.length === 0) {
       setToggle(false)

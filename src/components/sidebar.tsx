@@ -41,13 +41,15 @@ export const Sidebar: React.FC<Props> = ({
   selectedImage,
   updateImage,
 }) => {
-  const [toggle, setToggle] = useState<boolean>(false)
-  const [toggleProfile, setToggleProfile] = useState<boolean>(false)
-  const [showSuccessMsg, setShowSuccessMsg] = useState<string>('')
-  const [submitted, setSubmitted] = useState<boolean>(false)
-  const [fieldFocused, setFieldFocused] = useState<boolean>(false)
+  const [toggle, setToggle] = useState(false)
+  const [toggleProfile, setToggleProfile] = useState(false)
+  const [showSuccessMsg, setShowSuccessMsg] = useState('')
+  const [submitted, setSubmitted] = useState(false)
+  const [fieldFocused, setFieldFocused] = useState('')
   const [imageName, setImageName] = useState(selectedImage?.name)
   const [lightIntensity, setLightIntensity] = useState()
+  const [buyLink, setBuyLink] = useState('')
+  const [price, setPrice] = useState<number>()
   const [loader, setLoader] = useState('')
   const [errMsg, setErrMsg] = useState('')
 
@@ -58,6 +60,8 @@ export const Sidebar: React.FC<Props> = ({
   }, [userProfile])
 
   useEffect(() => {
+    setBuyLink(selectedImage?.buyLink)
+    setPrice(selectedImage?.price)
     setImageName(selectedImage?.name)
     setLightIntensity(selectedImage?.lighting)
   }, [selectedImage])
@@ -71,7 +75,9 @@ export const Sidebar: React.FC<Props> = ({
   )
 
   const fileInputRef = useRef(null)
-  const artworkFieldRef = useRef(null)
+  const nameFieldRef = useRef(null)
+  const priceFieldRef = useRef(null)
+  const buyLinkFieldRef = useRef(null)
 
   const slideInOut = useSpring({
     transform: toggle ? 'translate3d(0, -50%, 0)' : 'translate3d(88%, -50%, 0)',
@@ -105,7 +111,7 @@ export const Sidebar: React.FC<Props> = ({
                 updateImage('name', imageName)
                 setShowSuccessMsg('Saved name to artwork')
                 setSubmitted(true)
-                artworkFieldRef.current.blur()
+                nameFieldRef.current.blur()
               }}
               style={{ flex: 4 }}
             >
@@ -113,30 +119,32 @@ export const Sidebar: React.FC<Props> = ({
                 <Label style={{ display: 'block' }}>Artwork name</Label>
                 <InputField
                   value={imageName}
-                  ref={artworkFieldRef}
+                  ref={nameFieldRef}
                   name="artworkName"
-                  onFocus={() => setFieldFocused(true)}
-                  onBlur={() => setTimeout(() => setFieldFocused(false), 200)}
+                  onFocus={() => setFieldFocused('name')}
+                  onBlur={() => setTimeout(() => setFieldFocused(''), 200)}
                   onChange={e => {
                     setSubmitted(false)
                     setImageName(e.target.value)
                   }}
                 />
-                {selectedImage?.name?.length > 0 && !submitted && fieldFocused && (
-                  <Add>
-                    <MdAddCircle
-                      size={24}
-                      color="green"
-                      onClick={e => {
-                        e.preventDefault()
-                        updateImage('name', imageName)
-                        setShowSuccessMsg('Saved name to artwork')
-                        setSubmitted(true)
-                        artworkFieldRef.current.blur()
-                      }}
-                    />
-                  </Add>
-                )}
+                {selectedImage?.name?.length > 0 &&
+                  !submitted &&
+                  fieldFocused === 'name' && (
+                    <Add>
+                      <MdAddCircle
+                        size={24}
+                        color="green"
+                        onClick={e => {
+                          e.preventDefault()
+                          updateImage('name', imageName)
+                          setShowSuccessMsg('Saved name to artwork')
+                          setSubmitted(true)
+                          nameFieldRef.current.blur()
+                        }}
+                      />
+                    </Add>
+                  )}
               </InputFieldRow>
             </form>
             <CheckboxGrid>
@@ -209,7 +217,92 @@ export const Sidebar: React.FC<Props> = ({
               value={lightIntensity}
             />
           </ZoomRange>
-          <DownloadButton
+          <form
+            onSubmit={e => {
+              e.preventDefault()
+              updateImage('price', price)
+              setShowSuccessMsg('Saved price to artwork')
+              setSubmitted(true)
+              priceFieldRef.current.blur()
+            }}
+            style={{ flex: 4 }}
+          >
+            <InputFieldRow style={{ marginBottom: '1rem' }}>
+              <Label style={{ display: 'block' }}>Price</Label>
+              <InputField
+                type="number"
+                value={price}
+                ref={priceFieldRef}
+                name="price"
+                onFocus={() => setFieldFocused('price')}
+                onBlur={() => setTimeout(() => setFieldFocused(''), 200)}
+                onChange={e => {
+                  setSubmitted(false)
+                  setPrice(parseFloat(e.target.value))
+                }}
+              />
+              {selectedImage?.price?.length > 0 &&
+                !submitted &&
+                fieldFocused === 'price' && (
+                  <Add>
+                    <MdAddCircle
+                      size={24}
+                      color="green"
+                      onClick={e => {
+                        e.preventDefault()
+                        updateImage('price', price)
+                        setShowSuccessMsg('Saved price to artwork')
+                        setSubmitted(true)
+                        priceFieldRef.current.blur()
+                      }}
+                    />
+                  </Add>
+                )}
+            </InputFieldRow>
+          </form>
+          <form
+            onSubmit={e => {
+              e.preventDefault()
+              updateImage('buyLink', buyLink)
+              setShowSuccessMsg('Saved buy link to artwork')
+              setSubmitted(true)
+              buyLinkFieldRef.current.blur()
+            }}
+            style={{ flex: 4 }}
+          >
+            <InputFieldRow>
+              <Label style={{ display: 'block' }}>Buy link</Label>
+              <InputField
+                value={buyLink}
+                ref={buyLinkFieldRef}
+                name="buyLink"
+                onFocus={() => setFieldFocused('buyLink')}
+                onBlur={() => setTimeout(() => setFieldFocused(''), 200)}
+                onChange={e => {
+                  setSubmitted(false)
+                  setBuyLink(e.target.value)
+                }}
+              />
+              {selectedImage?.buyLink?.length > 0 &&
+                !submitted &&
+                fieldFocused === 'buyLink' && (
+                  <Add>
+                    <MdAddCircle
+                      size={24}
+                      color="green"
+                      onClick={e => {
+                        e.preventDefault()
+                        updateImage('buyLink', buyLink)
+                        setShowSuccessMsg('Saved buy link to artwork')
+                        setSubmitted(true)
+                        buyLinkFieldRef.current.blur()
+                      }}
+                    />
+                  </Add>
+                )}
+            </InputFieldRow>
+          </form>
+          {/* <DownloadButton
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={() => {
@@ -218,7 +311,7 @@ export const Sidebar: React.FC<Props> = ({
           >
             <MdPhotoCamera style={{ marginRight: 10 }} />
             Take screenshot
-          </DownloadButton>
+          </DownloadButton> */}
           <input
             type="file"
             style={{ display: 'none' }}
@@ -431,13 +524,14 @@ const BackgroudCheckboxLabel = styled.span`
 
 const ZoomRange = styled.div`
   margin-top: 5px;
-  margin-bottom: 30px;
+  margin-bottom: 15px;
   display: flex;
   flex-direction: column;
 `
 
 const ZoomTitle = styled.h5`
   font-size: 14px;
+  margin-top: 1rem;
   margin-bottom: 10px;
   color: #333;
 `

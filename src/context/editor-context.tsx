@@ -72,6 +72,8 @@ export const EditorProvider = ({ children }) => {
             background
             rotate
             lighting
+            price
+            buyLink
           }
           social {
             website
