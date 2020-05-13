@@ -55,7 +55,7 @@ export const Box: React.FC<Props> = ({
   })
 
   return (
-    <group ref={ref} rotation={rotate ? [0, 0.4, 1.57] : [0, 0.4, 0]}>
+    <group ref={ref} rotation={rotate ? [0, 0.32, 1.57] : [0, 0.32, 0]}>
       <mesh castShadow rotation={[0, 0, 0]}>
         <boxBufferGeometry attach="geometry" args={[3 * ratio, 3, 0.2]} />
         <meshBasicMaterial

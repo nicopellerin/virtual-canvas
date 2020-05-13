@@ -82,8 +82,8 @@ export const MainScene: React.FC<Props> = ({ loader, errMsg }) => {
         maxDistance={7.8}
         minPolarAngle={THREE.Math.degToRad(70)}
         maxPolarAngle={THREE.Math.degToRad(90)}
-        minAzimuthAngle={THREE.Math.degToRad(-50)}
-        maxAzimuthAngle={THREE.Math.degToRad(50)}
+        minAzimuthAngle={THREE.Math.degToRad(-35)}
+        maxAzimuthAngle={THREE.Math.degToRad(70)}
         args={[camera, gl.domElement]}
         ref={orbitRef}
         zoomEnabled

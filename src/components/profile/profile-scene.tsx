@@ -50,7 +50,7 @@ export const ProfileScene: React.FC<Props> = ({ token, userToken }) => {
         maxDistance={7.8}
         minPolarAngle={THREE.Math.degToRad(70)}
         maxPolarAngle={THREE.Math.degToRad(90)}
-        minAzimuthAngle={THREE.Math.degToRad(-30)}
+        minAzimuthAngle={THREE.Math.degToRad(-35)}
         maxAzimuthAngle={THREE.Math.degToRad(70)}
         args={[camera, gl.domElement]}
         ref={orbitRef}
