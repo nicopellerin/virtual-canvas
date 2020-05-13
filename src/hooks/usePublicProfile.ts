@@ -1,14 +1,10 @@
-import * as React from 'react'
-import { useQuery, queryCache } from 'react-query'
+import { useQuery } from 'react-query'
 import { GraphQLClient } from 'graphql-request'
 
-import { UserProfile, PublicProfile } from '../modules/types'
+import { clientUrl } from '../utils/utils'
+import { PublicProfile } from '../modules/types'
 
-import { usernameFromPathname as username, clientUrl } from '../utils/utils'
-
-export const ProfileContext = React.createContext(null)
-
-export const ProfileProvider = ({ children }) => {
+const usePublicProfile = ({ username }) => {
   const client = new GraphQLClient(clientUrl)
 
   const getPublicProfile = async (): Promise<PublicProfile> => {
@@ -48,21 +44,7 @@ export const ProfileProvider = ({ children }) => {
     return getPublicProfile
   }
 
-  useQuery('publicProfile', getPublicProfile)
-
-  const profile = queryCache.getQueryData('publicProfile') as UserProfile
-
-  const isPublicProfile = true
-
-  return (
-    <ProfileContext.Provider
-      value={{
-        profile,
-        username,
-        isPublicProfile,
-      }}
-    >
-      {children}
-    </ProfileContext.Provider>
-  )
+  return useQuery('publicProfile', getPublicProfile)
 }
+
+export default usePublicProfile

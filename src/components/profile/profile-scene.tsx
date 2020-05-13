@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { useRef, Suspense, useContext } from 'react'
+import { useRef, Suspense } from 'react'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { Canvas, extend, useThree, useFrame } from 'react-three-fiber'
@@ -106,7 +106,11 @@ export const ProfileScene: React.FC<Props> = ({ token, userToken }) => {
       <Logo backgroundColor={selectedImage?.background} full />
       <ProfileCta token={token} />
       {userToken && usernameFromPathname === userToken && (
-        <ProfileBack token={token} />
+        <ProfileBack
+          token={token}
+          username={usernameFromPathname}
+          isPublicProfile={isPublicProfile}
+        />
       )}
       <Gallery
         type="publicProfile"

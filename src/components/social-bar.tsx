@@ -11,10 +11,11 @@ import { MdAccountCircle } from 'react-icons/md'
 import { motion } from 'framer-motion'
 import { queryCache } from 'react-query'
 
+import { updateUser } from '../hooks/useUserProfile'
+
 import { Toast } from './toast'
 
 import { UserProfile } from '../modules/types'
-import { EditorContext } from '../context/editor-context'
 
 interface Props {
   toggleProfile: boolean
@@ -29,8 +30,6 @@ const SocialBar: React.FC<Props> = ({ toggleProfile, setToggleProfile }) => {
 
   const userProfile = queryCache.getQueryData('userProfile') as UserProfile
 
-  const { updateUser, username } = useContext(EditorContext)
-
   useEffect(() => {
     setInstagram(userProfile?.social?.instagram)
     setFacebook(userProfile?.social?.facebook)
@@ -41,7 +40,7 @@ const SocialBar: React.FC<Props> = ({ toggleProfile, setToggleProfile }) => {
     e.preventDefault()
 
     const { msg } = await updateUser({
-      username,
+      username: userProfile?.username,
       facebook,
       website,
       instagram,
@@ -97,7 +96,10 @@ const SocialBar: React.FC<Props> = ({ toggleProfile, setToggleProfile }) => {
               <h2>Profile info</h2>
               <InputFieldRowSocial>
                 <LabelSocial style={{ display: 'block' }}>Username</LabelSocial>
-                <InputFieldSocial onChange={() => {}} value={username} />
+                <InputFieldSocial
+                  onChange={() => {}}
+                  value={userProfile?.username}
+                />
               </InputFieldRowSocial>
             </div>
           </div>

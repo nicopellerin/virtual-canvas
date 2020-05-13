@@ -217,34 +217,33 @@ export const Sidebar: React.FC<Props> = ({
               value={lightIntensity}
             />
           </ZoomRange>
-          <form
-            onSubmit={e => {
-              e.preventDefault()
-              updateImage('price', price)
-              setShowSuccessMsg('Saved price to artwork')
-              setSubmitted(true)
-              priceFieldRef.current.blur()
-            }}
-            style={{ flex: 4 }}
-          >
-            <InputFieldRow style={{ marginBottom: '1rem' }}>
-              <Label style={{ display: 'block' }}>Price</Label>
-              <InputField
-                type="number"
-                step="0.01"
-                value={price}
-                ref={priceFieldRef}
-                name="price"
-                onFocus={() => setFieldFocused('price')}
-                onBlur={() => setTimeout(() => setFieldFocused(''), 200)}
-                onChange={e => {
-                  setSubmitted(false)
-                  setPrice(parseFloat(e.target.value))
-                }}
-              />
-              {selectedImage?.price?.length > 0 &&
-                !submitted &&
-                fieldFocused === 'price' && (
+          <BuyWrapper>
+            <form
+              onSubmit={e => {
+                e.preventDefault()
+                updateImage('price', price)
+                setShowSuccessMsg('Saved price to artwork')
+                setSubmitted(true)
+                priceFieldRef.current.blur()
+              }}
+              style={{ flex: 4 }}
+            >
+              <InputFieldRow style={{ marginBottom: '1rem' }}>
+                <Label style={{ display: 'block' }}>Price</Label>
+                <InputField
+                  type="number"
+                  step="0.01"
+                  value={price}
+                  ref={priceFieldRef}
+                  name="price"
+                  onFocus={() => setFieldFocused('price')}
+                  onBlur={() => setTimeout(() => setFieldFocused(''), 200)}
+                  onChange={e => {
+                    setSubmitted(false)
+                    setPrice(parseFloat(e.target.value))
+                  }}
+                />
+                {price > 0 && !submitted && fieldFocused === 'price' && (
                   <Add>
                     <MdAddCircle
                       size={24}
@@ -259,51 +258,52 @@ export const Sidebar: React.FC<Props> = ({
                     />
                   </Add>
                 )}
-            </InputFieldRow>
-          </form>
-          <form
-            onSubmit={e => {
-              e.preventDefault()
-              updateImage('buyLink', buyLink)
-              setShowSuccessMsg('Saved buy link to artwork')
-              setSubmitted(true)
-              buyLinkFieldRef.current.blur()
-            }}
-            style={{ flex: 4 }}
-          >
-            <InputFieldRow>
-              <Label style={{ display: 'block' }}>Buy link</Label>
-              <InputField
-                value={buyLink}
-                ref={buyLinkFieldRef}
-                name="buyLink"
-                onFocus={() => setFieldFocused('buyLink')}
-                onBlur={() => setTimeout(() => setFieldFocused(''), 200)}
-                onChange={e => {
-                  setSubmitted(false)
-                  setBuyLink(e.target.value)
-                }}
-              />
-              {selectedImage?.buyLink?.length > 0 &&
-                !submitted &&
-                fieldFocused === 'buyLink' && (
-                  <Add>
-                    <MdAddCircle
-                      size={24}
-                      color="green"
-                      onClick={e => {
-                        e.preventDefault()
-                        updateImage('buyLink', buyLink)
-                        setShowSuccessMsg('Saved buy link to artwork')
-                        setSubmitted(true)
-                        buyLinkFieldRef.current.blur()
-                      }}
-                    />
-                  </Add>
-                )}
-            </InputFieldRow>
-          </form>
-          {/* <DownloadButton
+              </InputFieldRow>
+            </form>
+            <form
+              onSubmit={e => {
+                e.preventDefault()
+                updateImage('buyLink', buyLink)
+                setShowSuccessMsg('Saved buy link to artwork')
+                setSubmitted(true)
+                buyLinkFieldRef.current.blur()
+              }}
+              style={{ flex: 4 }}
+            >
+              <InputFieldRow>
+                <Label style={{ display: 'block' }}>Buy link</Label>
+                <InputField
+                  value={buyLink}
+                  ref={buyLinkFieldRef}
+                  name="buyLink"
+                  onFocus={() => setFieldFocused('buyLink')}
+                  onBlur={() => setTimeout(() => setFieldFocused(''), 200)}
+                  onChange={e => {
+                    setSubmitted(false)
+                    setBuyLink(e.target.value)
+                  }}
+                />
+                {buyLink?.length > 0 &&
+                  !submitted &&
+                  fieldFocused === 'buyLink' && (
+                    <Add>
+                      <MdAddCircle
+                        size={24}
+                        color="green"
+                        onClick={e => {
+                          e.preventDefault()
+                          updateImage('buyLink', buyLink)
+                          setShowSuccessMsg('Saved buy link to artwork')
+                          setSubmitted(true)
+                          buyLinkFieldRef.current.blur()
+                        }}
+                      />
+                    </Add>
+                  )}
+              </InputFieldRow>
+            </form>
+          </BuyWrapper>
+          <DownloadButton
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={() => {
@@ -312,7 +312,7 @@ export const Sidebar: React.FC<Props> = ({
           >
             <MdPhotoCamera style={{ marginRight: 10 }} />
             Take screenshot
-          </DownloadButton> */}
+          </DownloadButton>
           <input
             type="file"
             style={{ display: 'none' }}
@@ -525,7 +525,7 @@ const BackgroudCheckboxLabel = styled.span`
 
 const ZoomRange = styled.div`
   margin-top: 5px;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
   display: flex;
   flex-direction: column;
 `
@@ -539,6 +539,13 @@ const ZoomTitle = styled.h5`
 
 const ZoomText = styled.span`
   color: #333;
+`
+
+const BuyWrapper = styled.div`
+  display: grid;
+  grid-template-columns: 7.5rem 21.5rem;
+  grid-gap: 1.5rem;
+  margin-bottom: 1rem;
 `
 
 const DownloadButton = styled(motion.button)`

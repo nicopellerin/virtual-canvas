@@ -1,4 +1,5 @@
-import React, { useRef, useEffect, useState, Suspense, useContext } from 'react'
+import * as React from 'react'
+import { useRef, useEffect, useState, Suspense } from 'react'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { Canvas, extend, useThree, useFrame } from 'react-three-fiber'
@@ -36,13 +37,10 @@ export const MainScene: React.FC<Props> = ({ loader, errMsg }) => {
   const [screenShot, setScreenShot] = useState()
   const [snap, setSnap] = useState(false)
 
-  const getPhoto = React.useCallback(
-    gl => {
-      setScreenShot(gl.domElement.toDataURL('image/jpeg'))
-      setSnap(false)
-    },
-    [screenShot]
-  )
+  const getPhoto = gl => {
+    setScreenShot(gl.domElement.toDataURL('image/jpeg'))
+    setSnap(false)
+  }
 
   const saveToFile = async () => {
     await save(screenShot, `${selectedImage?.name || 'virtual-canvas'}.jpg`)

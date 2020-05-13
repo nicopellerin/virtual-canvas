@@ -1,16 +1,11 @@
 import * as React from 'react'
-import { useContext } from 'react'
 import styled from 'styled-components'
 import { Link } from 'gatsby'
 import { MdChevronLeft } from 'react-icons/md'
 
 import useImages from '../../hooks/useImages'
 
-// import { usernameFromPathname } from '../../utils/utils'
-import { ProfileContext } from '../../context/profile-context'
-
-const ProfileBack = ({ token }) => {
-  const { isPublicProfile, username } = useContext(ProfileContext)
+const ProfileBack = ({ token, username, isPublicProfile }) => {
   const { selectedImage } = useImages({ isPublicProfile })
 
   if (!token) return null
