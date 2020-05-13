@@ -21,7 +21,7 @@ const usePhotoUpload = async ({
   setErrMsg,
   setLoader,
   selectImage,
-}: Props) => {
+}: Props): Promise<void> => {
   const { files } = e.target
 
   const userProfile = queryCache.getQueryData('userProfile') as UserProfile

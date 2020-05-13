@@ -164,7 +164,7 @@ const useImages = ({ isPublicProfile }: Props) => {
     selectImage,
     updateImage,
     removeImage,
-  }
+  } as const
 }
 
 export default useImages
