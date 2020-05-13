@@ -16,9 +16,13 @@ export const ProfileInfo: React.FC<Props> = ({ selectedImage }) => {
           {selectedImage?.name}
         </Name>
         <Price backgroundColor={selectedImage?.background ? true : false}>
-          80,00$
+          {selectedImage?.price > 0 && `${selectedImage?.price}$`}
         </Price>
-        <BuyNow>Buy now</BuyNow>
+        {selectedImage?.buyLink && (
+          <a href={selectedImage?.buyLink} target="_blank" rel="nofollower">
+            <BuyNow>Buy now</BuyNow>
+          </a>
+        )}
       </Content>
     </Wrapper>
   )
