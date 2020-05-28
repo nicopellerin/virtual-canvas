@@ -9,6 +9,7 @@ export const GlobalStyles = createGlobalStyle`
     width: 100vw!important;
     min-height: 100vh;
     cursor: grab;
+    outline: none;
   }
 
 
