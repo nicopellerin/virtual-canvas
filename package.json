@@ -53,7 +53,7 @@
     "save-file": "^2.3.1",
     "styled-components": "^4.4.0",
     "swr": "^0.1.12",
-    "three": "0.111.0",
+    "three": "0.137.0",
     "typeface-inter": "^3.10.0",
     "typeface-nunito-sans": "^0.0.72",
     "use-debounced-effect": "^0.0.3",
